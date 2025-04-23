@@ -6,8 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Startup.unity
+    guid: 0d3b40ecff110444e9d1162e4759a437
+  - enabled: 1
+    path: Assets/Scenes/Deathmatch.unity
+    guid: eda0b8fb7e8c03642a26d0c819eb1630
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_UseUCBPForAssetBundles: 0
+    com.unity.input.settings: {fileID: 11400000, guid: 36150db0ceb0fd647ac9f9ed56f13517, type: 2}
