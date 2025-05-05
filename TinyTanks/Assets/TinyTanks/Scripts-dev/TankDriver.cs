@@ -19,33 +19,6 @@ public class TankDriver : NetworkBehaviour
         Controller = PlayerRef.None;
     }
 
-    private void Update()
-    {
-        // Only collect input if this is the assigned driver
-        if (Controller == Runner.LocalPlayer)
-        {
-            // Cache the inputs to be used in OnInput callback
-            cachedMoveInput = new Vector2(
-                Input.GetAxis("Horizontal"),
-                Input.GetAxis("Vertical")
-            );
-        }
-    }
-
-    // This method should be called from the LobbyManager's OnInput callback
-    public void ProcessInput(NetworkRunner runner, NetworkInput input)
-    {
-        // Only provide input if we're the driver
-        if (Controller == runner.LocalPlayer)
-        {
-            var data = new NetworkInputData();
-            data.TankMoveInput = cachedMoveInput;
-
-            // Set the input data through the provided NetworkInput parameter
-            input.Set(data);
-        }
-    }
-
     public override void FixedUpdateNetwork()
     {
         // Process inputs on the server/host

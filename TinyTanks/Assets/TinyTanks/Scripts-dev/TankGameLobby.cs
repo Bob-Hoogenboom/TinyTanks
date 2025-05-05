@@ -17,6 +17,25 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private NetworkRunner _runner;
 
+    private Vector2 cachedMoveInput;
+    private Vector2 cachedTurretInput;
+    private bool cachedFireInput;
+
+    private void Update()
+    {
+        cachedMoveInput = new Vector2(
+            Input.GetAxis("Horizontal"),
+            Input.GetAxis("Vertical")
+        );
+
+        cachedTurretInput = new Vector2(
+            Input.GetAxis("Mouse X"),
+            Input.GetAxis("Mouse Y")
+        );
+
+        cachedFireInput = Input.GetMouseButton(0);
+    }
+
     // Called when the host button is clicked in the UI
     public void OnHostButtonClicked()
     {
@@ -115,22 +134,14 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        // Find the tank
-        SharedTank tank = FindObjectOfType<SharedTank>();
-        if (tank == null)
-            return;
+        NetworkInputData data = new NetworkInputData
+        {
+            TankMoveInput = cachedMoveInput,
+            TurretRotationInput = cachedTurretInput,
+            FireInput = cachedFireInput
+        };
 
-        // Find the driver and gunner controllers
-        TankDriver driver = tank.GetComponent<TankDriver>();
-        TankGunner gunner = tank.GetComponent<TankGunner>();
-
-        // Process input for both components
-        // We first process driver then gunner - order matters because both will use the same NetworkInput
-        if (driver != null)
-            driver.ProcessInput(runner, input);
-
-        if (gunner != null)
-            gunner.ProcessInput(runner, input);
+        input.Set(data);
     }
 
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)

@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
             // Create tank if it doesn't exist
             if (spawnedTank == null)
             {
-                spawnedTank = runner.Spawn(tankPrefab, new Vector3(0, 1, 0), Quaternion.identity);
+                spawnedTank = runner.Spawn(tankPrefab, new Vector3(0, 1, 0), Quaternion.identity, inputAuthority: player);
             }
 
             // Assign a role based on availability

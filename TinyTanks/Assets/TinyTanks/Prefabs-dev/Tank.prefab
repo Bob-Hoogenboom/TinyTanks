@@ -397,6 +397,7 @@ GameObject:
   - component: {fileID: 6918818076917781588}
   - component: {fileID: 3125265355250094780}
   - component: {fileID: 317355660880057190}
+  - component: {fileID: 735850032240083866}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -438,6 +439,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 317355660880057190}
+  - {fileID: 735850032240083866}
   - {fileID: 7907487817711453971}
   - {fileID: 3613252402323380014}
   - {fileID: 746542558759687636}
@@ -457,3 +459,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankDriver: {fileID: 7907487817711453971}
   TankGunner: {fileID: 746542558759687636}
+--- !u!114 &735850032240083866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7182266149997804484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0.15
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
