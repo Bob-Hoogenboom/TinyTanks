@@ -76,8 +76,74 @@
         {
             "name": "TankTurret",
             "id": "06325f44-3f07-4f53-b71d-4c646e171e18",
-            "actions": [],
-            "bindings": []
+            "actions": [
+                {
+                    "name": "Rotate",
+                    "type": "PassThrough",
+                    "id": "b54d7d25-504a-48c2-ad86-2d6d01dae0b3",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "2D Vector",
+                    "id": "965ccd82-2fd3-4044-b5ff-a3aa1c0e2b46",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "f4f9bb74-2b18-4abb-a553-3987c5d4ef53",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "e26aca15-90a0-485a-97d1-d5ad87af7629",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "d82d9a5e-ce4d-4437-b82a-cbfae6c0d308",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "ce0876c8-00f5-44bd-8b1a-52c2ef46b02c",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
         }
     ],
     "controlSchemes": []
