@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class menuHandler : MonoBehaviour
 {
-   
     [Tooltip("Drag your menu panels here in order.")]
     public List<GameObject> menus = new List<GameObject>();
 
@@ -17,11 +15,12 @@ public class menuHandler : MonoBehaviour
     /// </summary>
     public void SwitchToMenu(int index)
     {
-        if (menus.Count != underlines.Count)
+        //LMAO nee, get out-commented *coconut mall plays*
+/*        if (menus.Count != underlines.Count)
         {
             Debug.LogError("Menus and Underlines lists must be the same length!");
             return;
-        }
+        }*/
 
         for (int i = 0; i < menus.Count; i++)
         {
