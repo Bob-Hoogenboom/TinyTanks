@@ -13,11 +13,11 @@ public class PlayerDriver : MonoBehaviour
     [SerializeField] private float speed = 1f;
     [SerializeField] private float rotationSpeed = 10f;
 
+    [SerializeField] private InputDevice driverInput;
 
 
     [Header("Input Values")]
     private Vector2 _moveVector; // left track = W/S && right track = ^/v
-
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -25,9 +25,14 @@ public class PlayerDriver : MonoBehaviour
     }
 
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+    }
+
+    private void Start()
+    {
+        //driverInput = manager.inputDevices[0];
     }
 
     private void Update()
