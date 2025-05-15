@@ -6,59 +6,59 @@ using UnityEngine.InputSystem;
 public class PlayerControlls : MonoBehaviour
 {
     [Header("References")]
-    private Rigidbody rb;
+    private Rigidbody _rb;
 
     [Header("Variables")]
-    [SerializeField] private float speed = 1f;
-    [SerializeField] private float rotationSpeed = 10f;
-    [SerializeField] private float turretRotationSpeed = 10f;
+    [SerializeField] private float _speed = 1f;
+    [SerializeField] private float _rotationSpeed = 10f;
+    [SerializeField] private float _turretRotationSpeed = 10f;
 
     [Header("Input Values")]
     private Vector2 _moveVector; // left track = W/S && right track = ^/v
     private Vector2 _rotateVector; // only takes a/d -> y axis
 
     [Header("Tank Components")]
-    [SerializeField] private GameObject tankBody;
-    [SerializeField] private GameObject tankTurret;
+    [SerializeField] private GameObject _tankBody;
+    [SerializeField] private GameObject _tankTurret;
 
-    private PlayerManager manager;
-    private int index;
+    private PlayerManager _manager;
+    private int _index;
 
     private void Awake()
     {
-        manager = FindObjectOfType<PlayerManager>();
-        index = manager.index;
+        _manager = FindObjectOfType<PlayerManager>();
+        _index = _manager.index;
 
     }
 
     private void Start()
     {
-        if(index == 1)
-            tankBody = GameObject.FindGameObjectWithTag("TankBody1");
-        if (index == 2)
-            tankTurret = GameObject.FindGameObjectWithTag("TankTurret1");
-        if (index == 3)
-            tankBody = GameObject.FindGameObjectWithTag("TankBody2");
-        if (index == 4)
-            tankTurret = GameObject.FindGameObjectWithTag("TankTurret2");
+        if(_index == 1)
+            _tankBody = GameObject.FindGameObjectWithTag("TankBody1");
+        if (_index == 2)
+            _tankTurret = GameObject.FindGameObjectWithTag("TankTurret1");
+        if (_index == 3)
+            _tankBody = GameObject.FindGameObjectWithTag("TankBody2");
+        if (_index == 4)
+            _tankTurret = GameObject.FindGameObjectWithTag("TankTurret2");
     }
 
     private void Update()
     {
-        if (tankBody != null)
+        if (_tankBody != null)
         {
-            if (rb != null)
+            if (_rb != null)
                 Move();
             else
-                rb = tankBody.GetComponent<Rigidbody>();
+                _rb = _tankBody.GetComponent<Rigidbody>();
         }
 
-        if (tankTurret != null)
+        if (_tankTurret != null)
         {
-            if (rb != null)
+            if (_rb != null)
                 Rotate();
             else
-                rb = tankTurret.GetComponentInParent<Rigidbody>();
+                _rb = _tankTurret.GetComponentInParent<Rigidbody>();
         }
 
     }
@@ -74,20 +74,20 @@ public class PlayerControlls : MonoBehaviour
     }
     private void Move()
     {
-        rb.AddForce(Physics.gravity, ForceMode.Acceleration);
+        _rb.AddForce(Physics.gravity, ForceMode.Acceleration);
 
-        float moveAmount = (_moveVector.y + _moveVector.x) * 0.5f * speed;
+        float moveAmount = (_moveVector.y + _moveVector.x) * 0.5f * _speed;
         Vector3 move = transform.forward * moveAmount * Time.deltaTime;
-        rb.MovePosition(rb.position + move);
+        _rb.MovePosition(_rb.position + move);
 
-        float rotationAmount = (_moveVector.y - _moveVector.x) * rotationSpeed * Time.deltaTime;
+        float rotationAmount = (_moveVector.y - _moveVector.x) * _rotationSpeed * Time.deltaTime;
         Quaternion turnOffset = Quaternion.Euler(0, rotationAmount, 0);
-        rb.MoveRotation(rb.rotation * turnOffset);
+        _rb.MoveRotation(_rb.rotation * turnOffset);
     }
     private void Rotate()
     {
-        float rotationAmount = _rotateVector.x * turretRotationSpeed * Time.deltaTime;
-        tankTurret.transform.Rotate(0, rotationAmount, 0);
+        float rotationAmount = _rotateVector.x * _turretRotationSpeed * Time.deltaTime;
+        _tankTurret.transform.Rotate(0, rotationAmount, 0);
     }
 
 }
