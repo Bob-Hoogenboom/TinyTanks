@@ -2,13 +2,22 @@
     "name": "PlayerInputActions",
     "maps": [
         {
-            "name": "TankDriver",
+            "name": "TankControlls",
             "id": "53eb7342-d1b1-4209-9b17-3185cbaa7356",
             "actions": [
                 {
                     "name": "Move",
                     "type": "PassThrough",
                     "id": "e47dfe51-9d3c-457f-8fbc-051ad210eb04",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Rotate",
+                    "type": "PassThrough",
+                    "id": "ede6d412-f740-43ae-a8f1-74721c439e8a",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -70,27 +79,65 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
-                }
-            ]
-        },
-        {
-            "name": "TankTurret",
-            "id": "06325f44-3f07-4f53-b71d-4c646e171e18",
-            "actions": [
-                {
-                    "name": "Rotate",
-                    "type": "PassThrough",
-                    "id": "b54d7d25-504a-48c2-ad86-2d6d01dae0b3",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "2D Vector",
-                    "id": "965ccd82-2fd3-4044-b5ff-a3aa1c0e2b46",
+                    "id": "777020c0-4f5c-4816-8db8-4446b4859a38",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "4d59f823-0b10-4452-b729-97cc625c34be",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "336072f2-021c-4da1-8acd-066fe6356368",
+                    "path": "<Gamepad>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "115c09f2-cb39-490e-9896-0e44b3ee3224",
+                    "path": "<Gamepad>/rightStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "c4f68360-0e90-4a4b-9315-54d5c0c2ec8f",
+                    "path": "<Gamepad>/rightStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "28c79d8f-7241-4605-af34-8bb38ad093a9",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -101,7 +148,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "f4f9bb74-2b18-4abb-a553-3987c5d4ef53",
+                    "id": "a7793fd6-85fc-4947-9ee6-ebe39dd8b947",
                     "path": "",
                     "interactions": "",
                     "processors": "",
@@ -112,7 +159,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "e26aca15-90a0-485a-97d1-d5ad87af7629",
+                    "id": "df24e5da-557e-4c7d-999f-4bffa366edb0",
                     "path": "",
                     "interactions": "",
                     "processors": "",
@@ -123,7 +170,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "d82d9a5e-ce4d-4437-b82a-cbfae6c0d308",
+                    "id": "d3751327-7007-4d3e-b4d8-72a23508f857",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -134,8 +181,63 @@
                 },
                 {
                     "name": "right",
-                    "id": "ce0876c8-00f5-44bd-8b1a-52c2ef46b02c",
+                    "id": "2c918c98-a697-4068-ac75-b5396ae13a53",
                     "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "26d53ac8-9f95-45b3-9f7f-bb8f86e99c7d",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "66850ecb-9e38-4dfe-be82-24dc93870681",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "1f3370e1-34aa-4a0d-a103-46ddd5ee6fe2",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "a3c38c2f-9348-4580-be80-ffd010d16bab",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "71fae893-3d6c-41ed-a0e9-77e58e017def",
+                    "path": "<Gamepad>/leftStick/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

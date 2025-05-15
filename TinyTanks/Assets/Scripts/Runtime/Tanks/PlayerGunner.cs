@@ -13,25 +13,25 @@ public class PlayerGunner : MonoBehaviour
     [Range(10, 50)]
     [SerializeField] private float rotationSpeed = 10f;
 
+    [SerializeField] private InputDevice gunnerInput;
 
 
     [Header("Input Values")]
     private Vector2 _rotateVector; // only takes a/d -> y axis
 
-    public void OnRotate(InputAction.CallbackContext context)
-    {
-        _rotateVector = context.ReadValue<Vector2>();
-    }
-
-
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        //gunnerInput = manager.inputDevices[1];
     }
 
     private void Update()
     {
         Rotate();
+    }
+    public void OnRotate(InputAction.CallbackContext context)
+    {
+        _rotateVector = context.ReadValue<Vector2>();
     }
 
     private void Rotate()
