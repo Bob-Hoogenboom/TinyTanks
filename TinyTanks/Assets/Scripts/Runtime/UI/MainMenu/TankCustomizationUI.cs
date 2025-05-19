@@ -15,7 +15,13 @@ public class TankCustomizationUI : MonoBehaviour
         tankBodyButton.onClick.AddListener(() =>
         {
             Debug.Log("TankBodyChanged");
-            tankOBJ.ChangeBody();
+            tankOBJ.ChangeTankPart(TankPart.TANK_BODY);
         });
+
+/*        tankBodyButton.onClick.AddListener(() =>
+        {
+            Debug.Log("TankBodyChanged");
+            tankOBJ.ChangeTankPart(TankPart.TANK_CUPOLA);
+        });*/
     }
 }

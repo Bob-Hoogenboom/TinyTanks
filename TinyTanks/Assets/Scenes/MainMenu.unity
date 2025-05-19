@@ -1696,6 +1696,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3877614335207539098, guid: f3f6a627d23ac074cb37820f4899ccb5,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -3579991142741384963, guid: f3f6a627d23ac074cb37820f4899ccb5,
+        type: 3}
     - target: {fileID: 919132149155446097, guid: f3f6a627d23ac074cb37820f4899ccb5,
         type: 3}
       propertyPath: m_Name
@@ -2356,9 +2362,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankPartDatas:
-  - partName: Body
+  - part: 0
     meshFilter: {fileID: 412262168}
-    meshParts: []
+    meshParts:
+    - {fileID: -3579991142741384963, guid: f3f6a627d23ac074cb37820f4899ccb5, type: 3}
+    - {fileID: -3579991142741384963, guid: 6b6adc00723e7af47b147f4d89388b6b, type: 3}
+    - {fileID: -3579991142741384963, guid: 7f4d2962b92eadd47885f0bea5bdc40f, type: 3}
 --- !u!1 &1497075367
 GameObject:
   m_ObjectHideFlags: 0
@@ -5687,6 +5696,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4356503235644200852}
+  - component: {fileID: 6226466277742358902}
   m_Layer: 5
   m_Name: TankPartSelection
   m_TagString: Untagged
@@ -5694,6 +5704,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6226466277742358902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6226466277742358901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fc391b3027dbc54bae655c6b4cfd47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tankOBJ: {fileID: 1318180236}
+  tankBodyButton: {fileID: 740797501}
 --- !u!224 &6342767602688453751
 RectTransform:
   m_ObjectHideFlags: 0
