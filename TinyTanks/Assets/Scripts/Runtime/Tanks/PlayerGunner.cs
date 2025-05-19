@@ -6,14 +6,14 @@ using UnityEngine.InputSystem;
 public class PlayerGunner : MonoBehaviour
 {
     [Header("References")]
-    private Rigidbody rb;
+    private Rigidbody _rb;
 
     [Header("Variables")]
     [Tooltip("Rotation speed in angles/second")]
     [Range(10, 50)]
-    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private float _rotationSpeed = 10f;
 
-    [SerializeField] private InputDevice gunnerInput;
+    [SerializeField] private InputDevice _gunnerInput;
 
 
     [Header("Input Values")]
@@ -21,7 +21,7 @@ public class PlayerGunner : MonoBehaviour
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        _rb = GetComponent<Rigidbody>();
         //gunnerInput = manager.inputDevices[1];
     }
 
@@ -36,7 +36,7 @@ public class PlayerGunner : MonoBehaviour
 
     private void Rotate()
     {
-        float rotationAmount = _rotateVector.x * rotationSpeed * Time.deltaTime;
+        float rotationAmount = _rotateVector.x * _rotationSpeed * Time.deltaTime;
         this.transform.Rotate(0, rotationAmount, 0);
     }
 

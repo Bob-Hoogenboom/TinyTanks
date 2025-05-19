@@ -5,14 +5,11 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    public int _index { get; private set; }
-
     [Header("Tank Components")]
-    [SerializeField] public GameObject _tankBody;
-    [SerializeField] public GameObject _tankTurret;
+    [SerializeField] public GameObject tankBody;
+    [SerializeField] public GameObject tankTurret;
 
     private PlayerInput _input;
-
     private PlayerManager _manager;
 
     private void Awake()
@@ -25,15 +22,15 @@ public class Player : MonoBehaviour
 
     public void SetDriverControls()
     {
-        if (_tankBody != null)
-            _input.actions["Move"].performed += _tankBody.GetComponent<PlayerDriver>().OnMove;
+        if (tankBody != null)
+            _input.actions["Move"].performed += tankBody.GetComponent<PlayerDriver>().OnMove;
     }
 
     public void SetGunnerControls()
     {
-        if (_tankTurret != null)
+        if (tankTurret != null)
         {
-            _input.actions["Rotate"].performed += _tankTurret.GetComponent<PlayerGunner>().OnRotate;
+            _input.actions["Rotate"].performed += tankTurret.GetComponent<PlayerGunner>().OnRotate;
             //_input.actions["Shoot"].performed += _tankBody.GetComponent<PlayerGunner>().OnShoot;   // For when shooting gets implemented
         }
     }
