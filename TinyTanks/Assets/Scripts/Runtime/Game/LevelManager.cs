@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class LevelManager : MonoBehaviour
 {
 
     private PlayerManager _playerManager;
+    private Player driver1, driver2, gunner1, gunner2;
+
 
     private void Awake()
     {
@@ -14,25 +17,46 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        if(_playerManager.driver1 != null)
+        GameObject playerObj = _playerManager.GetPlayerInRole(0);
+        if (playerObj != null)
         {
-            _playerManager.driver1.tankBody = GameObject.FindGameObjectWithTag("TankBody1");
-            _playerManager.driver1.SetDriverControls();
+            driver1 = playerObj.GetComponent<Player>();
         }
-        if (_playerManager.driver2 != null)
+        playerObj = _playerManager.GetPlayerInRole(1);
+        if (playerObj != null)
         {
-            _playerManager.driver2.tankBody = GameObject.FindGameObjectWithTag("TankBody2");
-            _playerManager.driver2.SetDriverControls();
+            gunner1 = playerObj.GetComponent<Player>();
         }
-        if (_playerManager.gunner1 != null)
+        playerObj = _playerManager.GetPlayerInRole(2);
+        if (playerObj != null)
         {
-            _playerManager.gunner1.tankTurret = GameObject.FindGameObjectWithTag("TankTurret1");
-            _playerManager.gunner1.SetGunnerControls();
+            driver2 = playerObj.GetComponent<Player>();
         }
-        if (_playerManager.gunner2 != null)
+        playerObj = _playerManager.GetPlayerInRole(3);
+        if (playerObj != null)
         {
-            _playerManager.gunner2.tankTurret = GameObject.FindGameObjectWithTag("TankTurret2");
-            _playerManager.gunner2.SetGunnerControls();
+            gunner2 = playerObj.GetComponent<Player>();
+        }
+
+        if (driver1 != null)
+        {
+            driver1.tankBody = GameObject.FindGameObjectWithTag("TankBody1");
+            driver1.SetDriverControls();
+        }
+        if (driver2 != null)
+        {
+            driver2.tankBody = GameObject.FindGameObjectWithTag("TankBody2");
+            driver2.SetDriverControls();
+        }
+        if (gunner1 != null)
+        {
+            gunner1.tankTurret = GameObject.FindGameObjectWithTag("TankTurret1");
+            gunner1.SetGunnerControls();
+        }
+        if (gunner2 != null)
+        {
+            gunner2.tankTurret = GameObject.FindGameObjectWithTag("TankTurret2");
+            gunner2.SetGunnerControls();
         }
     }
 }
