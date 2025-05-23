@@ -10,10 +10,10 @@ public class PlayerDriver : MonoBehaviour
     private Rigidbody rb;
 
     [Header("Variables")]
-    [SerializeField] private float speed = 1f;
-    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private float _speed = 1f;
+    [SerializeField] private float _rotationSpeed = 10f;
 
-    [SerializeField] private InputDevice driverInput;
+    [SerializeField] private InputDevice _driverInput;
 
 
     [Header("Input Values")]
@@ -44,11 +44,11 @@ public class PlayerDriver : MonoBehaviour
     {
         rb.AddForce(Physics.gravity, ForceMode.Acceleration);
 
-        float moveAmount = (_moveVector.y + _moveVector.x) * 0.5f * speed;
+        float moveAmount = (_moveVector.y + _moveVector.x) * 0.5f * _speed;
         Vector3 move = transform.forward * moveAmount * Time.deltaTime;
         rb.MovePosition(rb.position + move);
 
-        float rotationAmount = (_moveVector.y - _moveVector.x) * rotationSpeed * Time.deltaTime;
+        float rotationAmount = (_moveVector.y - _moveVector.x) * _rotationSpeed * Time.deltaTime;
         Quaternion turnOffset = Quaternion.Euler(0, rotationAmount, 0);
         rb.MoveRotation(rb.rotation * turnOffset);
     }
