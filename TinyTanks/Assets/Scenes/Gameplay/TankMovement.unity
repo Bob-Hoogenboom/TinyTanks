@@ -756,8 +756,8 @@ MonoBehaviour:
   _rotationSpeed: 10
   reloadCooldown: 5
   _bulletSpeed: 5
-  bulletPrefab: {fileID: 0}
-  turretTransform: {fileID: 0}
+  _bulletPrefab: {fileID: 0}
+  _turretTransform: {fileID: 0}
 --- !u!65 &1092316580
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -858,9 +858,9 @@ MonoBehaviour:
   _rotationSpeed: 10
   reloadCooldown: 5
   _bulletSpeed: 15
-  bulletPrefab: {fileID: 3379241636588189732, guid: 6758c3e3367d5d84c9572dacba185fe0,
+  _bulletPrefab: {fileID: 3379241636588189732, guid: 6758c3e3367d5d84c9572dacba185fe0,
     type: 3}
-  turretTransform: {fileID: 1796261245}
+  _turretTransform: {fileID: 1796261245}
 --- !u!65 &1424401147
 BoxCollider:
   m_ObjectHideFlags: 0
