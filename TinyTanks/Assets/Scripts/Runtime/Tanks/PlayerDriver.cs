@@ -78,7 +78,7 @@ public class PlayerDriver : MonoBehaviour
                 _reloadTimer = reloadCooldown;
                 _isShooting = false;
 
-                GameObject bullet = Instantiate(_bulletPrefab, _turretTransform.position + new Vector3(0,2,0), Quaternion.Euler(90, 0, 0));
+                GameObject bullet = Instantiate(_bulletPrefab, _turretTransform.position, Quaternion.Euler(90, 0, 0));
                 var brb = bullet.GetComponent<Rigidbody>();
                 brb.AddForce(Vector3.forward * _bulletSpeed, ForceMode.VelocityChange);
                 Destroy(bullet, 5f);
