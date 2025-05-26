@@ -13,9 +13,12 @@ public class PlayerDriver : MonoBehaviour
     [SerializeField] private float _speed = 1f;
     [SerializeField] private float _rotationSpeed = 10f;
     [SerializeField] private float reloadCooldown = 5f;
+    [SerializeField] private float _bulletSpeed = 10f;
 
     [SerializeField] private InputDevice _driverInput;
 
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform turretTransform;
 
     [Header("Input Values")]
     private Vector2 _moveVector; // left track = W/S && right track = ^/v
@@ -75,6 +78,12 @@ public class PlayerDriver : MonoBehaviour
                 _reloadTimer = reloadCooldown;
                 Debug.Log("Im shooting my load UwU");
                 _isShooting = false;
+
+
+                GameObject bullet = Instantiate(bulletPrefab, turretTransform.position + new Vector3(0,2,0), Quaternion.Euler(90, 0, 0));
+                var brb = bullet.GetComponent<Rigidbody>();
+                brb.AddRelativeForce(Vector3.up * _bulletSpeed, ForceMode.VelocityChange);
+                Destroy(bullet, 5f);
             }
             else
             {

@@ -752,8 +752,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0655657db2f2a1f44a81286cb1e5eb98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  rotationSpeed: 50
+  _speed: 1
+  _rotationSpeed: 10
+  reloadCooldown: 5
+  _bulletSpeed: 5
+  bulletPrefab: {fileID: 0}
+  turretTransform: {fileID: 0}
 --- !u!65 &1092316580
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -811,7 +815,7 @@ Transform:
   m_GameObject: {fileID: 1092316577}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.37, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -850,8 +854,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0655657db2f2a1f44a81286cb1e5eb98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  rotationSpeed: 50
+  _speed: 1
+  _rotationSpeed: 10
+  reloadCooldown: 5
+  _bulletSpeed: 15
+  bulletPrefab: {fileID: 3379241636588189732, guid: 6758c3e3367d5d84c9572dacba185fe0,
+    type: 3}
+  turretTransform: {fileID: 1796261245}
 --- !u!65 &1424401147
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1036,7 +1045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ab01b3137b186478db30ebf468e608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 25
+  _rotationSpeed: 10
 --- !u!1 &1883608142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1190,7 +1199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ab01b3137b186478db30ebf468e608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 25
+  _rotationSpeed: 10
 --- !u!65 &1975164052
 BoxCollider:
   m_ObjectHideFlags: 0
