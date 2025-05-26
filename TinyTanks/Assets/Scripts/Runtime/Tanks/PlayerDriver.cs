@@ -12,16 +12,27 @@ public class PlayerDriver : MonoBehaviour
     [Header("Variables")]
     [SerializeField] private float _speed = 1f;
     [SerializeField] private float _rotationSpeed = 10f;
+    [SerializeField] private float reloadCooldown = 5f;
+    [SerializeField] private float _bulletSpeed = 10f;
 
     [SerializeField] private InputDevice _driverInput;
 
+    [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private Transform _turretTransform;
 
     [Header("Input Values")]
     private Vector2 _moveVector; // left track = W/S && right track = ^/v
+    private float _reloadTimer;
+    private bool _isShooting;
 
     public void OnMove(InputAction.CallbackContext context)
     {
         _moveVector = context.ReadValue<Vector2>();
+    }
+
+    public void OnShoot()
+    {
+        _isShooting = true;
     }
 
 
@@ -37,7 +48,12 @@ public class PlayerDriver : MonoBehaviour
 
     private void Update()
     {
+
+        if (_reloadTimer >= 0)
+            _reloadTimer -= Time.deltaTime;
+
         Move();
+        Shoot();
     }
 
     private void Move()
@@ -51,5 +67,27 @@ public class PlayerDriver : MonoBehaviour
         float rotationAmount = (_moveVector.y - _moveVector.x) * _rotationSpeed * Time.deltaTime;
         Quaternion turnOffset = Quaternion.Euler(0, rotationAmount, 0);
         rb.MoveRotation(rb.rotation * turnOffset);
+    }
+
+    private void Shoot()
+    {
+        if(_isShooting == true)
+        {
+            if(_reloadTimer <= 0)
+            {
+                _reloadTimer = reloadCooldown;
+                _isShooting = false;
+
+                GameObject bullet = Instantiate(_bulletPrefab, _turretTransform.position, Quaternion.Euler(90, 0, 0));
+                var brb = bullet.GetComponent<Rigidbody>();
+                brb.AddForce(Vector3.forward * _bulletSpeed, ForceMode.VelocityChange);
+                Destroy(bullet, 5f);
+            }
+            else
+            {
+                Debug.Log("Im not ready to shoot my load Senpai");
+                _isShooting = false;
+            }
+        }
     }
 }

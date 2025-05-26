@@ -41,22 +41,22 @@ public class LevelManager : MonoBehaviour
         if (_driver1 != null)
         {
             _driver1.tankBody = GameObject.FindGameObjectWithTag("TankBody1");
-            _driver1.SetDriverControls();
+            _driver1.SetDriverControls(_driver1.GetComponent<Player>().input);
         }
         if (_driver2 != null)
         {
             _driver2.tankBody = GameObject.FindGameObjectWithTag("TankBody2");
-            _driver2.SetDriverControls();
+            _driver2.SetDriverControls(_driver2.GetComponent<Player>().input);
         }
         if (_gunner1 != null)
         {
             _gunner1.tankTurret = GameObject.FindGameObjectWithTag("TankTurret1");
-            _gunner1.SetGunnerControls();
+            _gunner1.SetGunnerControls(_gunner1.GetComponent<Player>().input);
         }
         if (_gunner2 != null)
         {
             _gunner2.tankTurret = GameObject.FindGameObjectWithTag("TankTurret2");
-            _gunner2.SetGunnerControls();
+            _gunner2.SetGunnerControls(_gunner2.GetComponent<Player>().input);
         }
     }
 }

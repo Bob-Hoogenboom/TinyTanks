@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] public GameObject tankBody;
     [SerializeField] public GameObject tankTurret;
 
-    private PlayerInput _input;
+    public PlayerInput input { get; private set; }
     private PlayerManager _manager;
 
     private void Awake()
@@ -17,23 +17,27 @@ public class Player : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         _manager = FindObjectOfType<PlayerManager>();
         //_manager.players.Add(this);
-        _input = GetComponent<PlayerInput>();
+        input = GetComponent<PlayerInput>();
     }
 
-    public void SetDriverControls()
+    public void SetDriverControls(PlayerInput playerInput)
     {
         if (tankBody != null)
-            _input.actions["Move"].performed += tankBody.GetComponent<PlayerDriver>().OnMove;
-    }
-
-    public void SetGunnerControls()
-    {
-        if (tankTurret != null)
         {
-            _input.actions["Rotate"].performed += tankTurret.GetComponent<PlayerGunner>().OnRotate;
-            //_input.actions["Shoot"].performed += _tankBody.GetComponent<PlayerGunner>().OnShoot;   // For when shooting gets implemented
+            InputActionAsset actions = playerInput.actions;
+            PlayerDriver driver = tankBody.GetComponent<PlayerDriver>();
+            actions.FindAction("Move").performed += ctx => driver.OnMove(ctx);
+            actions.FindAction("Shoot").performed += ctx => driver.OnShoot();
         }
     }
 
-
+    public void SetGunnerControls(PlayerInput playerInput)
+    {
+        if (tankTurret != null)
+        {
+            InputActionAsset actions = playerInput.actions;
+            PlayerGunner gunner = tankBody.GetComponent<PlayerGunner>();
+            actions.FindAction("Move").performed += ctx => gunner.OnRotate(ctx);
+        }
+    }
 }
