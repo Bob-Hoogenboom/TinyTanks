@@ -27,8 +27,6 @@ public class PlayerControlls : MonoBehaviour
     private void Awake()
     {
         _manager = FindObjectOfType<PlayerManager>();
-        _index = _manager.index;
-
     }
 
     private void Start()

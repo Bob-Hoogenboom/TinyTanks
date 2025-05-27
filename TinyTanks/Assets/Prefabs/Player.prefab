@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 54817087915352242}
-  - component: {fileID: 6415538711962443483}
-  - component: {fileID: 4499345514754647028}
+  - component: {fileID: 3804708763802313941}
+  - component: {fileID: 586476364461600115}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6415538711962443483
+--- !u!114 &3804708763802313941
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,15 +42,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3264024113075120981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a79fe6081c6e28459f2c7377f3acbe0, type: 3}
+  m_Script: {fileID: 11500000, guid: a61238a3155aa9046afbfe0f052c4144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 50
-  _rotationSpeed: 250
-  _turretRotationSpeed: 250
   _tankBody: {fileID: 0}
   _tankTurret: {fileID: 0}
---- !u!114 &4499345514754647028
+--- !u!114 &586476364461600115
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,37 +74,21 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6415538711962443483}
-        m_TargetAssemblyTypeName: PlayerInput, Assembly-CSharp
-        m_MethodName: OnMove
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: e47dfe51-9d3c-457f-8fbc-051ad210eb04
     m_ActionName: TankControlls/Move[/Keyboard/w,/Keyboard/s,/Keyboard/downArrow,/Keyboard/upArrow]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6415538711962443483}
-        m_TargetAssemblyTypeName: PlayerInput, Assembly-CSharp
-        m_MethodName: OnRotate
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: ede6d412-f740-43ae-a8f1-74721c439e8a
     m_ActionName: TankControlls/Rotate[/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 40db535d-a41c-4c2a-bea5-d49db0df340b
+    m_ActionName: TankDriver/Move[/Keyboard/w,/Keyboard/s,/Keyboard/downArrow,/Keyboard/upArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: dbeb2973-e387-485f-9dc8-62bb90203b29
+    m_ActionName: TankGunner/Rotate[/Keyboard/a,/Keyboard/d]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: TankControlls
