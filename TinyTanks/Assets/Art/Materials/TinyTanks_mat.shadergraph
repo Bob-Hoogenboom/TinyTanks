@@ -41,6 +41,9 @@
         },
         {
             "m_Id": "b12294f717ae467f97b740d9e0aa1bd1"
+        },
+        {
+            "m_Id": "3410f2b4c7d34656aa16605cf41e0c53"
         }
     ],
     "m_Keywords": [],
@@ -206,7 +209,7 @@
             },
             "m_InputSlot": {
                 "m_Node": {
-                    "m_Id": "c328fbfd37023b84b0e6d61edc72ab48"
+                    "m_Id": "cd2ee7937e14f18c8dcfa0cb0e18e4cd"
                 },
                 "m_SlotId": 1
             }
@@ -220,7 +223,7 @@
             },
             "m_InputSlot": {
                 "m_Node": {
-                    "m_Id": "cd2ee7937e14f18c8dcfa0cb0e18e4cd"
+                    "m_Id": "c328fbfd37023b84b0e6d61edc72ab48"
                 },
                 "m_SlotId": 1
             }
@@ -1612,6 +1615,34 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "3410f2b4c7d34656aa16605cf41e0c53",
+    "m_Guid": {
+        "m_GuidSerialized": "c12f8830-7c1c-4308-b5ce-a3926d74f111"
+    },
+    "m_Name": "Metallic intensity",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Metallic intensity",
+    "m_DefaultReferenceName": "_Metallic_intensity",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": 0.0,
+    "m_FloatType": 0,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
+    }
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "34a1b69f941b4462a64343e2ae0174bf",
@@ -2240,10 +2271,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1386.9998779296875,
-            "y": 605.9999389648438,
-            "width": 115.9998779296875,
-            "height": 34.00006103515625
+            "x": -1354.0,
+            "y": 677.0,
+            "width": 116.0,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -2471,10 +2502,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1252.078857421875,
-            "y": 1150.4453125,
+            "x": -1238.0,
+            "y": 1108.0,
             "width": 208.0,
-            "height": 326.0
+            "height": 326.0001220703125
         }
     },
     "m_Slots": [
@@ -3534,6 +3565,9 @@
         },
         {
             "m_Id": "b12294f717ae467f97b740d9e0aa1bd1"
+        },
+        {
+            "m_Id": "3410f2b4c7d34656aa16605cf41e0c53"
         }
     ]
 }
