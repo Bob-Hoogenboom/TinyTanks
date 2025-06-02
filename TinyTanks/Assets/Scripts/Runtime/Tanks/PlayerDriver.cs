@@ -10,15 +10,16 @@ public class PlayerDriver : MonoBehaviour
     private Rigidbody rb;
 
     [Header("Variables")]
-    [SerializeField] private float _speed = 1f;
-    [SerializeField] private float _rotationSpeed = 10f;
+    [SerializeField] private float _speed = 2f;
+    [SerializeField] private float _rotationSpeed = 40f;
     [SerializeField] private float reloadCooldown = 5f;
-    [SerializeField] private float _bulletSpeed = 10f;
+    [SerializeField] private float _bulletSpeed = 1f;
 
     [SerializeField] private InputDevice _driverInput;
 
     [SerializeField] private GameObject _bulletPrefab;
-    [SerializeField] private Transform _turretTransform;
+    [SerializeField] private GameObject _bulletParent;
+    [SerializeField] private Transform _bulletSpawnLocation;
 
     [Header("Input Values")]
     private Vector2 _moveVector; // left track = W/S && right track = ^/v
@@ -78,10 +79,13 @@ public class PlayerDriver : MonoBehaviour
                 _reloadTimer = reloadCooldown;
                 _isShooting = false;
 
-                GameObject bullet = Instantiate(_bulletPrefab, _turretTransform.position, Quaternion.Euler(90, 0, 0));
-                var brb = bullet.GetComponent<Rigidbody>();
-                brb.AddForce(Vector3.forward * _bulletSpeed, ForceMode.VelocityChange);
-                Destroy(bullet, 5f);
+                Quaternion rotation = _bulletSpawnLocation.rotation * Quaternion.Euler(-90, 0, 0);
+                GameObject bulletObj = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, rotation);
+                Rigidbody brb = bulletObj.GetComponent<Rigidbody>();
+                Bullet bullet = bulletObj.GetComponent<Bullet>();
+                bullet.parent = _bulletParent.gameObject;
+                brb.AddForce(_bulletSpawnLocation.forward * _bulletSpeed, ForceMode.VelocityChange);
+                Destroy(bulletObj, 5f);
             }
             else
             {
