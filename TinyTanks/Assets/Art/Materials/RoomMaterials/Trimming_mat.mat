@@ -42,7 +42,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: e4fd8de304a38d5448d152af0233ce65, type: 3}
+        m_Texture: {fileID: 2800000, guid: 501d2334e8243cb4fa73534379e3d823, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -58,7 +58,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EMR:
-        m_Texture: {fileID: 2800000, guid: 15f4b3ddd94ee37478f4f88ec2cecf11, type: 3}
+        m_Texture: {fileID: 2800000, guid: dff4a5903e3f59e4680a919ff0f9a9c3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -66,7 +66,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: c17f238ad20d4c64aa5a6bab3cc8b0f0, type: 3}
+        m_Texture: {fileID: 2800000, guid: c4f0a99140ee4644b987bda4496e0f3b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -101,6 +101,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
+    - _Alpha_Clip_Threshold: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -117,6 +118,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
+    - _Metallic_intensity: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
