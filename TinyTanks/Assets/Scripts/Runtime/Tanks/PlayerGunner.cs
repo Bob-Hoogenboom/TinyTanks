@@ -32,6 +32,7 @@ public class PlayerGunner : MonoBehaviour
     public void OnRotate(InputAction.CallbackContext context)
     {
         _rotateVector = context.ReadValue<Vector2>();
+        Debug.Log(_rotateVector);
     }
 
     private void Rotate()
