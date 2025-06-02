@@ -58,5 +58,6 @@ public class LevelManager : MonoBehaviour
             _gunner2.tankTurret = GameObject.FindGameObjectWithTag("TankTurret2");
             _gunner2.SetGunnerControls(_gunner2.GetComponent<Player>().input);
         }
+
     }
 }

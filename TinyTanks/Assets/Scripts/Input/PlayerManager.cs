@@ -161,4 +161,11 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
+
+    public Dictionary<int, int> GetPlayers()
+    {
+        Dictionary<int, int> playerToRoles = _playerToRoleMap;
+
+        return playerToRoles;
+    }
 }
