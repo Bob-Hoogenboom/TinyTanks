@@ -24,7 +24,7 @@ public class PlayerDriver : MonoBehaviour
     [Header("Input Values")]
     private Vector2 _moveVector;
     private float _reloadTimer;
-    private bool _isLoaded;
+    private bool _isLoaded = true;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -52,7 +52,6 @@ public class PlayerDriver : MonoBehaviour
             _reloadTimer -= Time.deltaTime;
 
         Move();
-        Shoot();
     }
 
     private void Move()
