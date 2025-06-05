@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
             InputActionAsset actions = playerInput.actions;
             PlayerGunner gunner = tankTurret.GetComponent<PlayerGunner>();
             actions.FindAction("Rotate").performed += ctx => gunner.OnRotate(ctx);
+            actions.FindAction("Reload").performed += ctx => gunner.OnReload();
         }
     }
 }
