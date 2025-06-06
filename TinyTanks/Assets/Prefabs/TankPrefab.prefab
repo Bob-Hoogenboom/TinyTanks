@@ -523,7 +523,7 @@ Transform:
   m_GameObject: {fileID: 5742852005183055864}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0030255683, y: 0.33155358, z: -0.089453004}
+  m_LocalPosition: {x: -0.0030255683, y: 0.29, z: -0.089453004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1310,6 +1310,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8417796927481747343, guid: 42a37a046e3ec104db7d766801b4dd13,
+        type: 3}
+      propertyPath: cupolaTransform
+      value: 
+      objectReference: {fileID: 5877753830352249208}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1367,6 +1372,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: GunnerCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1895708012193612146, guid: eee26696c6da89043b3aa63ff9667d52,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3069535145168372815, guid: eee26696c6da89043b3aa63ff9667d52,
+        type: 3}
+      propertyPath: cupolaTransform
+      value: 
+      objectReference: {fileID: 5877753830352249208}
     - target: {fileID: 3923392487894041625, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: barrelTransform
@@ -1376,6 +1391,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5933617521158145350, guid: eee26696c6da89043b3aa63ff9667d52,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 284
       objectReference: {fileID: 0}
     - target: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
