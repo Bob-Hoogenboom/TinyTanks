@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerGunner : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerGunner : MonoBehaviour
 
     [Header("References")]
     private Rigidbody _rb;
+    private PlayerDriver _playerDriver;
 
     [Header("Variables")]
     [Tooltip("Rotation speed in angles/second")]
@@ -22,6 +24,10 @@ public class PlayerGunner : MonoBehaviour
 
     [SerializeField] private InputDevice _gunnerInput;
 
+    [Header("UI")]
+    [Tooltip("Bullet state UI")]
+    [SerializeField] private TMP_Text bulletStateText;
+
 
     [Header("Input Values")]
     private Vector2 _rotateVector; // only takes a/d -> y axis
@@ -31,6 +37,8 @@ public class PlayerGunner : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _playerDriver = GetComponentInParent<PlayerDriver>();
+        _playerDriver.OnShootComplete.AddListener(HandleDriverShoot);
         //gunnerInput = manager.inputDevices[1];
     }
 
@@ -47,7 +55,7 @@ public class PlayerGunner : MonoBehaviour
     {
         if(isReloading == false)
         {
-            isReloading = true;
+            isReloading = true;         
             StartCoroutine(ReloadCoroutine());
         }
         
@@ -70,7 +78,13 @@ public class PlayerGunner : MonoBehaviour
             yield return null;
         }
 
+        bulletStateText.text = "Ready";
         isReloading = false;
         OnReloadComplete.Invoke();
+    }
+
+    private void HandleDriverShoot()
+    {
+        bulletStateText.text = "Not Ready";
     }
 }
