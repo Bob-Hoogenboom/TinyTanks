@@ -57,6 +57,18 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Distortiontexture:
+        m_Texture: {fileID: 2800000, guid: 8355600309d452b429da4ad1335da41b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Drips_Mask:
+        m_Texture: {fileID: 2800000, guid: 3f446b4ee7b17074b908b1e32e243f88, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Dripsmask:
+        m_Texture: {fileID: 2800000, guid: 3f446b4ee7b17074b908b1e32e243f88, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -73,8 +85,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Normal_Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Normal_map:
-        m_Texture: {fileID: 2800000, guid: 7a3385d91849418468f8f3e8cbe6a760, type: 3}
+        m_Texture: {fileID: 2800000, guid: d6380ae79f9709c4d8192fe83dfefb90, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -97,6 +113,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 7a3385d91849418468f8f3e8cbe6a760, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_c1eae15a1f964474b497ff78800a9ad3_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 3227e1b698e7b4f43a8c6e6a02f540d5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_da33af65258244a0a85900463f784f7f_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: d6ef91b8ca0a6194a8c62ec1f94d83cb, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -107,6 +127,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_fc8a9220a1754aed9d1e9f7587f769ce_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 8355600309d452b429da4ad1335da41b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Soap_Image:
+        m_Texture: {fileID: 2800000, guid: 013e8ff24f4314b4d9e6cc7f38aa5290, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -138,18 +162,27 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _DistortionSpeed: 3
+    - _Distortion_Amount: 0.49
+    - _Distortion_Speed: 6
+    - _Distortionamount: 0.25
+    - _Drip_Speed: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _Laundry_Speed: 9
+    - _Laundryspeed: 5
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _Shadow_Amount: 0.47
+    - _Shadow_amount: 0.4
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
