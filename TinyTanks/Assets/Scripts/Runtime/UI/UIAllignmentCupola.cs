@@ -14,7 +14,7 @@ public class CupolaUIRotation : MonoBehaviour
     void Update()
     {
         // Get the Y-axis rotation of the cupola in world space
-        float yaw = cupolaTransform.eulerAngles.y;
+        float yaw = cupolaTransform.localEulerAngles.y;
 
         // Apply it to the UI rotation (Z axis, because UI rotates around Z)
         rectTransform.localRotation = Quaternion.Euler(0f, 0f, -yaw);
