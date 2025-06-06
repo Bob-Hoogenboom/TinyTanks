@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
+using TMPro;
 
 public class Health : MonoBehaviour
 {
@@ -12,6 +14,12 @@ public class Health : MonoBehaviour
     [Header("Respawn settings")]
     [SerializeField] private float minSpawnDistance = 10f;
     [SerializeField] private float respawnDelay = 3f;
+
+    [Header("UI")]
+    [SerializeField] private GameObject driverRespawnTimer;
+    [SerializeField] private GameObject gunnerRespawnTimer;
+    [SerializeField] private TMP_Text driverRespawnTimerText;
+    [SerializeField] private TMP_Text gunnerRespawnTimerText;
 
     private int currentHitpoints;
 
@@ -67,15 +75,21 @@ public class Health : MonoBehaviour
 
         driver.enabled = false;
         gunner.enabled = false;
+        driverRespawnTimer.SetActive(true);
+        gunnerRespawnTimer.SetActive(true);
 
         Debug.Log($"Player:{driver.gameObject.name} is respawning");
 
         while(waitTimer.keepWaiting)
         {
             // desiplay wait UI
-            // waitTimer.Progress displays how far the process is -> can be used for UI to give value to slider or something
+            gunnerRespawnTimerText.text = $"{(int)waitTimer.RemainingTime}";
+            driverRespawnTimerText.text = $"{(int)waitTimer.RemainingTime}";
             yield return null;
         }
+
+        driverRespawnTimer.SetActive(false);
+        gunnerRespawnTimer.SetActive(false);
 
         Respawn();
     }

@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerDriver : MonoBehaviour
 {
+
+    [Header("Events")]
+    public UnityEvent OnShootComplete;
+
     [Header("References")]
     private Rigidbody _rb;
     private PlayerGunner _playerGunner;
@@ -79,6 +84,7 @@ public class PlayerDriver : MonoBehaviour
             bullet.parent = _bulletParent.gameObject;
             brb.AddForce(_bulletSpawnLocation.forward * _bulletSpeed, ForceMode.VelocityChange);
             Destroy(bulletObj, 5f);
+            OnShootComplete.Invoke();
         }
         else
         {
