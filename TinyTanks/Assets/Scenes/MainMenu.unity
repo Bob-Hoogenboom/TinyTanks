@@ -1042,7 +1042,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &400690992
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1078,12 +1078,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a5c549f807aec47a8298d2d9ee7166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!33 &412262168 stripped
-MeshFilter:
-  m_CorrespondingSourceObject: {fileID: -3877614335207539098, guid: f3f6a627d23ac074cb37820f4899ccb5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1037336140}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &489799333
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,6 +1727,7 @@ GameObject:
   - component: {fileID: 699398512}
   - component: {fileID: 699398514}
   - component: {fileID: 699398513}
+  - component: {fileID: 699398515}
   m_Layer: 5
   m_Name: RoleSelect
   m_TagString: Untagged
@@ -1797,6 +1792,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sensitivity: 1
+--- !u!114 &699398515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699398511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac04e33b2c8ce8847914197f744c296b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  readyBTN: {fileID: 787318729699414844}
+  playersToJoin: 1
+  roleObjects:
+  - {fileID: 697768033}
+  - {fileID: 616881573}
+  - {fileID: 1722631933}
+  - {fileID: 876907760}
+  spherePrefab: {fileID: 4070372846232988020, guid: 13141f88c27ca79489a4c1d182d26bb9,
+    type: 3}
+  assignObject: {fileID: 4899175137503574827, guid: 95912a4d886ac5444bc23ea2c2238981,
+    type: 3}
 --- !u!1 &740797499
 GameObject:
   m_ObjectHideFlags: 0
@@ -2576,17 +2594,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: f3f6a627d23ac074cb37820f4899ccb5,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f3f6a627d23ac074cb37820f4899ccb5,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f3f6a627d23ac074cb37820f4899ccb5,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f3f6a627d23ac074cb37820f4899ccb5,
         type: 3}
@@ -2637,6 +2655,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f3f6a627d23ac074cb37820f4899ccb5,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -3877614335207539098, guid: f3f6a627d23ac074cb37820f4899ccb5,
         type: 3}
@@ -3524,7 +3547,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankPartDatas:
   - part: 0
-    meshFilter: {fileID: 412262168}
+    meshFilter: {fileID: 0}
     meshParts:
     - {fileID: -3579991142741384963, guid: f3f6a627d23ac074cb37820f4899ccb5, type: 3}
     - {fileID: -3579991142741384963, guid: 6b6adc00723e7af47b147f4d89388b6b, type: 3}
@@ -5171,11 +5194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d01422899967b874fa28f475dd4cc1cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controllerNameDisplays:
-  - {fileID: 8084835}
-  - {fileID: 941116980}
-  - {fileID: 1143840595}
-  - {fileID: 1842040123}
   roleNames:
   - Driver1
   - Gunner1
@@ -5634,7 +5652,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.79622644, g: 0.79622644, b: 0.79622644, a: 1}
+    m_DisabledColor: {r: 1, g: 0, b: 0, a: 0.77254903}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5652,7 +5670,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3608708833424368815}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 640723300}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &832352791169505674
 RectTransform:
   m_ObjectHideFlags: 0

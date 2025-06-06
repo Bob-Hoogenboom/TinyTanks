@@ -36,8 +36,8 @@ public class Player : MonoBehaviour
         if (tankTurret != null)
         {
             InputActionAsset actions = playerInput.actions;
-            PlayerGunner gunner = tankBody.GetComponent<PlayerGunner>();
-            actions.FindAction("Move").performed += ctx => gunner.OnRotate(ctx);
+            PlayerGunner gunner = tankTurret.GetComponent<PlayerGunner>();
+            actions.FindAction("Rotate").performed += ctx => gunner.OnRotate(ctx);
         }
     }
 }

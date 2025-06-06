@@ -7,6 +7,6 @@ public class LoadScene : MonoBehaviour
 {
     public void LoadMovementScene()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(4);
     }
 }
