@@ -61,7 +61,7 @@ public class ReadyPlayers : MonoBehaviour
         Vector3 pos = oldObj.transform.position;
         Quaternion rot = oldObj.transform.rotation;
 
-        GameObject newObj = Instantiate(assignObject, pos, rot);
+        GameObject newObj = Instantiate(assignObject, pos, rot,oldObj.transform.parent);
         roleObjects[roleId] = newObj;
 
         Debug.Log($"Changed role {roleId} to assigned object.");
@@ -80,7 +80,7 @@ public class ReadyPlayers : MonoBehaviour
         Vector3 pos = currentObj.transform.position;
         Quaternion rot = currentObj.transform.rotation;
 
-        GameObject sphere = Instantiate(spherePrefab, pos, rot);
+        GameObject sphere = Instantiate(spherePrefab, pos, rot, currentObj.transform.parent);
         roleObjects[roleId] = sphere;
 
         Debug.Log($"Reverted role {roleId} back to sphere.");
