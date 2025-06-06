@@ -15,7 +15,7 @@ public class Health : MonoBehaviour
 
     private int currentHitpoints;
 
-    private List<SpawnPoint> spawnPoints = new();
+    private List<GameObject> spawnPoints = new();
 
     private PlayerDriver driver;
     private PlayerGunner gunner;
@@ -26,7 +26,7 @@ public class Health : MonoBehaviour
 
         driver = GetComponent<PlayerDriver>();
         gunner = GetComponentInChildren<PlayerGunner>();
-        spawnPoints.AddRange(FindObjectsOfType<SpawnPoint>());
+        spawnPoints.AddRange(GameObject.FindGameObjectsWithTag("SpawnPoint"));
     }
 
     public void TakeDamage(int amount)
