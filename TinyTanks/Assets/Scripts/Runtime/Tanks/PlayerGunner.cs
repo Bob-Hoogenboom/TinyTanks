@@ -26,6 +26,8 @@ public class PlayerGunner : MonoBehaviour
     [Header("Input Values")]
     private Vector2 _rotateVector; // only takes a/d -> y axis
 
+    private bool isReloading = false;
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
@@ -43,7 +45,12 @@ public class PlayerGunner : MonoBehaviour
 
     public void OnReload()
     {
-        StartCoroutine(ReloadCoroutine());
+        if(isReloading == false)
+        {
+            isReloading = true;
+            StartCoroutine(ReloadCoroutine());
+        }
+        
     }
 
     private void Rotate()
@@ -63,6 +70,7 @@ public class PlayerGunner : MonoBehaviour
             yield return null;
         }
 
+        isReloading = false;
         OnReloadComplete.Invoke();
     }
 }
