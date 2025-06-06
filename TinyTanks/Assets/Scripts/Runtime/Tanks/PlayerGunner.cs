@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerGunner : MonoBehaviour
 {
@@ -27,6 +28,9 @@ public class PlayerGunner : MonoBehaviour
     [Header("UI")]
     [Tooltip("Bullet state UI")]
     [SerializeField] private TMP_Text bulletStateText;
+    [SerializeField] private GameObject reloadTimerPrefab;
+    [SerializeField] private Image bulletBGImage;
+    [SerializeField] private Image reloadTimerImage;
 
 
     [Header("Input Values")]
@@ -71,20 +75,28 @@ public class PlayerGunner : MonoBehaviour
     {
         TimedWait reloadTimer = new TimedWait(reloadCooldown);
 
+
+
         while (reloadTimer.keepWaiting)
         {
             //Reload UI slider change etc.
-            //reloadTimer.Progress displays how far the process is -> can be used for UI to give value to slider or something
+            bulletBGImage.fillAmount = reloadTimer.Progress;
+            reloadTimerImage.fillAmount = reloadTimer.Progress;
+
             yield return null;
         }
 
         bulletStateText.text = "Ready";
         isReloading = false;
+        reloadTimerPrefab.SetActive(false);
+        bulletBGImage.fillAmount = 0;
+        reloadTimerImage.fillAmount = 0;
         OnReloadComplete.Invoke();
     }
 
     private void HandleDriverShoot()
     {
         bulletStateText.text = "Not Ready";
+        reloadTimerPrefab.SetActive(true);
     }
 }
