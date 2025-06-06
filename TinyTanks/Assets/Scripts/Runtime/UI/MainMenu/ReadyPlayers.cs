@@ -8,8 +8,13 @@ public class ReadyPlayers : MonoBehaviour
     [SerializeField] private Button readyBTN;
     [SerializeField] private int playersToJoin = 4; //this variable is purely for testing 
     [SerializeField] private GameObject[] roleObjects;
+
     [SerializeField] private GameObject spherePrefab; // Original sphere prefab references
-    [SerializeField] private GameObject assignObject; // The replacement (e.g. cube)
+
+    [SerializeField] private GameObject hullPrefab; // The replacement (e.g. cube)
+    [SerializeField] private GameObject cupolaPrefab; // The replacement (e.g. cube)
+
+
 
     private PlayerManager _playManager;
     private Dictionary<int, int> _lastRolesPerPlayer = new Dictionary<int, int>();
@@ -61,8 +66,16 @@ public class ReadyPlayers : MonoBehaviour
         Vector3 pos = oldObj.transform.position;
         Quaternion rot = oldObj.transform.rotation;
 
-        GameObject newObj = Instantiate(assignObject, pos, rot,oldObj.transform.parent);
-        roleObjects[roleId] = newObj;
+        if(roleId == 0 || roleId == 2)
+        {
+            GameObject newObj = Instantiate(cupolaPrefab, pos, rot,oldObj.transform.parent);
+            roleObjects[roleId] = newObj;
+        }
+        else
+        {
+            GameObject newObj = Instantiate(hullPrefab, pos, rot, oldObj.transform.parent);
+            roleObjects[roleId] = newObj;
+        }
 
         Debug.Log($"Changed role {roleId} to assigned object.");
     }
