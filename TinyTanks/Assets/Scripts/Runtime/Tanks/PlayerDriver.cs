@@ -7,12 +7,12 @@ using UnityEngine.InputSystem;
 public class PlayerDriver : MonoBehaviour
 {
     [Header("References")]
-    private Rigidbody rb;
+    private Rigidbody _rb;
+    private PlayerGunner _playerGunner;
 
     [Header("Variables")]
     [SerializeField] private float _speed = 2f;
     [SerializeField] private float _rotationSpeed = 40f;
-    [SerializeField] private float reloadCooldown = 5f;
     [SerializeField] private float _bulletSpeed = 1f;
 
     [SerializeField] private InputDevice _driverInput;
@@ -22,9 +22,9 @@ public class PlayerDriver : MonoBehaviour
     [SerializeField] private Transform _bulletSpawnLocation;
 
     [Header("Input Values")]
-    private Vector2 _moveVector; // left track = W/S && right track = ^/v
+    private Vector2 _moveVector;
     private float _reloadTimer;
-    private bool _isShooting;
+    private bool _isLoaded = true;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -33,18 +33,16 @@ public class PlayerDriver : MonoBehaviour
 
     public void OnShoot()
     {
-        _isShooting = true;
+        Shoot();
     }
 
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-    }
+        _rb = GetComponent<Rigidbody>();
+        _playerGunner = GetComponentInChildren<PlayerGunner>();
+        _playerGunner.OnReloadComplete.AddListener(HandleGunnerReloadComplete);
 
-    private void Start()
-    {
-        //driverInput = manager.inputDevices[0];
     }
 
     private void Update()
@@ -54,44 +52,43 @@ public class PlayerDriver : MonoBehaviour
             _reloadTimer -= Time.deltaTime;
 
         Move();
-        Shoot();
     }
 
     private void Move()
     {
-        rb.AddForce(Physics.gravity, ForceMode.Acceleration);
+        _rb.AddForce(Physics.gravity, ForceMode.Acceleration);
 
         float moveAmount = (_moveVector.y + _moveVector.x) * 0.5f * _speed;
         Vector3 move = transform.forward * moveAmount * Time.deltaTime;
-        rb.MovePosition(rb.position + move);
+        _rb.MovePosition(_rb.position + move);
 
         float rotationAmount = (_moveVector.y - _moveVector.x) * _rotationSpeed * Time.deltaTime;
         Quaternion turnOffset = Quaternion.Euler(0, rotationAmount, 0);
-        rb.MoveRotation(rb.rotation * turnOffset);
+        _rb.MoveRotation(_rb.rotation * turnOffset);
     }
 
     private void Shoot()
     {
-        if(_isShooting == true)
+        if (_isLoaded == true)
         {
-            if(_reloadTimer <= 0)
-            {
-                _reloadTimer = reloadCooldown;
-                _isShooting = false;
-
-                Quaternion rotation = _bulletSpawnLocation.rotation * Quaternion.Euler(-90, 0, 0);
-                GameObject bulletObj = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, rotation);
-                Rigidbody brb = bulletObj.GetComponent<Rigidbody>();
-                Bullet bullet = bulletObj.GetComponent<Bullet>();
-                bullet.parent = _bulletParent.gameObject;
-                brb.AddForce(_bulletSpawnLocation.forward * _bulletSpeed, ForceMode.VelocityChange);
-                Destroy(bulletObj, 5f);
-            }
-            else
-            {
-                Debug.Log("Im not ready to shoot my load Senpai");
-                _isShooting = false;
-            }
+            _isLoaded = false;
+            Quaternion rotation = _bulletSpawnLocation.rotation * Quaternion.Euler(-90, 0, 0);
+            GameObject bulletObj = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, rotation);
+            Rigidbody brb = bulletObj.GetComponent<Rigidbody>();
+            Bullet bullet = bulletObj.GetComponent<Bullet>();
+            bullet.parent = _bulletParent.gameObject;
+            brb.AddForce(_bulletSpawnLocation.forward * _bulletSpeed, ForceMode.VelocityChange);
+            Destroy(bulletObj, 5f);
         }
+        else
+        {
+            Debug.Log("Im not ready to shoot my load Senpai");
+        }
+    }
+
+    private void HandleGunnerReloadComplete()
+    {
+        _isLoaded = true;
+        Debug.Log("Gunner finished reloading, Driver can shoot again!");
     }
 }

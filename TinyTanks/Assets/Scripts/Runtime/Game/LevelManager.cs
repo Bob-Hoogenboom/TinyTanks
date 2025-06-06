@@ -5,10 +5,8 @@ using UnityEngine.InputSystem;
 
 public class LevelManager : MonoBehaviour
 {
-
     private PlayerManager _playerManager;
     private Player _driver1, _driver2, _gunner1, _gunner2;
-
 
     private void Awake()
     {
@@ -17,6 +15,7 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        // assign players to tank objects
         GameObject playerObj = _playerManager.GetPlayerInRole(0);
         if (playerObj != null)
         {
@@ -38,6 +37,8 @@ public class LevelManager : MonoBehaviour
             _gunner2 = playerObj.GetComponent<Player>();
         }
 
+
+        // assign input if there is a player assigned to tankpart
         if (_driver1 != null)
         {
             _driver1.tankBody = GameObject.FindGameObjectWithTag("TankBody1");
@@ -58,6 +59,5 @@ public class LevelManager : MonoBehaviour
             _gunner2.tankTurret = GameObject.FindGameObjectWithTag("TankTurret2");
             _gunner2.SetGunnerControls(_gunner2.GetComponent<Player>().input);
         }
-
     }
 }
