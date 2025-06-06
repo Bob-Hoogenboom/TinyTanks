@@ -77,7 +77,7 @@ public class PlayerDriver : MonoBehaviour
         if (_isLoaded == true)
         {
             _isLoaded = false;
-            Quaternion rotation = _bulletSpawnLocation.rotation * Quaternion.Euler(-90, 0, 0);
+            Quaternion rotation = _bulletSpawnLocation.rotation;
             GameObject bulletObj = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, rotation);
             Rigidbody brb = bulletObj.GetComponent<Rigidbody>();
             Bullet bullet = bulletObj.GetComponent<Bullet>();
