@@ -12,10 +12,10 @@ public class Bullet : MonoBehaviour
         {
             if(other.gameObject != parent)
             {
-                if(other.gameObject.GetComponent<Health>())
-                    other.gameObject.GetComponent<Health>().hitPoints--;
+                if (other.gameObject.GetComponent<Health>())
+                    other.gameObject.GetComponent<Health>().TakeDamage(1);
                 else if (other.gameObject.GetComponentInParent<Health>())
-                    other.gameObject.GetComponentInParent<Health>().hitPoints--;
+                    other.gameObject.GetComponentInParent<Health>().TakeDamage(1);
                 Debug.Log("hit a player");
                 Destroy(gameObject);
             }         
