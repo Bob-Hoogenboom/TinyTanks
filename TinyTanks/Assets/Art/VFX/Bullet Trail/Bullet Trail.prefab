@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5035693190389014198}
   - component: {fileID: 140892260140583471}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 8638033701189328612}
   - component: {fileID: 1022700365415259455}
   - component: {fileID: 3208318579094249205}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bullet Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2771049729441235571}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.70710576, y: -0, z: -0, w: 0.70710784}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.5702753, y: 1.132, z: 15.103176}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
@@ -180,7 +180,7 @@ Transform:
   - {fileID: 6264683137304348262}
   - {fileID: 5035693190389014198}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1022700365415259455
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -206,7 +206,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5000001
   m_Height: 2
@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 8717083431961096622}
   - component: {fileID: 8376639144546651195}
   - component: {fileID: 2051271016094752959}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Smoke 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -238,7 +238,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6152987602544228073}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5062,7 +5062,7 @@ GameObject:
   - component: {fileID: 6264683137304348262}
   - component: {fileID: 5377782657247968897}
   - component: {fileID: 6279924806513688098}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Smoke 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5077,7 +5077,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8553236520805801397}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
