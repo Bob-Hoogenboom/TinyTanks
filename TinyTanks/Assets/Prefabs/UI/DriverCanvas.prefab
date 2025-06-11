@@ -51,7 +51,7 @@ Canvas:
   m_GameObject: {fileID: 614462684347698548}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -77,10 +77,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -138,7 +138,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 231}
+  m_AnchoredPosition: {x: 0, y: 176}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &330482955607460488
@@ -232,7 +232,7 @@ PrefabInstance:
     - target: {fileID: 662653501019353343, guid: 03a311449df15814d828ea05b551f93d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 662653501019353343, guid: 03a311449df15814d828ea05b551f93d,
         type: 3}
@@ -356,7 +356,7 @@ PrefabInstance:
     - target: {fileID: 3208757727922925410, guid: 28dcf118198971e43bf737adada676ca,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 114
+      value: 217
       objectReference: {fileID: 0}
     - target: {fileID: 3208757727922925410, guid: 28dcf118198971e43bf737adada676ca,
         type: 3}
@@ -599,12 +599,12 @@ PrefabInstance:
     - target: {fileID: 40193025697454168, guid: afae3c8d4d7bfdf47a7b026dcd635710,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1208.4149
+      value: -1195
       objectReference: {fileID: 0}
     - target: {fileID: 40193025697454168, guid: afae3c8d4d7bfdf47a7b026dcd635710,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -527.2571
+      value: -420
       objectReference: {fileID: 0}
     - target: {fileID: 40193025697454168, guid: afae3c8d4d7bfdf47a7b026dcd635710,
         type: 3}

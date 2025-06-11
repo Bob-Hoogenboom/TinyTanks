@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 5392481747817440426}
   - component: {fileID: 6725748877835005261}
   m_Layer: 0
-  m_Name: StandardBullet_prop
+  m_Name: StandardBullet_Prop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -251,11 +251,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 0}
-  _tankHitVFX: {fileID: 2049740959366051043, guid: e794b01cea4d81d46969de072c4548b6,
+  _tankHitVFX: {fileID: 2666358658107486306, guid: ed2b852cbd2211f4e8920134af2299f5,
     type: 3}
-  _enviormentHitVFX: {fileID: 2049740959366051043, guid: e794b01cea4d81d46969de072c4548b6,
+  _enviormentHitVFX: {fileID: 8021359772948875717, guid: ee77d7d403fabfd48be582168fe9a746,
     type: 3}
-  _bulletTrailVFX: {fileID: 2771049729441235571, guid: bc4baf23fc15efb48846be372d07783b,
+  _smokeVFX: {fileID: 3258551338417457710, guid: 2880db6858a8e81479ece32424a72b20,
     type: 3}
 --- !u!54 &6725748877835005261
 Rigidbody:

@@ -65,6 +65,7 @@ public class Health : MonoBehaviour
         //Disable controls
         driver.enabled = false;
         gunner.enabled = false;
+        Destroy(this.gameObject);
 
         // sent message to GameHandler that game is over
     }

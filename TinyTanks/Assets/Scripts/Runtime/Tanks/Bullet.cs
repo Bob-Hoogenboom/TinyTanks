@@ -8,13 +8,12 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] private GameObject _tankHitVFX;
     [SerializeField] private GameObject _enviormentHitVFX;
-    [SerializeField] private GameObject _bulletTrailVFX;
-
-    private GameObject _bulletTrail;
+    [SerializeField] private GameObject _smokeVFX;
 
     private void Start()
     {
-        _bulletTrail = Instantiate(_bulletTrailVFX, this.transform.position, this.transform.rotation, this.gameObject.transform);
+        var _barrelSmoke = Instantiate(_smokeVFX, this.transform.position, this.transform.rotation);
+        Destroy(_barrelSmoke, 3);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -33,7 +32,6 @@ public class Bullet : MonoBehaviour
                 Debug.Log("hit a player");
                 var vxf = Instantiate(_tankHitVFX, this.transform.position, this.transform.rotation);
                 Destroy(vxf, 3);
-                Destroy(_bulletTrail, 1);
                 Destroy(gameObject);
             }         
         }
@@ -41,8 +39,14 @@ public class Bullet : MonoBehaviour
         {
             var vxf = Instantiate(_enviormentHitVFX, this.transform.position, this.transform.rotation);
             Destroy(vxf, 3);
-            Destroy(_bulletTrail, 1);
-            Destroy(gameObject);      
+
+            Rigidbody rb = GetComponent<Rigidbody>(); // refine this so the bullet actually goes on the ground
+            Collider col = GetComponent<Collider>();
+            col.isTrigger = false;
+            rb.useGravity = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            Destroy(this);
         }
 
     }
