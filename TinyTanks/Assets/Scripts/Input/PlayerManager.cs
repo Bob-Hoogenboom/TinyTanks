@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     public class RoleAssignmentEvent : UnityEvent<int, int> { } // playerIndex, roleIndex
 
     [Header("Role Configuration")]
-    public string[] roleNames = { "Driver1", "Gunner1", "Driver2", "Gunner2" };
+    public string[] roleNames = { "Gunner1", "Driver1", "Gunner2",  "Driver2" };
     public int[] maxPlayersPerRole = { 1, 1, 1, 1 };
 
     [Header("Input Configuratiom")]
@@ -80,10 +80,10 @@ public class PlayerManager : MonoBehaviour
         var actions = playerInput.actions;
 
         // Bind role selection buttons
-        actions.FindAction("SelectRole1").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 0);
-        actions.FindAction("SelectRole2").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 1);
-        actions.FindAction("SelectRole3").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 2);
-        actions.FindAction("SelectRole4").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 3);
+        actions.FindAction("SelectRole1").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 1);
+        actions.FindAction("SelectRole2").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 0);
+        actions.FindAction("SelectRole3").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 3);
+        actions.FindAction("SelectRole4").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 2);
 
         // Alternative: Single button cycling through roles
         //actions.FindAction("CycleRole").performed += ctx => CyclePlayerRole(playerInput.playerIndex);
