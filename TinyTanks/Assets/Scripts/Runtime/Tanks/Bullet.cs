@@ -39,7 +39,14 @@ public class Bullet : MonoBehaviour
         {
             var vxf = Instantiate(_enviormentHitVFX, this.transform.position, this.transform.rotation);
             Destroy(vxf, 3);
-            Destroy(gameObject);      
+
+            Rigidbody rb = GetComponent<Rigidbody>(); // refine this so the bullet actually goes on the ground
+            Collider col = GetComponent<Collider>();
+            col.isTrigger = false;
+            rb.useGravity = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            Destroy(this);
         }
 
     }
