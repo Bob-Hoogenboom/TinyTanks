@@ -986,8 +986,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _speed: 2.5
-  _rotationSpeed: 25
-  _bulletSpeed: 7
+  _rotationSpeed: 30
+  _bulletSpeed: 10
   _bulletPrefab: {fileID: 3732487249527810964, guid: 9a871bd9082c5a14d8ae6b52fc712d7d,
     type: 3}
   _bulletParent: {fileID: 8324227576374414075}
@@ -1054,7 +1054,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHitPoints: 3
   lives: 3
-  minSpawnDistance: 10
+  minSpawnDistance: 30
   respawnDelay: 3
   driverRespawnTimer: {fileID: 2159704895333170506}
   gunnerRespawnTimer: {fileID: 6042470570191879112}
@@ -1585,7 +1585,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 1
+  m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -1745,7 +1745,7 @@ MonoBehaviour:
   OnReloadComplete:
     m_PersistentCalls:
       m_Calls: []
-  _rotationSpeed: 10
+  _rotationSpeed: 25
   reloadCooldown: 5
   bulletStateText: {fileID: 3598726603380354545}
   reloadTimerPrefab: {fileID: 136307893523293317}
@@ -2337,6 +2337,16 @@ PrefabInstance:
       propertyPath: viewDirection
       value: 
       objectReference: {fileID: 6181323766486798882}
+    - target: {fileID: 2186120219943910098, guid: 42a37a046e3ec104db7d766801b4dd13,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 60126622312856207}
+    - target: {fileID: 2186120219943910098, guid: 42a37a046e3ec104db7d766801b4dd13,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6543527012906388723, guid: 42a37a046e3ec104db7d766801b4dd13,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2504,6 +2514,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2884373544967438221, guid: eee26696c6da89043b3aa63ff9667d52,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 12.74292
+      objectReference: {fileID: 0}
     - target: {fileID: 3069535145168372815, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: cupolaTransform
@@ -2623,6 +2638,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7951408478652710218, guid: eee26696c6da89043b3aa63ff9667d52,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 5958542420688788447}
+    - target: {fileID: 7951408478652710218, guid: eee26696c6da89043b3aa63ff9667d52,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

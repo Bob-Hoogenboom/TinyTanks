@@ -57,6 +57,15 @@ public class PlayerDriver : MonoBehaviour
             _reloadTimer -= Time.deltaTime;
 
         Move();
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Shoot();
+        }
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            TEST_GUNNER_RELOAD_FOR_BULLET_TEST_REMOVE_AFTER();
+        }
     }
 
     private void Move()
@@ -96,5 +105,10 @@ public class PlayerDriver : MonoBehaviour
     {
         _isLoaded = true;
         Debug.Log("Gunner finished reloading, Driver can shoot again!");
+    }
+
+    public void TEST_GUNNER_RELOAD_FOR_BULLET_TEST_REMOVE_AFTER()
+    {
+        _isLoaded = true;
     }
 }
