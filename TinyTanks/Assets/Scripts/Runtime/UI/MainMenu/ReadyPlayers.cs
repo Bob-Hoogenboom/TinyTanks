@@ -31,7 +31,7 @@ public class ReadyPlayers : MonoBehaviour
     private void Update()
     {
         Dictionary<int, int> currentPlayers = _playManager.GetPlayers();
-        readyBTN.interactable = currentPlayers.Count == playersToJoin;
+        readyBTN.interactable = currentPlayers.Count <= playersToJoin;
 
         foreach (KeyValuePair<int, int> entry in currentPlayers)
         {
@@ -66,7 +66,7 @@ public class ReadyPlayers : MonoBehaviour
         Vector3 pos = oldObj.transform.position;
         Quaternion rot = oldObj.transform.rotation;
 
-        if(roleId == 0 || roleId == 2)
+        if(roleId == 1 || roleId == 3)
         {
             GameObject newObj = Instantiate(cupolaPrefab, pos, rot,oldObj.transform.parent);
             roleObjects[roleId] = newObj;
