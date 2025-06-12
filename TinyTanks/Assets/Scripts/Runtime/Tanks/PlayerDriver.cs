@@ -15,6 +15,19 @@ public class PlayerDriver : MonoBehaviour
     private Rigidbody _rb;
     private PlayerGunner _playerGunner;
 
+    [Header("Physics Layers")]
+    public LayerMask enviormentLayer;
+
+    [Header("Audio")]
+    public AudioSource driveIntoEnviornmentAudio;
+    public float minImpactSpeed;
+    public AudioSource startDrivingAudio;
+    public AudioSource duringDrivingAudio;
+    public AudioSource stopDrivingAudio;
+    public AudioSource idleAudio;
+    float playThreshold = 0.1f;
+    private bool isDriving = false;
+
     [Header("Variables")]
     [SerializeField] private float _speed = 2f;
     [SerializeField] private float _rotationSpeed = 40f;
@@ -49,6 +62,10 @@ public class PlayerDriver : MonoBehaviour
         _playerGunner.OnReloadComplete.AddListener(HandleGunnerReloadComplete);
 
     }
+    private void Start()
+    {
+        idleAudio.Play();
+    }
 
     private void Update()
     {
@@ -70,6 +87,26 @@ public class PlayerDriver : MonoBehaviour
         float rotationAmount = (_moveVector.y - _moveVector.x) * _rotationSpeed * Time.deltaTime;
         Quaternion turnOffset = Quaternion.Euler(0, rotationAmount, 0);
         _rb.MoveRotation(_rb.rotation * turnOffset);
+
+        if (Mathf.Abs(moveAmount) > playThreshold)
+        {
+            if (!isDriving)
+            {
+                idleAudio.Stop();
+                startDrivingAudio.Play();
+                duringDrivingAudio.PlayDelayed(1);
+                isDriving = true;
+            }
+        }
+        else if (isDriving)
+        {
+            startDrivingAudio.Stop();
+            duringDrivingAudio.Stop();
+            stopDrivingAudio.Play();
+            idleAudio.PlayDelayed(1);
+            isDriving = false;
+        }
+
     }
 
     private void Shoot()
@@ -96,5 +133,19 @@ public class PlayerDriver : MonoBehaviour
     {
         _isLoaded = true;
         Debug.Log("Gunner finished reloading, Driver can shoot again!");
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(((1<<collision.collider.gameObject.layer) & enviormentLayer) == 0)
+            return;
+
+        // Would be nice to add this, but need better hitboxes and physics for this to work
+        //float speed = collision.relativeVelocity.magnitude; 
+        //Debug.Log(speed);
+        //if (speed < minImpactSpeed)
+        //    return;
+
+        driveIntoEnviornmentAudio.Play();
     }
 }
