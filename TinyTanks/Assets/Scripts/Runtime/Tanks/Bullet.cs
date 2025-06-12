@@ -10,8 +10,12 @@ public class Bullet : MonoBehaviour
     [SerializeField] private GameObject _enviormentHitVFX;
     [SerializeField] private GameObject _smokeVFX;
 
+    private AudioSource _bulletWhistle;
+
     private void Start()
     {
+        _bulletWhistle = GetComponentInChildren<AudioSource>();
+
         var _barrelSmoke = Instantiate(_smokeVFX, this.transform.position, this.transform.rotation);
         Destroy(_barrelSmoke, 3);
     }
@@ -33,6 +37,7 @@ public class Bullet : MonoBehaviour
                 var vxf = Instantiate(_tankHitVFX, this.transform.position, this.transform.rotation);
                 Destroy(vxf, 3);
                 Destroy(gameObject);
+                _bulletWhistle.Stop();
             }         
         }
         else if(other.gameObject.layer != 3 && other.gameObject.layer != 7)
@@ -47,6 +52,7 @@ public class Bullet : MonoBehaviour
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             Destroy(this);
+            _bulletWhistle.Stop();
         }
 
     }
