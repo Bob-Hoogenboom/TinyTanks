@@ -10,7 +10,10 @@ public class Bullet : MonoBehaviour
     [SerializeField] private GameObject _enviormentHitVFX;
     [SerializeField] private GameObject _smokeVFX;
 
-    private AudioSource _bulletWhistle;
+    [Header("Audio")]
+    public AudioSource _bulletWhistle;
+    public AudioSource _tankHitAudioSource;
+    public AudioSource _enviormentHitAudioSource;
 
     private void Start()
     {
@@ -33,11 +36,14 @@ public class Bullet : MonoBehaviour
                     other.gameObject.GetComponent<Health>().TakeDamage(1);
                 else if (other.gameObject.GetComponentInParent<Health>())
                     other.gameObject.GetComponentInParent<Health>().TakeDamage(1);
+
                 Debug.Log("hit a player");
                 var vxf = Instantiate(_tankHitVFX, this.transform.position, this.transform.rotation);
                 Destroy(vxf, 3);
                 Destroy(gameObject);
                 _bulletWhistle.Stop();
+                var hitAudio = Instantiate(_tankHitAudioSource, this.transform.position, this.transform.rotation);
+                Destroy(hitAudio.gameObject, 4);
             }         
         }
         else if(other.gameObject.layer != 3 && other.gameObject.layer != 7)
@@ -45,14 +51,17 @@ public class Bullet : MonoBehaviour
             var vxf = Instantiate(_enviormentHitVFX, this.transform.position, this.transform.rotation);
             Destroy(vxf, 3);
 
+            var hitAudio = Instantiate(_enviormentHitAudioSource, this.transform.position, this.transform.rotation);
+            Destroy(hitAudio.gameObject, 4);
+
             Rigidbody rb = GetComponent<Rigidbody>(); // refine this so the bullet actually goes on the ground
             Collider col = GetComponent<Collider>();
             col.isTrigger = false;
             rb.useGravity = true;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            Destroy(this);
             _bulletWhistle.Stop();
+            Destroy(this);           
         }
 
     }

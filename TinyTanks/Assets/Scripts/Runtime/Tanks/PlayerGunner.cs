@@ -10,11 +10,17 @@ public class PlayerGunner : MonoBehaviour
 {
 
     [Header("Events")]
+    public UnityEvent OnReloadStarted;
     public UnityEvent OnReloadComplete;
 
     [Header("References")]
     private Rigidbody _rb;
     private PlayerDriver _playerDriver;
+
+    [Header("Audio")]
+    public AudioSource rotateAudio;
+    float playThreshold = 0.1f;
+    private bool isRotating = false;
 
     [Header("Variables")]
     [Tooltip("Rotation speed in angles/second")]
@@ -37,6 +43,7 @@ public class PlayerGunner : MonoBehaviour
     private Vector2 _rotateVector; // only takes a/d -> y axis
 
     private bool isReloading = false;
+    
 
     private void Start()
     {
@@ -69,12 +76,26 @@ public class PlayerGunner : MonoBehaviour
     {
         float rotationAmount = _rotateVector.x * _rotationSpeed * Time.deltaTime;
         this.transform.Rotate(0, rotationAmount, 0);
+
+        if (Mathf.Abs(rotationAmount) > playThreshold)
+        {
+            if (!isRotating)
+            {
+                rotateAudio.Play();
+                isRotating = true;
+            }
+        }
+        else if (isRotating)
+        {
+            rotateAudio.Stop();
+            isRotating = false;
+        }
     }
 
     private IEnumerator ReloadCoroutine()
     {
         TimedWait reloadTimer = new TimedWait(reloadCooldown);
-
+        OnReloadStarted.Invoke();
 
 
         while (reloadTimer.keepWaiting)

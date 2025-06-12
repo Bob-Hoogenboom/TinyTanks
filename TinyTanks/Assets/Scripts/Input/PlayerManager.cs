@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Events")]
     public RoleAssignmentEvent onPlayerAssignedToRole;
+
+    [Header("Buttons")]
+    [SerializeField] private Button buttonToPress;
 
     private List<PlayerInput> _connectedPlayers = new List<PlayerInput>();
     private Dictionary<int, int> _playerToRoleMap = new Dictionary<int, int>();
@@ -84,9 +88,15 @@ public class PlayerManager : MonoBehaviour
         actions.FindAction("SelectRole2").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 0);
         actions.FindAction("SelectRole3").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 3);
         actions.FindAction("SelectRole4").performed += ctx => AssignPlayerToRole(playerInput.playerIndex, 2);
+        actions.FindAction("StartGame").performed += ctx => OnSubmit();
 
         // Alternative: Single button cycling through roles
         //actions.FindAction("CycleRole").performed += ctx => CyclePlayerRole(playerInput.playerIndex);
+    }
+
+    private void OnSubmit()
+    {
+        buttonToPress.onClick.Invoke();
     }
 
     public void AssignPlayerToRole(int playerIndex, int roleIndex)
