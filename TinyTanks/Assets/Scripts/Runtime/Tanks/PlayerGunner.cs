@@ -43,7 +43,8 @@ public class PlayerGunner : MonoBehaviour
     private Vector2 _rotateVector; // only takes a/d -> y axis
 
     private bool isReloading = false;
-    
+    private bool hasBullet = true;
+
 
     private void Start()
     {
@@ -64,11 +65,15 @@ public class PlayerGunner : MonoBehaviour
 
     public void OnReload()
     {
-        if(isReloading == false)
+        if(hasBullet == false)
         {
-            isReloading = true;         
-            StartCoroutine(ReloadCoroutine());
+            if (isReloading == false)
+            {
+                isReloading = true;
+                StartCoroutine(ReloadCoroutine());
+            }
         }
+        
         
     }
 
@@ -109,6 +114,7 @@ public class PlayerGunner : MonoBehaviour
 
         bulletStateText.text = "Ready";
         isReloading = false;
+        hasBullet = true;
         reloadTimerPrefab.SetActive(false);
         bulletBGImage.fillAmount = 0;
         reloadTimerImage.fillAmount = 0;
@@ -118,6 +124,7 @@ public class PlayerGunner : MonoBehaviour
     private void HandleDriverShoot()
     {
         bulletStateText.text = "Not Ready";
+        hasBullet = false;
         reloadTimerPrefab.SetActive(true);
     }
 }
