@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
@@ -87,6 +88,14 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            var pis = FindObjectsOfType<PlayerInput>();
+            foreach (PlayerInput _pi in pis)
+            {
+                Destroy(_pi.gameObject);
+            }
+            var pm = FindObjectOfType<PlayerInputManager>();
+            Destroy(pm.gameObject);
+
             SceneManager.LoadScene(exitScene);
         }
     }
