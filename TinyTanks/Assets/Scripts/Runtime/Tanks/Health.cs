@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
 {
@@ -67,6 +69,15 @@ public class Health : MonoBehaviour
         gunner.enabled = false;
         Destroy(this.gameObject);
 
+        var pis = FindObjectsOfType<PlayerInput>();
+        foreach(PlayerInput _pi in pis)
+        {
+            Destroy(_pi.gameObject);
+        }
+        var pm = FindObjectOfType<PlayerInputManager>();
+        Destroy(pm.gameObject);
+
+        SceneManager.LoadScene(0);
         // sent message to GameHandler that game is over
     }
 

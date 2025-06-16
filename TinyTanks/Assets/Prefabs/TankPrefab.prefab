@@ -511,7 +511,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 5
   DopplerLevel: 1
   MinDistance: 2.05
   MaxDistance: 7.27
@@ -962,6 +962,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 990397506517994750}
+  - {fileID: 8775551017551131628}
   - {fileID: 118178317375901482}
   - {fileID: 8498151809512052229}
   - {fileID: 394259278150254958}
@@ -1109,11 +1110,11 @@ Transform:
   m_GameObject: {fileID: 4608477995554311338}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.00008598645, y: -0.1007725, z: -0.114768244}
+  m_LocalPosition: {x: 0.0030255683, y: 0.76525176, z: 0.00700142}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5357173075527689725}
+  m_Father: {fileID: 6181323766486798882}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &679327441193526790
 AudioSource:
@@ -1513,8 +1514,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -1664,7 +1665,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   rotateAudio: {fileID: 843581157900915645}
-  _rotationSpeed: 25
+  _rotationSpeed: 40
   reloadCooldown: 5
   bulletStateText: {fileID: 3598726603380354545}
   reloadTimerPrefab: {fileID: 136307893523293317}
@@ -1798,8 +1799,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -1863,13 +1864,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b28feba60e2a9914988657244076b25e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.557
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1.33
   MaxDistance: 8.85
@@ -2137,8 +2138,7 @@ Transform:
   m_LocalPosition: {x: -0.00008598645, y: 0.1007725, z: 0.114768244}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8775551017551131628}
+  m_Children: []
   m_Father: {fileID: 5877753830352249208}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6105281106921041052
@@ -2697,7 +2697,7 @@ PrefabInstance:
     - target: {fileID: 2884373544967438221, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -248.41498
+      value: -248.41504
       objectReference: {fileID: 0}
     - target: {fileID: 2884373544967438221, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
