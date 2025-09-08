@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 54817087915352242}
   - component: {fileID: 3804708763802313941}
   - component: {fileID: 586476364461600115}
+  - component: {fileID: 7075364114189444925}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -83,14 +84,51 @@ MonoBehaviour:
     m_ActionName: TankControlls/Rotate[/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 40db535d-a41c-4c2a-bea5-d49db0df340b
-    m_ActionName: TankDriver/Move[/Keyboard/w,/Keyboard/s,/Keyboard/downArrow,/Keyboard/upArrow]
+    m_ActionId: 9543c34e-088b-4e61-95c2-1f428aa012ac
+    m_ActionName: TankControlls/Shoot[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: dbeb2973-e387-485f-9dc8-62bb90203b29
-    m_ActionName: TankGunner/Rotate[/Keyboard/a,/Keyboard/d]
+    m_ActionId: bdf7e0f2-c42e-452c-a318-bce9c6ca4e07
+    m_ActionName: TankControlls/Reload[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 83127dda-7a75-445d-bc8d-110019c24402
+    m_ActionName: TankControlls/SelectRole1[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5229abee-ba56-4537-9da2-abb0962d9ad2
+    m_ActionName: TankControlls/SelectRole2[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 82507b69-b8b2-4531-b839-46a801374490
+    m_ActionName: TankControlls/SelectRole3[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3e6b33e9-3537-459d-9ca3-1a5559d310c6
+    m_ActionName: TankControlls/SelectRole4[/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 777a4da2-f165-4d92-86ae-5a2a2b90e4bb
+    m_ActionName: TankControlls/StartGame[/Keyboard/home]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: TankControlls
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &7075364114189444925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3264024113075120981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 1003890851
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
