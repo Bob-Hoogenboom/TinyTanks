@@ -61,12 +61,12 @@ public class TankBrain : NetworkBehaviour
         if (turretPitchPivot) turretPitchPivot.localRotation = Quaternion.Euler(0f, 0f, _pitch);
     }
 
-    void OnYawChanged(float _, float newYaw)
+    private void OnYawChanged(float _, float newYaw)
     {
         if (turretYawPivot) turretYawPivot.localRotation = Quaternion.Euler(0f, newYaw, 0f);
     }
 
-    void OnPitchChanged(float _, float newPitch)
+    private void OnPitchChanged(float _, float newPitch)
     {
         if (turretPitchPivot) turretPitchPivot.localRotation = Quaternion.Euler(newPitch, 0f, 0f);
     }

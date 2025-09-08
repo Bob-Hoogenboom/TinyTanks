@@ -18,7 +18,7 @@ public class GunnerSeatController : NetworkBehaviour
         enabled = true;
     }
 
-    void Update()
+    private void FixedUpdate()
     {
         if (!isLocalPlayer) return;
 
@@ -29,7 +29,7 @@ public class GunnerSeatController : NetworkBehaviour
     }
 
     [Command]
-    void CmdGunnerInput(float yaw, float pitch)
+    private void CmdGunnerInput(float yaw, float pitch)
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_SetGunnerAim(seat, yaw, pitch);

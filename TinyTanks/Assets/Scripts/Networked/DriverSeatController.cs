@@ -18,7 +18,7 @@ public class DriverSeatController : NetworkBehaviour
         enabled = true;                                    // in case you keep controllers disabled by default
     }
 
-    void Update()
+    private void FixedUpdate()
     {
         if (!isLocalPlayer) return;
 
@@ -28,7 +28,7 @@ public class DriverSeatController : NetworkBehaviour
     }
 
     [Command]
-    void CmdDriverInput(float throttle, float steer)
+    private void CmdDriverInput(float throttle, float steer)
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_SetDriverInput(seat, throttle, steer);
