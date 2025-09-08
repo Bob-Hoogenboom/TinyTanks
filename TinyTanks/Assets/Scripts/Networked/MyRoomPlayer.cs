@@ -12,10 +12,6 @@ public class MyRoomPlayer : NetworkRoomPlayer
     [SerializeField] private Button readyButton;
     [SerializeField] private TMP_Text readyStatus;
 
-    [Header("Roles")]
-    [SyncVar] public string chosenRoleKey;
-    [Command] public void CmdChooseRole(string key) => chosenRoleKey = key;
-
     [SyncVar(hook = nameof(OnRoleChanged))]
     public int roleIndex = -1;
 

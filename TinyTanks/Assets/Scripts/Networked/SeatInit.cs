@@ -5,7 +5,7 @@ using Mirror;
 
 public class SeatInit : NetworkBehaviour
 {
-    [SerializeField] CrewSeat seat;
+    [SerializeField] private CrewSeat seat;
 
     public override void OnStartServer()
     {

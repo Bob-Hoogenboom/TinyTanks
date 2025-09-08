@@ -7,15 +7,13 @@ using System;
 public class DriverSeatController : NetworkBehaviour
 {
     [SerializeField] CrewSeat seat;
-    Camera seatCam;
+    [SerializeField] private Camera seatCam;
 
     void Awake() => seatCam = GetComponentInChildren<Camera>(true);
 
     public override void OnStartLocalPlayer()
     {
-        Debug.Log($"[DriverSeat] I am local player: netId={netId}");
-        if (seatCam) seatCam.gameObject.SetActive(true);   // enable seat camera for local user
-        enabled = true;                                    // in case you keep controllers disabled by default
+        if (seatCam) seatCam.gameObject.SetActive(true); // Set camera
     }
 
     private void FixedUpdate()

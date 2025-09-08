@@ -532,6 +532,8 @@ MonoBehaviour:
   turnSpeed: 90
   turretYawSpeed: 10
   turretPitchSpeed: 10
+  minPitch: -10
+  maxPitch: 30
   turretYawPivot: {fileID: 1410563789}
   turretPitchPivot: {fileID: 488729624}
   muzzle: {fileID: 554299571}
@@ -928,7 +930,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  roleKey: Gunner1
+  roleKey: 1
   seatType: 1
   tank: {fileID: 568986554}
   taken: 0
@@ -980,6 +982,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   seat: {fileID: 1770906567}
+  seatCam: {fileID: 0}
 --- !u!1 &1923988522
 GameObject:
   m_ObjectHideFlags: 0
@@ -1014,7 +1017,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  roleKey: Driver1
+  roleKey: 0
   seatType: 0
   tank: {fileID: 568986554}
   taken: 0
@@ -1066,6 +1069,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   seat: {fileID: 1923988523}
+  seatCam: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1074,5 +1078,5 @@ SceneRoots:
   - {fileID: 307300037}
   - {fileID: 954883622}
   - {fileID: 568986553}
-  - {fileID: 1770906569}
   - {fileID: 1923988525}
+  - {fileID: 1770906569}

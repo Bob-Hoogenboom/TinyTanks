@@ -7,15 +7,13 @@ using System;
 public class GunnerSeatController : NetworkBehaviour
 {
     [SerializeField] CrewSeat seat;
-    Camera seatCam;
+    [SerializeField] private Camera seatCam;
 
     void Awake() => seatCam = GetComponentInChildren<Camera>(true);
 
     public override void OnStartLocalPlayer()
     {
-        Debug.Log($"[GunnerSeat] I am local player: netId={netId}");
-        if (seatCam) seatCam.gameObject.SetActive(true);
-        enabled = true;
+        if (seatCam) seatCam.gameObject.SetActive(true); // Set camera
     }
 
     private void FixedUpdate()

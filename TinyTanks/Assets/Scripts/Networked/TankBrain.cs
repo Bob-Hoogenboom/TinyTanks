@@ -46,10 +46,7 @@ public class TankBrain : NetworkBehaviour
         Debug.Log(gunner.name);
     }
 
-    // Aiming
-
-    [Server]
-    public void Server_SetGunnerAim(CrewSeat from, float yawDelta, float pitchDelta)
+    [Server] public void Server_SetGunnerAim(CrewSeat from, float yawDelta, float pitchDelta)
     {
         if (from != gunner) return;
 

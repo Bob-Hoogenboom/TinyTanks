@@ -7,7 +7,7 @@ public enum SeatType { Driver, Gunner}
 
 public class CrewSeat : NetworkBehaviour
 {
-    public string roleKey;
+    public int roleKey;
     public SeatType seatType;
     public TankBrain tank;
     [SyncVar] public bool taken;
