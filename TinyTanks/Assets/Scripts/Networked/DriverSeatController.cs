@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using System.Linq;
 
 public class DriverSeatController : NetworkBehaviour
 {
     [SerializeField] CrewSeat seat;
     [SerializeField] private Camera seatCam;
-
-    void Awake() => seatCam = GetComponentInChildren<Camera>(true);
 
     public override void OnStartLocalPlayer()
     {

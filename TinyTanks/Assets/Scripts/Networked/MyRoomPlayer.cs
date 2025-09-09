@@ -81,25 +81,25 @@ public class MyRoomPlayer : NetworkRoomPlayer
     void CmdRequestRole(int roleIndex)
     {
         if (RoleManager.Instance != null)
-            RoleManager.Instance.TryClaimRole(netIdentity, roleIndex, allowSwitch: true);
+            RoleManager.Instance.Server_TryClaimRole(netIdentity, roleIndex, allowSwitch: true);
     }
 
     [Command]
     void CmdReleaseRole(int roleIndex)
     {
         if (RoleManager.Instance != null)
-            RoleManager.Instance.ReleaseRole(netIdentity, roleIndex);
+            RoleManager.Instance.Server_ReleaseRole(netIdentity, roleIndex);
     }
 
     // If this player disconnects, server clears the role if we owned it
     public override void OnStopServer()
     {
         if (RoleManager.Instance != null)
-            RoleManager.Instance.ReleaseAllFor(netIdentity);
+            RoleManager.Instance.Server_ReleaseAllFor(netIdentity);
     }
 
     [Server]
-    public void ServerSetRole(int idx)
+    public void Server_SetRole(int idx)
     {
         roleIndex = idx;
     }
