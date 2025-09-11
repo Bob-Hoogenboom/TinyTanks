@@ -12,6 +12,8 @@ public class TankBrain : NetworkBehaviour
     private Rigidbody rb;
     [SerializeField] private float moveSpeed = 6f;
     [SerializeField] private float turnSpeed = 90f;
+    private float leftTrack;
+    private float rightTrack;
 
     [Header("Gunner Controlls")]
     [SerializeField] private float turretYawSpeed = 1f;
@@ -67,6 +69,24 @@ public class TankBrain : NetworkBehaviour
             Server_RespawnTank();
     }
 
+    [ServerCallback]
+    private void FixedUpdate()
+    {
+        if (!isServer || rb == null) return;
+
+        float dt = Time.fixedDeltaTime;
+
+        float moveAmount = (leftTrack + rightTrack) * 0.5f * moveSpeed;
+        Debug.Log(moveAmount);
+        Vector3 move = transform.right * moveAmount * Time.deltaTime;
+        rb.MovePosition(rb.position + move);
+
+        float rotationAmount = (leftTrack - rightTrack) * turnSpeed * Time.deltaTime;
+        Quaternion turnOffset = Quaternion.Euler(0, rotationAmount, 0);
+        rb.MoveRotation(rb.rotation * turnOffset);
+
+    }
+
     [Server] public void Server_SetGunnerAim(CrewSeat from, float yawDelta, float pitchDelta)
     {
         if (from != gunner) return;
@@ -101,16 +121,11 @@ public class TankBrain : NetworkBehaviour
         if (turretPitchPivot) turretPitchPivot.localRotation = Quaternion.Euler(0f, 0f, newPitch);
     }
 
-    [Server] public void Server_SetDriverInput(CrewSeat from, float throttle, float steer)
+    [Server] public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
     {
         if (from != driver) return;
-
-        Debug.Log("im driver");
-
-        Vector3 fwd = transform.right * (throttle * moveSpeed * Time.fixedDeltaTime);
-        Quaternion turn = Quaternion.Euler(0f, steer * turnSpeed * Time.fixedDeltaTime, 0f);
-        rb.MovePosition(rb.position + fwd);
-        rb.MoveRotation(rb.rotation * turn);
+        leftTrack = _leftTrack;
+        rightTrack = _rightTrack;
     }
 
     [Server] private void Server_TankDeath()
