@@ -10,8 +10,9 @@ public class TankBrain : NetworkBehaviour
 
     [Header("Driver controlls")]
     private Rigidbody rb;
-    [SerializeField] private float moveSpeed = 6f;
-    [SerializeField] private float turnSpeed = 90f;
+
+    [Header("Physics based movement")]
+    [SerializeField] private TankTrackPhysics tracks;
     private float leftTrack;
     private float rightTrack;
 
@@ -47,6 +48,7 @@ public class TankBrain : NetworkBehaviour
     public override void OnStartServer()
     {
         rb = GetComponent<Rigidbody>();
+        if (!tracks) tracks = GetComponent<TankTrackPhysics>();
         currHealth = maxHealth;
         respawnTimer = respawnTime;
     }
@@ -73,18 +75,7 @@ public class TankBrain : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!isServer || rb == null) return;
-
-        float dt = Time.fixedDeltaTime;
-
-        float moveAmount = (leftTrack + rightTrack) * 0.5f * moveSpeed;
-        Debug.Log(moveAmount);
-        Vector3 move = transform.right * moveAmount * Time.deltaTime;
-        rb.MovePosition(rb.position + move);
-
-        float rotationAmount = (leftTrack - rightTrack) * turnSpeed * Time.deltaTime;
-        Quaternion turnOffset = Quaternion.Euler(0, rotationAmount, 0);
-        rb.MoveRotation(rb.rotation * turnOffset);
-
+        if (tracks) tracks.SetInputs(leftTrack, rightTrack);
     }
 
     [Server] public void Server_SetGunnerAim(CrewSeat from, float yawDelta, float pitchDelta)
@@ -124,8 +115,8 @@ public class TankBrain : NetworkBehaviour
     [Server] public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
     {
         if (from != driver) return;
-        leftTrack = _leftTrack;
-        rightTrack = _rightTrack;
+        leftTrack = Mathf.Clamp(_leftTrack,-1f,1f);
+        rightTrack = Mathf.Clamp(_rightTrack, -1f, 1f);
     }
 
     [Server] private void Server_TankDeath()
