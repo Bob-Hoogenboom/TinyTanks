@@ -16,17 +16,17 @@ public class TankData : ScriptableObject
     public float muLong;
     [Tooltip("Sideways grip number (dimensionless). Higher = less sliding sideways.")]
     public float muLat;
-    [Tooltip("Always-on slow-down from tracks touching the ground (rolling drag). Higher = coasts less.")]
+    [Tooltip("Always on slow down from tracks touching the ground (rolling drag). Higher = coasts less.")]
     public float rollingResistance;
-    [Tooltip("Speed-based slow-down. The faster you go, the stronger this backward push.")]
+    [Tooltip("Speed based slow down. The faster you go, the stronger this backward push.")]
     public float speedDrag;
 
     [Header("Contact Patch & Yaw Control")]
-    [Tooltip("Distance from the track’s center to where we apply side slow-down (front/back), in meters. Higher = more twist effect to resist spins.")]
+    [Tooltip("Distance from the track’s center to where we apply side slow down forces (front/back), in meters. Higher = more twist effect to resist spins.")]
     public float contactHalfLength;
-    [Tooltip("Low-speed side slow-down factor. Helps stop gentle spins and sideways drift.")]
+    [Tooltip("Low speed side slow down factor. Helps stop gentle spins and sideways drift.")]
     public float linearLatDrag;
-    [Tooltip("High-speed side slow-down factor. Gets much stronger when sliding fast; resists quick spins.")]
+    [Tooltip("High speed side slow down factor. Gets much stronger when sliding fast; resists quick spins.")]
     public float quadLatDrag;
 
     [Header("Side Grip Tuning")]
