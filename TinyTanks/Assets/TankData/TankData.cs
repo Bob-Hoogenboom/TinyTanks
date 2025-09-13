@@ -1,45 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Tank/Track Surface Variables")]
 public class TankData : ScriptableObject
 {
     [Header("Engine")]
-    [Tooltip("Engine power in horsepower (HP). Converted at runtime to watts via EnginePowerW (1 HP = 735.5 W). Affects drive at medium–high speeds via power limit.")]
+    [Tooltip("Engine power in horsepower (HP). Higher number = stronger engine push at higher speeds.")]
     public float enginePowerHP;
     public float EnginePowerW => enginePowerHP * 735.5f;
-    [Tooltip("Hard cap on DRIVE FORCE per track (Newtons). Final drive limit uses: engineForceCap = min(maxForcePerTrack, EnginePowerW / max(0.5, |velocityFwd|)). Lower values limit launch/low-speed push; higher values shift limit to engine power.")]
+    [Tooltip("Hard cap on engine push per track (Newtons). Limits how hard a track can shove the tank forward at very low speed.")]
     public float maxForcePerTrack;
 
     [Header("Grip & Resistance")]
-    [Tooltip("Longitudinal friction coefficient μx (dimensionless). Caps forward drive & braking: tractionLong = μx * normalForce (normalForce ≈ m·g/2 per track).")]
+    [Tooltip("Forward/back grip number (dimensionless). Higher = better traction for accelerating and braking.")]
     public float muLong;
-    [Tooltip("Lateral friction coefficient μy (dimensionless). Caps lateral grip: tractionLat = μy * normalForce. Higher = stronger side grip (until capped).")]
+    [Tooltip("Sideways grip number (dimensionless). Higher = less sliding sideways.")]
     public float muLat;
-    [Tooltip("Rolling-resistance coefficient c_rr (dimensionless). Speed-independent drag along forward: ForceRollingRessistance = c_rr * normalForce. Higher = coasts to a stop sooner.")]
+    [Tooltip("Always-on slow-down from tracks touching the ground (rolling drag). Higher = coasts less.")]
     public float rollingResistance;
-    [Tooltip("Linear speed-drag coefficient (N per m/s). Additional forward drag growing with speed: DragForce = speedDrag * velocityFwd. Higher = more high-speed resistance.")]
+    [Tooltip("Speed-based slow-down. The faster you go, the stronger this backward push.")]
     public float speedDrag;
 
-    [Tooltip("Half-length of the track/ground contact patch along the forward axis (meters). Forces are applied at hit.point ± contactHalfLength to create yaw-resisting lateral drag.")]
+    [Header("Contact Patch & Yaw Control")]
+    [Tooltip("Distance from the track’s center to where we apply side slow-down (front/back), in meters. Higher = more twist effect to resist spins.")]
     public float contactHalfLength;
-    [Tooltip("Linear coefficient for lateral drag at the front/rear application points (N·s/m). Used in: F = -(linearLatDrag * velocityLat + quadLatDrag * velocityLat * |velocityLat|). Dominates at low lateral speeds.")]
+    [Tooltip("Low-speed side slow-down factor. Helps stop gentle spins and sideways drift.")]
     public float linearLatDrag;
-    [Tooltip("Quadratic coefficient for lateral drag at the front/rear application points (N·s²/m²). Same equation as above; dominates at higher lateral speeds to resist fast spins.")]
+    [Tooltip("High-speed side slow-down factor. Gets much stronger when sliding fast; resists quick spins.")]
     public float quadLatDrag;
 
-    [Header("Tuning")]
-    [Tooltip("Cornering-stiffness–like coefficient (N·s/m). Maps lateral slip velocity to lateral grip before friction capping: ForceLat = clamp(-velocityLat * lateralStiffness, ±tractionLat). Higher = stronger lateral grip / less side-slip.")]
+    [Header("Side Grip Tuning")]
+    [Tooltip("Side grip strength. How quickly side force builds when you start to slide sideways.")]
     public float lateralStiffness;
 
-    [Header("Braking & Steer Assist")]
-    [Tooltip("Max braking force per track (Newtons). Actual brake is min(trackBrakeForce, tractionLong). Applied when input is released or opposes motion; can be boosted for pivot turns.")]
+    [Header("Braking & Steering")]
+    [Tooltip("Maximum brake push per track (Newtons). Higher = stronger braking.")]
     public float trackBrakeForce;
-    [Tooltip("Input magnitude threshold (0..1). If |input| < brakeDeadzone the track is considered released and clutch-brake engages to stop residual motion.")]
+    [Tooltip("Input threshold (0..1). Below this we treat it like no throttle and let the brakes stop the track.")]
     public float brakeDeadzone;
-    [Tooltip("Multiplier applied to braking when the opposite track is being driven (|otherInput| > 0.2). >1 boosts pivot-turn braking; <1 softens it.")]
+    [Tooltip("Extra braking when the other track is driving (helps pivot turns). 1 = off, >1 = stronger extra brake.")]
     public float steerBrakeMultiplier;
-    [Tooltip("Multiplier applied to the engine force cap during neutral steer (tracks commanded in opposite directions; input*otherInput < -0.2). Boosts torque for pivot turns.")]
+    [Tooltip("Extra engine twist when tracks spin opposite ways (pivot-in-place). 1 = off, >1 = stronger twist boost.")]
     public float neutralSteerTorqueBoost;
 }
