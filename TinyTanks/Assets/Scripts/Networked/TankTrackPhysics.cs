@@ -11,30 +11,10 @@ public class TankTrackPhysics : MonoBehaviour
     [SerializeField] private float trackRayStartHeight = 0.6f;
     [SerializeField] private float trackRayLength = 1.2f;
 
-    //[Header("Engine")]
-    //[SerializeField] private float enginePowerHP = 600f;
-    //[SerializeField] private float maxForcePerTrack = 80000f;
-
-    //[Header("Grip & Resistance")]
-    //[SerializeField] private float muLong = 0.85f;
-    //[SerializeField] private float muLat = 1.6f;
-    //[SerializeField] private float rollingResistance = 0.02f;
-    //[SerializeField] private float speedDrag = 120f;
-
-    //[SerializeField] private float contactHalfLength = 2.5f;   // half the track-ground footprint length (m)
-    //[SerializeField] private float linearLatDrag = 400; // N·s/m
-    //[SerializeField] private float quadLatDrag = 50;  // N·s²/m²
-
     [Header("Tuning")]
     [SerializeField] private float extraDownForce = 0f;
     [SerializeField] private float yawDamping = 0.2f;
-    //[SerializeField] private float lateralStiffness = 20000f;
 
-    //[Header("Braking & Steer Assist")]
-    //[SerializeField] private float trackBrakeForce = 180000f;
-    //[SerializeField] private float brakeDeadzone = 0.15f;
-    //[SerializeField] private float steerBrakeMultiplier = 1.3f;
-    //[SerializeField] private float neutralSteerTorqueBoost = 1.5f;
     [Header("Movemen Variables")]
     [SerializeField] private TankData hardFloorData;
     [SerializeField] private TankData carpetData;
@@ -43,8 +23,6 @@ public class TankTrackPhysics : MonoBehaviour
 
     private float leftInput;
     private float rightInput;
-
-    //private float EnginePowerW => enginePowerHP * 735.5f;
 
     private void Reset()
     {
@@ -60,7 +38,7 @@ public class TankTrackPhysics : MonoBehaviour
         rightInput = right;
     }
 
-    private void FixedUpdate() // TO DO use SO to change variables to represent different surfaces -> use raycast to see what groundType it is.
+    private void FixedUpdate()
     {       
         if (!NetworkServer.active) return;
         Vector3 lOrigin = transform.TransformPoint(new Vector3(-trackSpacing * 0.5f, trackRayStartHeight, 0f));
@@ -170,4 +148,15 @@ public class TankTrackPhysics : MonoBehaviour
                 break;
         }
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Vector3 l = transform.TransformPoint(new Vector3(-trackSpacing * 0.5f, trackRayStartHeight, 0f));
+        Vector3 r = transform.TransformPoint(new Vector3(trackSpacing * 0.5f, trackRayStartHeight, 0f));
+        Gizmos.DrawLine(l, l + Vector3.down * trackRayLength);
+        Gizmos.DrawLine(r, r + Vector3.down * trackRayLength);
+    }
+#endif
 }
