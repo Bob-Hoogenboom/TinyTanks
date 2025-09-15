@@ -14,7 +14,7 @@ public class CrewSeat : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        if (tank != null) tank.RegisterSeat(this); // assign seat to tank
+        if (tank != null) tank.Server_RegisterSeat(this); // assign seat to tank
         else Debug.LogError($"{name} has no TankBrain reference!");
     }
 }

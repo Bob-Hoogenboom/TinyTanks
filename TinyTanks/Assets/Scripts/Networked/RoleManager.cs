@@ -55,9 +55,9 @@ public class RoleManager : NetworkBehaviour
 
     // ---------- SERVER API ----------
     [Server]
-    public bool TryClaimRole(NetworkIdentity requester, int roleIndex, bool allowSwitch = true)
+    public bool Server_TryClaimRole(NetworkIdentity requester, int roleIndex, bool allowSwitch = true)
     {
-        if (!roleOwners.ContainsKey(roleIndex)) { TargetDenied(requester.connectionToClient, "Invalid role"); return false; }
+        if (!roleOwners.ContainsKey(roleIndex)) { RPC_TargetDenied(requester.connectionToClient, "Invalid role"); return false; }
 
         uint currentOwner = roleOwners[roleIndex];
         uint requesterId = requester.netId;
@@ -65,7 +65,7 @@ public class RoleManager : NetworkBehaviour
         // Already taken by someone else?
         if (currentOwner != 0 && currentOwner != requesterId)
         {
-            TargetDenied(requester.connectionToClient, "Role already taken");
+            RPC_TargetDenied(requester.connectionToClient, "Role already taken");
             return false;
         }
 
@@ -75,7 +75,7 @@ public class RoleManager : NetworkBehaviour
         {
             if (!allowSwitch)
             {
-                TargetDenied(requester.connectionToClient, "You already have a role");
+                RPC_TargetDenied(requester.connectionToClient, "You already have a role");
                 return false;
             }
             roleOwners[existing] = 0;
@@ -83,35 +83,35 @@ public class RoleManager : NetworkBehaviour
 
         roleOwners[roleIndex] = requesterId; // delta-synced to all clients
         var requestingPlayer = requester.GetComponent<MyRoomPlayer>();
-        if (requestingPlayer != null) requestingPlayer.ServerSetRole(roleIndex);
+        if (requestingPlayer != null) requestingPlayer.Server_SetRole(roleIndex);
 
         OnRolesUpdated?.Invoke();
         return true;
     }
 
     [Server]
-    public void ReleaseRole(NetworkIdentity requester, int roleIndex)
+    public void Server_ReleaseRole(NetworkIdentity requester, int roleIndex)
     {
         if (!roleOwners.TryGetValue(roleIndex, out uint owner)) return;
         if (owner == requester.netId)
         {
             roleOwners[roleIndex] = 0;
             var requestingPlayer = requester.GetComponent<MyRoomPlayer>();
-            if (requestingPlayer != null) requestingPlayer.ServerSetRole(-1);
+            if (requestingPlayer != null) requestingPlayer.Server_SetRole(-1);
 
             OnRolesUpdated?.Invoke();
         }      
     }
 
     [Server]
-    public void ReleaseAllFor(NetworkIdentity identity)
+    public void Server_ReleaseAllFor(NetworkIdentity identity)
     {
         uint id = identity.netId;
         foreach (var keyValue in roleOwners)
             if (keyValue.Value == id) roleOwners[keyValue.Key] = 0;
 
         var requestingPlayer = identity.GetComponent<MyRoomPlayer>();
-        if (requestingPlayer != null) requestingPlayer.ServerSetRole(-1);
+        if (requestingPlayer != null) requestingPlayer.Server_SetRole(-1);
 
         OnRolesUpdated?.Invoke();
     }
@@ -124,7 +124,7 @@ public class RoleManager : NetworkBehaviour
     }
 
     [TargetRpc]
-    void TargetDenied(NetworkConnectionToClient conn, string msg) =>
+    void RPC_TargetDenied(NetworkConnectionToClient conn, string msg) =>
         Debug.Log($"[RoleManager] Denied: {msg}");
 
     // ---------- CLIENT HELPERS ----------

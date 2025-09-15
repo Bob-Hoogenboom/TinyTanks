@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using System.Linq;
 
 public class DriverSeatController : NetworkBehaviour
 {
     [SerializeField] CrewSeat seat;
     [SerializeField] private Camera seatCam;
-
-    void Awake() => seatCam = GetComponentInChildren<Camera>(true);
 
     public override void OnStartLocalPlayer()
     {
@@ -20,15 +19,15 @@ public class DriverSeatController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
 
-        float throttle = Input.GetAxisRaw("Vertical");
-        float steer = Input.GetAxisRaw("Horizontal");
-        CmdDriverInput(throttle, steer);
+        float leftTrack = Input.GetAxisRaw("Vertical");
+        float rightTrack = Input.GetAxisRaw("Vertical2");
+        CmdDriverInput(leftTrack, rightTrack);
     }
 
     [Command]
-    private void CmdDriverInput(float throttle, float steer)
+    private void CmdDriverInput(float leftTrack, float rightTrack)
     {
         if (!seat || !seat.tank) return;
-        seat.tank.Server_SetDriverInput(seat, throttle, steer);
+        seat.tank.Server_SetDriverInput(seat, leftTrack, rightTrack);
     }
 }
