@@ -16,7 +16,6 @@ public class MyRoomPlayer : NetworkRoomPlayer
     public int roleIndex = -1;
 
 
-
     private void Awake()
     {
         readyButton = GameObject.FindWithTag("ReadyButton").GetComponent<Button>();
