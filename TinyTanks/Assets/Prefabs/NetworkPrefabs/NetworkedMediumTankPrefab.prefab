@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1020467479293221193
 Transform:
   m_ObjectHideFlags: 0
@@ -501,7 +501,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8922364533835996594
 Transform:
   m_ObjectHideFlags: 0
@@ -663,6 +663,7 @@ GameObject:
   - component: {fileID: 2017693082011493435}
   - component: {fileID: 4751387655643667337}
   - component: {fileID: 8416088550841953184}
+  - component: {fileID: 319210562668348669}
   - component: {fileID: 6391339614521110794}
   - component: {fileID: 1301563495824643946}
   m_Layer: 9
@@ -740,10 +741,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   tracks: {fileID: 8416088550841953184}
-  turretYawSpeed: 10
-  turretPitchSpeed: 10
-  minPitch: -10
-  maxPitch: 30
+  turret: {fileID: 319210562668348669}
   tankBody: {fileID: 490045448937751782}
   turretYawPivot: {fileID: 3335216286506554464}
   turretPitchPivot: {fileID: 5950514435522869286}
@@ -782,6 +780,39 @@ MonoBehaviour:
   carpetData: {fileID: 11400000, guid: 0dacfb941179d54479fda178f1acf43c, type: 2}
   wetFloorData: {fileID: 11400000, guid: affdcabadcc689e4a87e5069419266de, type: 2}
   currData: {fileID: 0}
+--- !u!114 &319210562668348669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707319521374501269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 851d45d65b8e55145a8f9f1a21baf432, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  yawPivot: {fileID: 3335216286506554464}
+  pitchPivot: {fileID: 5950514435522869286}
+  inputDeadzone: 0.05
+  idleModeYaw: 1
+  idleModePitch: 1
+  yawSettings: {fileID: 11400000, guid: 341f91b478b68944f92df4bbd0a21979, type: 2}
+  pitchSettings: {fileID: 11400000, guid: d77e733687db97443a98afbd4b5d3b51, type: 2}
+  yawHalfRange: 0
+  yawSoftZone: 8
+  yawLimitK: 1200
+  yawLimitC: 80
+  pitchMin: -10
+  pitchMax: 30
+  pitchSoftZone: 5
+  pitchLimitK: 1500
+  pitchLimitC: 100
+  pitchMEff: 0
+  pitchRM: 0
 --- !u!114 &6391339614521110794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1401,6 +1432,7 @@ GameObject:
   - component: {fileID: 4567450239123953926}
   - component: {fileID: 189590334781875934}
   - component: {fileID: 6248731220635565586}
+  - component: {fileID: 3946333656086292979}
   m_Layer: 9
   m_Name: Track_to be animated
   m_TagString: Untagged
@@ -1495,6 +1527,27 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8218505396625983945, guid: f3f6a627d23ac074cb37820f4899ccb5, type: 3}
+--- !u!65 &3946333656086292979
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441608655587753340}
+  m_Material: {fileID: 13400000, guid: f9a6f753bc5ca4a449413f3d86d1b587, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.85787845, y: 0.5695493, z: 0.6253166}
+  m_Center: {x: -0.0010586977, y: 0.26973534, z: -0.037187576}
 --- !u!1 &5870835241293329173
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,7 +32,7 @@ public class GunnerSeatController : NetworkBehaviour
     private void CmdGunnerInput(float yaw, float pitch)
     {
         if (!seat || !seat.tank) return;
-        seat.tank.Server_SetGunnerAim(seat, yaw, pitch);
+        seat.tank.Server_SetGunnerInput(seat, yaw, pitch);
     }
 
     [Command]

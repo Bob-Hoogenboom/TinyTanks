@@ -15,15 +15,9 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private TankTrackPhysics tracks;
     private float leftTrack;
     private float rightTrack;
-
-    [Header("Gunner Controlls")]
-    [SerializeField] private float turretYawSpeed = 1f;
-    [SerializeField] private float turretPitchSpeed = 1f;
-    [SerializeField] private float minPitch = -10;
-    [SerializeField] private float maxPitch = 30;
-
-    [SyncVar(hook = nameof(OnYawChanged))] private float _yaw;
-    [SyncVar(hook = nameof(OnPitchChanged))] private float _pitch;
+    [SerializeField] private TankTurretPhysics turret;
+    private float yaw;
+    private float pitch;
 
     [Header("Tank Parts")]
     [SerializeField] private GameObject tankBody;
@@ -76,18 +70,15 @@ public class TankBrain : NetworkBehaviour
     {
         if (!isServer || rb == null) return;
         if (tracks) tracks.SetInputs(leftTrack, rightTrack);
+        if (turret) turret.SetInputs(yaw, pitch);
     }
 
-    [Server] public void Server_SetGunnerAim(CrewSeat from, float yawDelta, float pitchDelta)
+    [Server] public void Server_SetGunnerInput(CrewSeat from, float yawDelta, float pitchDelta)
     {
         if (from != gunner) return;
 
-        _yaw = Mathf.Repeat(_yaw + yawDelta, 360f);
-        _pitch = Mathf.Clamp(_pitch + pitchDelta, minPitch, maxPitch);
-
-        // apply on server immediately
-        if (turretYawPivot) turretYawPivot.localRotation = Quaternion.Euler(0f, _yaw, 0f);
-        if (turretPitchPivot) turretPitchPivot.localRotation = Quaternion.Euler(0f, 0f, _pitch);
+        yaw = Mathf.Clamp(yawDelta, -1f, 1f);
+        pitch = Mathf.Clamp(pitchDelta, -1f, 1f);
     }
 
     [Server] public void Server_SetOffGun(CrewSeat from)
@@ -95,21 +86,11 @@ public class TankBrain : NetworkBehaviour
         if (from != gunner) return;
         if (fireCooldownTimer > 0) return;
 
-        GameObject shellClone = Instantiate(shellPrefab, muzzle.transform.position, turretPitchPivot.transform.rotation * Quaternion.Euler(0,0,90));
-        shellClone.GetComponent<Rigidbody>().velocity = turretPitchPivot.transform.right * shellSpeed;
+        GameObject shellClone = Instantiate(shellPrefab, muzzle.transform.position, turretPitchPivot.transform.rotation * Quaternion.Euler(90,0,0));
+        shellClone.GetComponent<Rigidbody>().velocity = turretPitchPivot.transform.forward * shellSpeed;
         shellClone.GetComponent<NetworkedShell>().parent = this;
         NetworkServer.Spawn(shellClone);
         fireCooldownTimer = fireCooldownTime;
-    }
-
-    private void OnYawChanged(float _, float newYaw)
-    {
-        if (turretYawPivot) turretYawPivot.localRotation = Quaternion.Euler(0f, newYaw, 0f);
-    }
-
-    private void OnPitchChanged(float _, float newPitch)
-    {
-        if (turretPitchPivot) turretPitchPivot.localRotation = Quaternion.Euler(0f, 0f, newPitch);
     }
 
     [Server] public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
