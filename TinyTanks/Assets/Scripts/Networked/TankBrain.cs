@@ -10,8 +10,11 @@ public class TankBrain : NetworkBehaviour
 
     [Header("Driver controlls")]
     private Rigidbody rb;
-    [SerializeField] private float moveSpeed = 6f;
-    [SerializeField] private float turnSpeed = 90f;
+
+    [Header("Physics based movement")]
+    [SerializeField] private TankTrackPhysics tracks;
+    private float leftTrack;
+    private float rightTrack;
 
     [Header("Gunner Controlls")]
     [SerializeField] private float turretYawSpeed = 1f;
@@ -22,7 +25,8 @@ public class TankBrain : NetworkBehaviour
     [SyncVar(hook = nameof(OnYawChanged))] private float _yaw;
     [SyncVar(hook = nameof(OnPitchChanged))] private float _pitch;
 
-    [Header("Turret Parts")]
+    [Header("Tank Parts")]
+    [SerializeField] private GameObject tankBody;
     [SerializeField] private Transform turretYawPivot; // Y rotation
     [SerializeField] private Transform turretPitchPivot; // X rotation
     [SerializeField] private Transform muzzle; // shell spawn
@@ -30,20 +34,48 @@ public class TankBrain : NetworkBehaviour
     [Header("Firing")]
     [SerializeField] private GameObject shellPrefab;
     [SerializeField] private float shellSpeed = 10f;
-    [SerializeField] private float fireCooldown = 5f;
+    [SerializeField] private float fireCooldownTime = 5f;
+    [SyncVar] [SerializeField] private float fireCooldownTimer = 0f;
     private float _nextFireTime;
+
+    [Header("Health/Life")]
+    [SyncVar] [SerializeField] private int currHealth;
+    [SyncVar] private float respawnTimer = 0f;
+    [SerializeField] private int maxHealth = 5;    
+    [SerializeField] private float respawnTime = 5f;
+    [SerializeField] private Transform spawnLocation;
 
     public override void OnStartServer()
     {
         rb = GetComponent<Rigidbody>();
+        if (!tracks) tracks = GetComponent<TankTrackPhysics>();
+        currHealth = maxHealth;
+        respawnTimer = respawnTime;
     }
 
-    [Server] public void RegisterSeat(CrewSeat s)
+    [Server] public void Server_RegisterSeat(CrewSeat s)
     {
         if (s.seatType == SeatType.Driver) driver = s;
         else if (s.seatType == SeatType.Gunner) gunner = s;
+    }
 
-        Debug.Log(gunner.name);
+    private void Update()
+    {
+        if(fireCooldownTimer >= 0)
+            fireCooldownTimer -= Time.deltaTime;
+
+        if (currHealth <= 0)
+            Server_TankDeath();
+
+        if (respawnTimer <= 0)
+            Server_RespawnTank();
+    }
+
+    [ServerCallback]
+    private void FixedUpdate()
+    {
+        if (!isServer || rb == null) return;
+        if (tracks) tracks.SetInputs(leftTrack, rightTrack);
     }
 
     [Server] public void Server_SetGunnerAim(CrewSeat from, float yawDelta, float pitchDelta)
@@ -58,6 +90,18 @@ public class TankBrain : NetworkBehaviour
         if (turretPitchPivot) turretPitchPivot.localRotation = Quaternion.Euler(0f, 0f, _pitch);
     }
 
+    [Server] public void Server_SetOffGun(CrewSeat from)
+    {
+        if (from != gunner) return;
+        if (fireCooldownTimer > 0) return;
+
+        GameObject shellClone = Instantiate(shellPrefab, muzzle.transform.position, turretPitchPivot.transform.rotation * Quaternion.Euler(0,0,90));
+        shellClone.GetComponent<Rigidbody>().velocity = turretPitchPivot.transform.right * shellSpeed;
+        shellClone.GetComponent<NetworkedShell>().parent = this;
+        NetworkServer.Spawn(shellClone);
+        fireCooldownTimer = fireCooldownTime;
+    }
+
     private void OnYawChanged(float _, float newYaw)
     {
         if (turretYawPivot) turretYawPivot.localRotation = Quaternion.Euler(0f, newYaw, 0f);
@@ -65,18 +109,34 @@ public class TankBrain : NetworkBehaviour
 
     private void OnPitchChanged(float _, float newPitch)
     {
-        if (turretPitchPivot) turretPitchPivot.localRotation = Quaternion.Euler(newPitch, 0f, 0f);
+        if (turretPitchPivot) turretPitchPivot.localRotation = Quaternion.Euler(0f, 0f, newPitch);
     }
 
-    [Server] public void Server_SetDriverInput(CrewSeat from, float throttle, float steer)
+    [Server] public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
     {
         if (from != driver) return;
+        leftTrack = Mathf.Clamp(_leftTrack,-1f,1f);
+        rightTrack = Mathf.Clamp(_rightTrack, -1f, 1f);
+    }
 
-        Debug.Log("im driver");
+    [Server] private void Server_TankDeath()
+    {
+        respawnTimer -= Time.deltaTime;
+        tankBody.SetActive(false);
+        turretYawPivot.gameObject.SetActive(false);
+        
+    }
+    [Server] private void Server_RespawnTank()
+    {
+        gameObject.transform.position = spawnLocation.transform.position;
+        currHealth = maxHealth;
+        respawnTimer = respawnTime;
+        tankBody.SetActive(true);
+        turretYawPivot.gameObject.SetActive(true);
+    }
 
-        Vector3 fwd = transform.forward * (throttle * moveSpeed * Time.fixedDeltaTime);
-        Quaternion turn = Quaternion.Euler(0f, steer * turnSpeed * Time.fixedDeltaTime, 0f);
-        rb.MovePosition(rb.position + fwd);
-        rb.MoveRotation(rb.rotation * turn);
+    public void TakeDamge(int dmg)
+    {
+        currHealth -= dmg;
     }
 }

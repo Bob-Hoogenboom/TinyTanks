@@ -9,6 +9,6 @@ public class SeatInit : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        if (seat && seat.tank) seat.tank.RegisterSeat(seat);
+        if (seat && seat.tank) seat.tank.Server_RegisterSeat(seat);
     }
 }

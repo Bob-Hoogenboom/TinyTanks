@@ -9,7 +9,7 @@ public class RoleUIController : MonoBehaviour
     [SerializeField] private Button[] roleButtons;   // size 4
     [SerializeField] private TMP_Text[] roleLabels;  // size 4
 
-    RoleManager bound;
+    private RoleManager bound;
 
     private void OnEnable()
     {
