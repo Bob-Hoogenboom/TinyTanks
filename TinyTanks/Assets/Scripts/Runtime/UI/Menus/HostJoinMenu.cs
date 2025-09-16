@@ -27,6 +27,11 @@ namespace Menu
             _netManager.StartClient();
         }
 
+        public void ReturnToMainMenu()
+        {
+
+        }
+
         private void UpdateNetwork()
         {
             // set the IP
