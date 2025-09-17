@@ -15,7 +15,7 @@ public class ScrollingTexture : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         if(_meshRenderer == null)
         {
-            Debug.LogWarning("The object this cript is attached to does not contain a meshRenderer");
+            Debug.LogWarning("The object this script is attached to does not contain a meshRenderer");
         }
     }
 
