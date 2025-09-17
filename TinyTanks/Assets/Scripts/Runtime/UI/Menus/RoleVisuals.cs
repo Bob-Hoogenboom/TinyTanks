@@ -1,7 +1,5 @@
 using UnityEngine;
 using TMPro;
-using UnityEditor;
-using System.Linq; // optional, remove if not using
 
 public class RoleVisuals : MonoBehaviour
 {
@@ -21,16 +19,22 @@ public class RoleVisuals : MonoBehaviour
     {
         // If RoleManager already exists, register immediately
         if (RoleManager.Instance != null)
+        {
             RegisterWithRoleManager();
+        }
         else
+        {
             UpdateVisuals(); // still run a pass (all free)
+        }
     }
 
     private void OnDestroy()
     {
         RoleManager.InstanceChanged -= OnRoleManagerChanged;
         if (RoleManager.Instance != null)
+        {
             RoleManager.Instance.OnRolesUpdated -= UpdateVisuals;
+        }
     }
 
     private void OnRoleManagerChanged(RoleManager newInstance)
@@ -89,8 +93,6 @@ public class RoleVisuals : MonoBehaviour
                         // (e.g. "Standard" set to Rendering Mode: Transparent or Fade)
                     }
                 }
-
-
 
                 // Optional: update a name label for this role
                 if (ownerNameTexts != null && i < ownerNameTexts.Length)

@@ -13,6 +13,7 @@ namespace Menu
         private void Awake()
         {
             _netManager = FindObjectOfType<NetworkManager>();
+            if(_netManager == null) this.enabled = false;
         }
 
         public void HostButton()
@@ -27,9 +28,18 @@ namespace Menu
             _netManager.StartClient();
         }
 
+        [Tooltip("Sends the client out of the room but if the host invokes this the room gets terminated")]
         public void ReturnToMainMenu()
-        {
-
+        { 
+            if(NetworkServer.active && NetworkClient.isConnected)
+            {
+                //you are the host
+                _netManager.StopHost();
+            }
+            else
+            {
+                _netManager.StopClient();
+            }
         }
 
         private void UpdateNetwork()
