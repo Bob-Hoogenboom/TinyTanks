@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb7072dd91b4c1498a435ba6d873c27, type: 3}
+  m_Name: MediumTankWetFloor
+  m_EditorClassIdentifier: 
+  trackSpacing: 2.69
+  trackRayStartHeight: 0.6
+  trackRayLength: 0.65
+  enginePowerHP: 780
+  maxForcePerTrack: 80000
+  muLong: 0.55
+  muLat: 1.25
+  rollingResistance: 0.02
+  speedDrag: 360
+  contactHalfLength: 2.5
+  linearLatDrag: 3000
+  quadLatDrag: 500
+  extraDownForce: 0
+  yawDamping: 0.25
+  lateralStiffness: 30000
+  trackBrakeForce: 200000
+  brakeDeadzone: 0.15
+  steerBrakeMultiplier: 1
+  neutralSteerTorqueBoost: 1

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb7072dd91b4c1498a435ba6d873c27, type: 3}
+  m_Name: MediumSmallTest
+  m_EditorClassIdentifier: 
+  enginePowerHP: 9000
+  maxForcePerTrack: 200000
+  muLong: 0.65
+  muLat: 1
+  rollingResistance: 0.01
+  speedDrag: 1
+  contactHalfLength: 0
+  linearLatDrag: 0
+  quadLatDrag: 0
+  lateralStiffness: 0
+  trackBrakeForce: 0
+  brakeDeadzone: 0
+  steerBrakeMultiplier: 0
+  neutralSteerTorqueBoost: 0
