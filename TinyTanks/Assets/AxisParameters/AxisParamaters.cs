@@ -29,7 +29,7 @@ public class AxisParamaters : ScriptableObject
     [Tooltip("Mechanical viscous damping [N·m·s/rad] (bearings, grease, seals).")]
     public float bMechanical = 0.0f;
 
-    [Header("Electrical damping when shorted (Dynamic Brake)")]
+    [Header("Dynamic Brake")]
     [Tooltip("Equivalent electrical damping when the motor is shorted at idle [N·m·s/rad]. Set 0 if you don't use DynamicBrakeShort.")]
-    public float bElectricalShorted = 0.0f;
+    public float dynamicBrake = 0.0f;
 }

@@ -410,6 +410,7 @@ GameObject:
   - component: {fileID: 5950514435522869286}
   - component: {fileID: 7728717808550005659}
   - component: {fileID: 753265604200515571}
+  - component: {fileID: 8986765101202883078}
   m_Layer: 9
   m_Name: Barrel_axis_mesh
   m_TagString: Untagged
@@ -483,6 +484,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8986765101202883078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571550370643820449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 5950514435522869286}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 0
+  compressRotation: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  useFixedUpdate: 1
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &1109500215505799776
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,6 +664,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2124524459161670718}
+  - component: {fileID: 754280433991015988}
   m_Layer: 9
   m_Name: BulletSpawnLocation
   m_TagString: Untagged
@@ -651,6 +687,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4212063416447542792}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &754280433991015988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1377701442902299330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 2124524459161670718}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 0
+  compressRotation: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  useFixedUpdate: 1
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &1707319521374501269
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,6 +736,7 @@ GameObject:
   - component: {fileID: 319210562668348669}
   - component: {fileID: 6391339614521110794}
   - component: {fileID: 1301563495824643946}
+  - component: {fileID: 5428459484476281349}
   m_Layer: 9
   m_Name: NetworkedMediumTankPrefab
   m_TagString: Untagged
@@ -746,7 +817,9 @@ MonoBehaviour:
   turretYawPivot: {fileID: 3335216286506554464}
   turretPitchPivot: {fileID: 5950514435522869286}
   muzzle: {fileID: 2124524459161670718}
-  shellPrefab: {fileID: 7578487806137353445, guid: f2f55292054e62e4abfe6acd93786b60,
+  serverShellPrefab: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
+    type: 3}
+  clientShellPrefab: {fileID: 3732487249527810964, guid: 19dee6e852902dd47976e45177664d8f,
     type: 3}
   shellSpeed: 10
   fireCooldownTime: 5
@@ -840,6 +913,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 3483162887165568838}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 0
+  compressRotation: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 1
+  useFixedUpdate: 1
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
+--- !u!114 &5428459484476281349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707319521374501269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
@@ -1004,6 +1111,7 @@ GameObject:
   - component: {fileID: 2188714594961473147}
   - component: {fileID: 8287464348928537316}
   - component: {fileID: 9161803907049470565}
+  - component: {fileID: 5336617522953109008}
   m_Layer: 9
   m_Name: Barrel_mesh
   m_TagString: Untagged
@@ -1098,6 +1206,40 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.118402705, y: 0.11841339, z: 0.5231763}
   m_Center: {x: 0.00009533763, y: 0.0021325648, z: 0.35560685}
+--- !u!114 &5336617522953109008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3399583117807293424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 4212063416447542792}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 0
+  compressRotation: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  useFixedUpdate: 1
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &3595829853358103648
 GameObject:
   m_ObjectHideFlags: 0
@@ -1984,6 +2126,7 @@ GameObject:
   - component: {fileID: 7160544577372020720}
   - component: {fileID: 4231202940690342539}
   - component: {fileID: 9214399586552676631}
+  - component: {fileID: 3256332225669583093}
   m_Layer: 9
   m_Name: Cupola_mesh
   m_TagString: Untagged
@@ -2081,6 +2224,40 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4044924, y: 0.28317565, z: 0.49548873}
   m_Center: {x: -0.000000044703484, y: 0.13837364, z: -0.03691514}
+--- !u!114 &3256332225669583093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7541207171012642212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 3335216286506554464}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 0
+  compressRotation: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  useFixedUpdate: 1
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &7832157649756468196
 GameObject:
   m_ObjectHideFlags: 0

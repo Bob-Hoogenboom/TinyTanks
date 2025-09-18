@@ -26,7 +26,8 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Transform muzzle; // shell spawn
 
     [Header("Firing")]
-    [SerializeField] private GameObject shellPrefab;
+    [SerializeField] private GameObject serverShellPrefab;
+    [SerializeField] private GameObject clientShellPrefab;
     [SerializeField] private float shellSpeed = 10f;
     [SerializeField] private float fireCooldownTime = 5f;
     [SyncVar] [SerializeField] private float fireCooldownTimer = 0f;
@@ -81,16 +82,21 @@ public class TankBrain : NetworkBehaviour
         pitch = Mathf.Clamp(pitchDelta, -1f, 1f);
     }
 
-    [Server] public void Server_SetOffGun(CrewSeat from)
+    [Server] public void Server_SetOffGun(CrewSeat from, double networkTime)
     {
-        if (from != gunner) return;
+        if (from != driver) return;
         if (fireCooldownTimer > 0) return;
 
-        GameObject shellClone = Instantiate(shellPrefab, muzzle.transform.position, turretPitchPivot.transform.rotation * Quaternion.Euler(90,0,0));
-        shellClone.GetComponent<Rigidbody>().velocity = turretPitchPivot.transform.forward * shellSpeed;
-        shellClone.GetComponent<NetworkedShell>().parent = this;
-        NetworkServer.Spawn(shellClone);
-        fireCooldownTimer = fireCooldownTime;
+        var velocity = turretPitchPivot.transform.forward * shellSpeed;
+        Debug.Log(turretPitchPivot.transform.rotation);
+        GameObject serverShellClone = Instantiate(serverShellPrefab, muzzle.transform.position, turretPitchPivot.transform.rotation);
+        Rigidbody serverShellRB = serverShellClone.GetComponent<Rigidbody>();
+        serverShellRB.velocity = velocity;
+
+        NetworkedShell nShell = serverShellClone.GetComponent<NetworkedShell>();
+        nShell.parent = this;
+        NetworkServer.Spawn(serverShellClone);
+        fireCooldownTimer = fireCooldownTime;       
     }
 
     [Server] public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)

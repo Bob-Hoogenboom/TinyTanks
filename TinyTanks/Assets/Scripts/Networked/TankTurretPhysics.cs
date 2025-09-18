@@ -53,10 +53,22 @@ public class TankTurretPhysics : NetworkBehaviour
     [Tooltip("Lever arm from axis to CoM [m].")]
     public float pitchRM = 0f;
 
+    [Header("Anti-Jitter Sleep")]
+    [Tooltip("If |angular speed| is below this (deg/s) with no input, axis can sleep.")]
+    public float sleepSpeedDeg = 0.05f;
+    [Tooltip("If |net torque| is below this (N·m) with no input, axis can sleep.")]
+    public float sleepTorque = 0.25f;
+    [Tooltip("Input needed to wake the yaw from sleep.")]
+    public float yawWakeInput = 0.02f;
+    [Tooltip("Snap grid for yaw when sleeping or near rest (deg).")]
+    public float yawAngleSnapDeg = 0.005f;
+
     // Runtime state
     private float yawRelDeg, yawRateDeg;     // yaw relative to start
     private float yawStartDeg;
     private float pitchDeg, pitchRateDeg;
+    bool _yawSleeping = false;
+    float _yawSleepAngleDeg = 0f;
 
     private float cmdYaw, cmdPitch; // [-1..1]
 
@@ -69,11 +81,6 @@ public class TankTurretPhysics : NetworkBehaviour
 
     void Awake()
     {
-        if (!yawPivot) Debug.LogWarning("[TankTurretPhysics] Yaw pivot not assigned.");
-        if (!pitchPivot) Debug.LogWarning("[TankTurretPhysics] Pitch pivot not assigned.");
-        if (!yawSettings) Debug.LogError("[TankTurretPhysics] Missing yawSettings ScriptableObject.");
-        if (!pitchSettings) Debug.LogError("[TankTurretPhysics] Missing pitchSettings ScriptableObject.");
-
         if (yawPivot) yawStartDeg = ToSigned(yawPivot.localEulerAngles.y);
         if (pitchPivot)
         {
@@ -91,42 +98,105 @@ public class TankTurretPhysics : NetworkBehaviour
 
         // --- YAW ---
         {
-            float w = Mathf.Deg2Rad * yawRateDeg;
-            float motor = MotorTorque(yawSettings, cmdYaw, w, idleModeYaw);
-            float fric = FrictionTorque(yawSettings, w);
-            float tLimit = YawLimitTorque(w);
+            float angularVelocity = Mathf.Deg2Rad * yawRateDeg;
+            float motor = MotorTorque(yawSettings, cmdYaw, angularVelocity, idleModeYaw);
+            float fric = FrictionTorque(yawSettings, angularVelocity);
+            float tLimit = YawLimitTorque(angularVelocity);
+            float netTau = motor - fric - tLimit;
 
-            float alpha = (motor - fric - tLimit) / Mathf.Max(EPS, yawSettings.inertia);
-            w += alpha * dt;
+            // Wake condition: real stick movement or actual torque
+            bool wantWake = Mathf.Abs(cmdYaw) > yawWakeInput || Mathf.Abs(netTau) >= sleepTorque;
 
-            yawRateDeg = w * Mathf.Rad2Deg;
-            yawRelDeg += yawRateDeg * dt;
+            // Sleep condition: tiny speed, tiny torque, and no input
+            bool canSleep =
+                Mathf.Abs(cmdYaw) <= yawWakeInput &&
+                Mathf.Abs(angularVelocity) < Mathf.Deg2Rad * Mathf.Max(0.001f, sleepSpeedDeg) &&
+                Mathf.Abs(netTau) < Mathf.Max(0f, sleepTorque);
 
-            if (yawHalfRange > 0f)
+            // Latch sleeping
+            if (_yawSleeping)
             {
-                float left = -yawHalfRange, right = yawHalfRange;
-                if (yawRelDeg < left) { yawRelDeg = left; if (yawRateDeg < 0f) yawRateDeg = 0f; }
-                if (yawRelDeg > right) { yawRelDeg = right; if (yawRateDeg > 0f) yawRateDeg = 0f; }
+                if (wantWake)
+                    _yawSleeping = false;
+            }
+            else if (canSleep)
+            {
+                _yawSleeping = true;
+                // Snap to a stable angle when entering sleep
+                float worldYawDeg = yawStartDeg + yawRelDeg;
+                if (yawAngleSnapDeg > 0f)
+                    worldYawDeg = Mathf.Round(worldYawDeg / yawAngleSnapDeg) * yawAngleSnapDeg;
+                _yawSleepAngleDeg = worldYawDeg;
+            }
+
+            if (_yawSleeping)
+            {
+                // Hold perfectly still at the snapped angle
+                yawRateDeg = 0f;
+                yawRelDeg = _yawSleepAngleDeg - yawStartDeg;
+            }
+            else
+            {
+                // Normal integrate
+                float alpha = netTau / Mathf.Max(EPS, yawSettings.inertia);
+                angularVelocity += alpha * dt;
+                yawRateDeg = angularVelocity * Mathf.Rad2Deg;
+                yawRelDeg += yawRateDeg * dt;
+
+                // Limits: stop overshoot from re-waking the axis
+                if (yawHalfRange > 0f)
+                {
+                    float left = -yawHalfRange, right = yawHalfRange;
+                    if (yawRelDeg < left) { yawRelDeg = left; if (yawRateDeg < 0f) yawRateDeg = 0f; }
+                    if (yawRelDeg > right) { yawRelDeg = right; if (yawRateDeg > 0f) yawRateDeg = 0f; }
+                }
+
+                // Gentle snap even when awake near rest to avoid micro dithering
+                if (Mathf.Abs(yawRateDeg) < sleepSpeedDeg * 1.5f && Mathf.Abs(cmdYaw) <= yawWakeInput && yawAngleSnapDeg > 0f)
+                {
+                    float worldYawDeg = yawStartDeg + yawRelDeg;
+                    worldYawDeg = Mathf.Round(worldYawDeg / yawAngleSnapDeg) * yawAngleSnapDeg;
+                    yawRelDeg = worldYawDeg - yawStartDeg;
+                }
             }
 
             if (yawPivot)
-                yawPivot.localRotation = Quaternion.Euler(0f, Wrap360(yawStartDeg + yawRelDeg), 0f);
+            {
+                // Keep your existing wrapping if you rely on it elsewhere
+                float wrapped = Wrap360(yawStartDeg + yawRelDeg);
+                yawPivot.localRotation = Quaternion.Euler(0f, wrapped, 0f);
+            }
         }
 
         // --- PITCH ---
         {
-            float w = Mathf.Deg2Rad * pitchRateDeg;
+            float angularVelocity = Mathf.Deg2Rad * pitchRateDeg;
             float theta = Mathf.Deg2Rad * pitchDeg;
 
-            float motor = MotorTorque(pitchSettings, cmdPitch, w, idleModePitch);
-            float fric = FrictionTorque(pitchSettings, w);
+            float motor = MotorTorque(pitchSettings, cmdPitch, angularVelocity, idleModePitch);
+            float fric = FrictionTorque(pitchSettings, angularVelocity);
             float tGrav = (pitchMEff > 0f && pitchRM > 0f) ? pitchMEff * 9.81f * pitchRM * Mathf.Sin(theta) : 0f;
-            float tLimit = PitchLimitTorque(w);
+            float tLimit = PitchLimitTorque(angularVelocity);
 
-            float alpha = (motor - fric - tGrav - tLimit) / Mathf.Max(EPS, pitchSettings.inertia);
-            w += alpha * dt;
+            // NEW: compute net torque and sleep if near-zero
+            float netTau = motor - fric - tGrav - tLimit;
+            bool wantSleep =
+                Mathf.Approximately(cmdPitch, 0f) &&
+                Mathf.Abs(angularVelocity) < Mathf.Deg2Rad * Mathf.Max(0.001f, sleepSpeedDeg) &&
+                Mathf.Abs(netTau) < Mathf.Max(0f, sleepTorque);
 
-            pitchRateDeg = w * Mathf.Rad2Deg;
+            if (wantSleep)
+            {
+                angularVelocity = 0f;
+                pitchRateDeg = 0f;
+            }
+            else
+            {
+                float alpha = netTau / Mathf.Max(EPS, pitchSettings.inertia);
+                angularVelocity += alpha * dt;
+                pitchRateDeg = angularVelocity * Mathf.Rad2Deg;
+            }
+
             pitchDeg += pitchRateDeg * dt;
 
             if (pitchDeg < pitchMin) { pitchDeg = pitchMin; if (pitchRateDeg < 0f) pitchRateDeg = 0f; }
@@ -137,46 +207,45 @@ public class TankTurretPhysics : NetworkBehaviour
         }
     }
 
-    // ====== Physics pieces (read-only; all parameters from SO) ======
-    static float MotorTorque(AxisParamaters s, float u, float w, IdleElectricalMode idleMode)
+    static float MotorTorque(AxisParamaters _params, float u, float angularVelocity, IdleElectricalMode idleMode)
     {
         // Convert free speed to rad/s
-        float wFree = Mathf.Deg2Rad * Mathf.Max(1e-3f, s.freeSpeedDegPerSec);
+        float wFree = Mathf.Deg2Rad * Mathf.Max(1e-3f, _params.freeSpeedDegPerSec);
 
         if (Mathf.Abs(u) > 1e-3f)
         {
             // Linear motor model: tau = tau_stall * (u - w/w_free)
-            return s.stallTorque * (Mathf.Clamp(u, -1f, 1f) - w / wFree);
+            return _params.stallTorque * (Mathf.Clamp(u, -1f, 1f) - angularVelocity / wFree);
         }
 
         // Idle behavior uses only data from SO
         switch (idleMode)
         {
-            case IdleElectricalMode.DynamicBrakeShort: return -s.bElectricalShorted * w;
-            case IdleElectricalMode.HoldZero: return -s.stallTorque * (w / wFree); // proportional to speed
+            case IdleElectricalMode.DynamicBrakeShort: return -_params.dynamicBrake * angularVelocity;
+            case IdleElectricalMode.HoldZero: return -_params.stallTorque * (angularVelocity / wFree); // proportional to speed
             default: return 0f; // CoastOpen
         }
     }
 
-    static float FrictionTorque(AxisParamaters s, float w)
+    static float FrictionTorque(AxisParamaters _params, float angularVelocity)
     {
-        float absw = Mathf.Abs(w);
-        float sgn = Mathf.Sign(w);
+        float absw = Mathf.Abs(angularVelocity);
+        float sgn = Mathf.Sign(angularVelocity);
 
         // Stribeck (static->coulomb) + Coulomb
-        float wStr = Mathf.Deg2Rad * Mathf.Max(0.01f, s.stribeckDegPerSec);
-        float strib = (s.tauStatic - s.tauCoulomb) * Mathf.Exp(-Mathf.Pow(absw / wStr, 2f));
-        float dry = (s.tauCoulomb + strib) * sgn;
+        float wStr = Mathf.Deg2Rad * Mathf.Max(0.01f, _params.stribeckDegPerSec);
+        float strib = (_params.tauStatic - _params.tauCoulomb) * Mathf.Exp(-Mathf.Pow(absw / wStr, 2f));
+        float dry = (_params.tauCoulomb + strib) * sgn;
 
         // Viscous
-        float visc = s.bMechanical * w;
+        float visc = _params.bMechanical * angularVelocity;
 
         // Stick region clamp near zero speed
-        if (absw < 0.01f) return Mathf.Clamp(dry + visc, -s.tauStatic, s.tauStatic);
+        if (absw < 0.01f) return Mathf.Clamp(dry + visc, -_params.tauStatic, _params.tauStatic);
         return dry + visc;
     }
 
-    float YawLimitTorque(float w)
+    float YawLimitTorque(float angularVelocity)
     {
         if (yawHalfRange <= 0f) return 0f;
         float soft = Mathf.Max(0.1f, yawSoftZone);
@@ -186,17 +255,17 @@ public class TankTurretPhysics : NetworkBehaviour
         if (yawRelDeg < left + soft)
         {
             float pen = Mathf.Deg2Rad * ((left + soft) - yawRelDeg);
-            tau += yawLimitK * pen + yawLimitC * Mathf.Max(0f, -w);
+            tau += yawLimitK * pen + yawLimitC * Mathf.Max(0f, -angularVelocity);
         }
         else if (yawRelDeg > right - soft)
         {
             float pen = Mathf.Deg2Rad * (yawRelDeg - (right - soft));
-            tau += -(yawLimitK * pen + yawLimitC * Mathf.Max(0f, w));
+            tau += -(yawLimitK * pen + yawLimitC * Mathf.Max(0f, angularVelocity));
         }
         return tau;
     }
 
-    float PitchLimitTorque(float w)
+    float PitchLimitTorque(float angularVelocity)
     {
         float soft = Mathf.Max(0.1f, pitchSoftZone);
         float tau = 0f;
@@ -204,12 +273,12 @@ public class TankTurretPhysics : NetworkBehaviour
         if (pitchDeg < pitchMin + soft)
         {
             float pen = Mathf.Deg2Rad * ((pitchMin + soft) - pitchDeg);
-            tau += pitchLimitK * pen + pitchLimitC * Mathf.Max(0f, -w);
+            tau += pitchLimitK * pen + pitchLimitC * Mathf.Max(0f, -angularVelocity);
         }
         else if (pitchDeg > pitchMax - soft)
         {
             float pen = Mathf.Deg2Rad * (pitchDeg - (pitchMax - soft));
-            tau += -(pitchLimitK * pen + pitchLimitC * Mathf.Max(0f, w));
+            tau += -(pitchLimitK * pen + pitchLimitC * Mathf.Max(0f, angularVelocity));
         }
         return tau;
     }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7578487806137353445
+--- !u!1 &3732487249527810964
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,51 +8,51 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1746037035058612011}
-  - component: {fileID: 4569134349323922719}
-  - component: {fileID: 4602073975215468586}
-  - component: {fileID: 3693885193418851937}
-  - component: {fileID: -4904029658141100271}
-  - component: {fileID: 7584821306279092730}
-  - component: {fileID: -4799222717371998590}
-  - component: {fileID: 2252229726073269367}
-  m_Layer: 6
-  m_Name: TestBullet
+  - component: {fileID: 6955452298965383634}
+  - component: {fileID: -8059354695294034555}
+  - component: {fileID: 813639458802063460}
+  - component: {fileID: 4666911793924803659}
+  - component: {fileID: 6725748877835005261}
+  - component: {fileID: 1273131803844214113}
+  - component: {fileID: 8839403108195990478}
+  - component: {fileID: -5675497144142597041}
+  m_Layer: 0
+  m_Name: NetworkedStandardBullet_Prop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1746037035058612011
+--- !u!4 &6955452298965383634
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578487806137353445}
+  m_GameObject: {fileID: 3732487249527810964}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: -0.73673224, y: 0, z: 28.9929}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4569134349323922719
+--- !u!33 &-8059354695294034555
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578487806137353445}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &4602073975215468586
+  m_GameObject: {fileID: 3732487249527810964}
+  m_Mesh: {fileID: 6051355008134783815, guid: 2a0fe87aa4569b649a3a09ba8ade00d6, type: 3}
+--- !u!23 &813639458802063460
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578487806137353445}
+  m_GameObject: {fileID: 3732487249527810964}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -88,13 +88,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3693885193418851937
+--- !u!136 &4666911793924803659
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578487806137353445}
+  m_GameObject: {fileID: 3732487249527810964}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -107,17 +107,17 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &-4904029658141100271
+  m_Radius: 0.041013964
+  m_Height: 0.33071375
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.00078671426, z: 0.16347098}
+--- !u!54 &6725748877835005261
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578487806137353445}
+  m_GameObject: {fileID: 3732487249527810964}
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
@@ -138,30 +138,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7584821306279092730
+--- !u!114 &1273131803844214113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578487806137353445}
+  m_GameObject: {fileID: 3732487249527810964}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
-  _assetId: 1024512484
+  _assetId: 2426268504
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
---- !u!114 &-4799222717371998590
+--- !u!114 &8839403108195990478
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578487806137353445}
+  m_GameObject: {fileID: 3732487249527810964}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
@@ -170,13 +170,13 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  target: {fileID: 1746037035058612011}
+  target: {fileID: 6955452298965383634}
   syncPosition: 1
   syncRotation: 1
   syncScale: 0
-  onlySyncOnChange: 1
-  compressRotation: 1
-  interpolatePosition: 1
+  onlySyncOnChange: 0
+  compressRotation: 0
+  interpolatePosition: 0
   interpolateRotation: 1
   interpolateScale: 1
   coordinateSpace: 0
@@ -185,17 +185,17 @@ MonoBehaviour:
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
   onlySyncOnChangeCorrectionMultiplier: 2
-  useFixedUpdate: 0
+  useFixedUpdate: 1
   rotationSensitivity: 0.01
   positionPrecision: 0.01
   scalePrecision: 0.01
---- !u!114 &2252229726073269367
+--- !u!114 &-5675497144142597041
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578487806137353445}
+  m_GameObject: {fileID: 3732487249527810964}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aaf4f2373cc0b624d97091d79343cdf0, type: 3}
@@ -206,4 +206,5 @@ MonoBehaviour:
   syncInterval: 0
   parent: {fileID: 0}
   shellLifeTime: 5
+  rotationSpeed: 5
   damage: 1
