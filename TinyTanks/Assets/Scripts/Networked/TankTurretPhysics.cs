@@ -29,46 +29,46 @@ public class TankTurretPhysics : NetworkBehaviour
 
     [Header("Yaw Limits")]
     [Tooltip("Optional hard yaw half-range about start [deg]. Set 0 for unlimited.")]
-    [Range(0f, 180f)] public float yawHalfRange = 0f;
+    [Range(0f, 180f)] [SerializeField] private float yawHalfRange = 0f;
     [Tooltip("Soft zone width before hard yaw limit [deg].")]
-    public float yawSoftZone = 8f;
+    [SerializeField] private float yawSoftZone = 8f;
     [Tooltip("Soft limit spring [N·m/rad].")]
-    public float yawLimitK = 1200f;
+    [SerializeField] private float yawLimitK = 1200f;
     [Tooltip("Soft limit damper [N·m·s/rad].")]
-    public float yawLimitC = 80f;
+    [SerializeField] private float yawLimitC = 80f;
 
     [Header("Pitch Limits")]
     [Tooltip("Min / Max elevation [deg].")]
-    public float pitchMin = -10f, pitchMax = 30f;
+    [SerializeField] private float pitchMin = -10f, pitchMax = 30f;
     [Tooltip("Soft zone width before hard pitch limit [deg].")]
-    public float pitchSoftZone = 5f;
+    [SerializeField] private float pitchSoftZone = 5f;
     [Tooltip("Soft limit spring [N·m/rad].")]
-    public float pitchLimitK = 1500f;
+    [SerializeField] private float pitchLimitK = 1500f;
     [Tooltip("Soft limit damper [N·m·s/rad].")]
-    public float pitchLimitC = 100f;
+    [SerializeField] private float pitchLimitC = 100f;
 
     [Header("Pitch Gravity (optional)")]
     [Tooltip("Effective mass acting on elevation [kg].")]
-    public float pitchMEff = 0f;
+    [SerializeField] private float pitchMEff = 0f;
     [Tooltip("Lever arm from axis to CoM [m].")]
-    public float pitchRM = 0f;
+    [SerializeField] private float pitchRM = 0f;
 
     [Header("Anti-Jitter Sleep")]
     [Tooltip("If |angular speed| is below this (deg/s) with no input, axis can sleep.")]
-    public float sleepSpeedDeg = 0.05f;
+    [SerializeField] private float sleepSpeedDeg = 0.05f;
     [Tooltip("If |net torque| is below this (N·m) with no input, axis can sleep.")]
-    public float sleepTorque = 0.25f;
+    [SerializeField] private float sleepTorque = 0.25f;
     [Tooltip("Input needed to wake the yaw from sleep.")]
-    public float yawWakeInput = 0.02f;
+    [SerializeField] private float yawWakeInput = 0.02f;
     [Tooltip("Snap grid for yaw when sleeping or near rest (deg).")]
-    public float yawAngleSnapDeg = 0.005f;
+    [SerializeField] private float yawAngleSnapDeg = 0.005f;
 
     // Runtime state
     private float yawRelDeg, yawRateDeg;     // yaw relative to start
     private float yawStartDeg;
     private float pitchDeg, pitchRateDeg;
-    bool _yawSleeping = false;
-    float _yawSleepAngleDeg = 0f;
+    private bool _yawSleeping = false;
+    private float _yawSleepAngleDeg = 0f;
 
     private float cmdYaw, cmdPitch; // [-1..1]
 

@@ -6147,10 +6147,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4691365325415838650, guid: c3cc05b8a8190734689427394c0e3661,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -248.41504
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751387655643667337, guid: c3cc05b8a8190734689427394c0e3661,
+        type: 3}
+      propertyPath: trackSpacing
+      value: 0.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751387655643667337, guid: c3cc05b8a8190734689427394c0e3661,
+        type: 3}
+      propertyPath: trackRayLength
+      value: -0.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751387655643667337, guid: c3cc05b8a8190734689427394c0e3661,
+        type: 3}
+      propertyPath: contactSphereRadius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751387655643667337, guid: c3cc05b8a8190734689427394c0e3661,
+        type: 3}
+      propertyPath: trackRayStartHeight
+      value: 0.16
+      objectReference: {fileID: 0}
     - target: {fileID: 6391339614521110794, guid: c3cc05b8a8190734689427394c0e3661,
         type: 3}
       propertyPath: sceneId
       value: 2193087175
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416088550841953184, guid: c3cc05b8a8190734689427394c0e3661,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416088550841953184, guid: c3cc05b8a8190734689427394c0e3661,
+        type: 3}
+      propertyPath: trackSpacing
+      value: 0.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416088550841953184, guid: c3cc05b8a8190734689427394c0e3661,
+        type: 3}
+      propertyPath: contactSphereRadius
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6248731220635565586, guid: c3cc05b8a8190734689427394c0e3661, type: 3}
@@ -7796,6 +7836,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4691365325415838650, guid: c3cc05b8a8190734689427394c0e3661,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -248.41504
       objectReference: {fileID: 0}
     - target: {fileID: 6391339614521110794, guid: c3cc05b8a8190734689427394c0e3661,
         type: 3}
