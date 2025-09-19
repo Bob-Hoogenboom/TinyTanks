@@ -1,7 +1,8 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using TMPro;
 
 [DefaultExecutionOrder(-100)]
 public class TankBrain : NetworkBehaviour
@@ -35,11 +36,13 @@ public class TankBrain : NetworkBehaviour
     private float _nextFireTime;
 
     [Header("Health/Life")]
-    [SyncVar] [SerializeField] private int currHealth;
-    [SyncVar] private float respawnTimer = 0f;
-    [SerializeField] private int maxHealth = 5;    
+    [SyncVar, SerializeField] private int lives = 3;
+    [SyncVar, SerializeField] private int currHealth;
+    [SyncVar] private double respawnEndTime;
+    [SerializeField] private int maxHealth = 5;
     [SerializeField] private float respawnTime = 5f;
     [SerializeField] private Transform spawnLocation;
+    private bool isDead;
 
     [Header("RayCast")]
     [SerializeField] float contactRadius = 0.22f;
@@ -49,15 +52,21 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private float trackRayLength = 1.2f;
     [SerializeField] private LayerMask groundMask = ~0;
 
+    [Header("UI Canvas")]
+    [SerializeField] CanvasGroup driverRespawn;
+    [SerializeField] CanvasGroup gunnerRespawn;
+    [SerializeField] TMP_Text[] respawnTexts;
+
     public override void OnStartServer()
     {
         rb = GetComponent<Rigidbody>();
         if (!tracks) tracks = GetComponent<TankTrackPhysics>();
         currHealth = maxHealth;
-        respawnTimer = respawnTime;
+        isDead = false;
     }
 
-    [Server] public void Server_RegisterSeat(CrewSeat s)
+    [Server]
+    public void Server_RegisterSeat(CrewSeat s)
     {
         if (s.seatType == SeatType.Driver) driver = s;
         else if (s.seatType == SeatType.Gunner) gunner = s;
@@ -65,25 +74,27 @@ public class TankBrain : NetworkBehaviour
 
     private void Update()
     {
-        if(fireCooldownTimer >= 0)
+        double remaining = respawnEndTime - NetworkTime.time;
+        UpdateTimerDisplay(remaining, respawnTexts);
+
+        if (remaining <= 0 && isDead) Server_RespawnTank();
+
+        if (fireCooldownTimer >= 0)
             fireCooldownTimer -= Time.deltaTime;
 
-        if (currHealth <= 0)
-            Server_TankDeath();
-
-        if (respawnTimer <= 0)
-            Server_RespawnTank();
     }
 
     [ServerCallback]
     private void FixedUpdate()
     {
         if (!isServer || rb == null) return;
+        if (isDead) return;
         if (tracks) tracks.SetInputs(leftTrack, rightTrack);
         if (turret) turret.SetInputs(yaw, pitch);
     }
 
-    [Server] public void Server_SetGunnerInput(CrewSeat from, float yawDelta, float pitchDelta)
+    [Server]
+    public void Server_SetGunnerInput(CrewSeat from, float yawDelta, float pitchDelta)
     {
         if (from != gunner) return;
 
@@ -91,7 +102,8 @@ public class TankBrain : NetworkBehaviour
         pitch = Mathf.Clamp(pitchDelta, -1f, 1f);
     }
 
-    [Server] public void Server_SetOffGun(CrewSeat from, double networkTime)
+    [Server]
+    public void Server_SetOffGun(CrewSeat from, double networkTime)
     {
         if (from != driver) return;
         if (fireCooldownTimer > 0) return;
@@ -105,37 +117,74 @@ public class TankBrain : NetworkBehaviour
         NetworkedShell nShell = serverShellClone.GetComponent<NetworkedShell>();
         nShell.parent = this;
         NetworkServer.Spawn(serverShellClone);
-        fireCooldownTimer = fireCooldownTime;       
+        fireCooldownTimer = fireCooldownTime;
     }
 
-    [Server] public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
+    [Server]
+    public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
     {
         if (from != driver) return;
-        leftTrack = Mathf.Clamp(_leftTrack,-1f,1f);
+        leftTrack = Mathf.Clamp(_leftTrack, -1f, 1f);
         rightTrack = Mathf.Clamp(_rightTrack, -1f, 1f);
     }
 
-    [Server] private void Server_TankDeath()
+    [Server]
+    private void Server_TankDeath()
     {
-        respawnTimer -= Time.deltaTime;
-        tankBody.SetActive(false);
-        turretYawPivot.gameObject.SetActive(false);
-        
+        if (lives <= 0) Server_ReturnToLobby();
+
+        StarRespawnTimer();
     }
-    [Server] private void Server_RespawnTank()
+
+    [Server]
+    private void Server_RespawnTank()
     {
         gameObject.transform.position = spawnLocation.transform.position;
         currHealth = maxHealth;
-        respawnTimer = respawnTime;
-        tankBody.SetActive(true);
-        turretYawPivot.gameObject.SetActive(true);
+        lives -= 1;
+        isDead = false;
+        driverRespawn.alpha = 0;
+        gunnerRespawn.alpha = 0;
+    }
+
+    [Server]
+    private void Server_ReturnToLobby()
+    {
+        if (NetworkServer.active)
+        {
+            var roomMgr = (NetworkRoomManager)NetworkManager.singleton;
+            NetworkManager.singleton.ServerChangeScene(roomMgr.RoomScene);
+        }
+    }
+
+    private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
+    {
+        if (timeRemaining <= 0) timeRemaining = 0;
+        var ts = TimeSpan.FromSeconds(timeRemaining);
+
+        foreach(var text in uiTexts)
+            text.text = $"{ts.Seconds:00}";
+    }
+
+    private void StarRespawnTimer()
+    {
+        isDead = true;
+        driverRespawn.alpha = 1;
+        gunnerRespawn.alpha = 1;
+        respawnEndTime = NetworkTime.time + +respawnTime;
     }
 
     public void TakeDamge(int dmg)
     {
+        if (isDead) return;
+
         currHealth -= dmg;
+
+        if (currHealth <= 0)
+            Server_TankDeath();
     }
 
+    #region WireCapsule
 #if UNITY_EDITOR
 
     [SerializeField] bool gizmoDrawCapsuleCasts = true;
@@ -258,5 +307,5 @@ public class TankBrain : NetworkBehaviour
         }
     }
 #endif
-
+    #endregion
 }
