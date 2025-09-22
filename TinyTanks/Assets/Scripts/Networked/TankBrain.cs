@@ -117,7 +117,7 @@ public class TankBrain : NetworkBehaviour
     [Server]
     public void Server_SetOffGun(CrewSeat from)
     {
-        if (from != gunner) return;
+        if (from != driver) return;
         if (!hasBullet) return;
 
         var velocity = turretPitchPivot.transform.forward * shellSpeed;
