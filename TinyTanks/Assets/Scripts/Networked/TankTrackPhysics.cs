@@ -130,6 +130,8 @@ public class TankTrackPhysics : MonoBehaviour
 
     private void ApplyTrackForces( Vector3 contactPoint, Vector3 contactNormal, float input, float otherInput, float normalForce, bool isLeft)
     {
+        Debug.Log(input);
+
         Vector3 lateral = Vector3.ProjectOnPlane(smoothedRight, contactNormal);
         float latMag = lateral.magnitude;
 

@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using TMPro;
+using UnityEngine.UI;
 
 [DefaultExecutionOrder(-100)]
 public class TankBrain : NetworkBehaviour
@@ -29,11 +29,9 @@ public class TankBrain : NetworkBehaviour
 
     [Header("Firing")]
     [SerializeField] private GameObject serverShellPrefab;
-    [SerializeField] private GameObject clientShellPrefab;
     [SerializeField] private float shellSpeed = 10f;
-    [SerializeField] private float fireCooldownTime = 5f;
-    [SyncVar] [SerializeField] private float fireCooldownTimer = 0f;
-    private float _nextFireTime;
+    [SyncVar, SerializeField] private double reloadEndTime;
+    [SerializeField] private float reloadTime = 5f;
 
     [Header("Health/Life")]
     [SyncVar, SerializeField] private int lives = 3;
@@ -57,6 +55,15 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] CanvasGroup gunnerRespawn;
     [SerializeField] TMP_Text[] respawnTexts;
 
+    [Header("UI Bullet")]
+    [SerializeField] private CanvasGroup reloadGroup;
+    [SerializeField] private TMP_Text bulletStateText;
+    [SerializeField] private Image bulletReloadImage;
+    [SerializeField] private Image reloadTimerImage;
+
+    [SyncVar] private bool isReloading = false;
+    [SyncVar] private bool hasBullet = true;
+
     public override void OnStartServer()
     {
         rb = GetComponent<Rigidbody>();
@@ -74,14 +81,19 @@ public class TankBrain : NetworkBehaviour
 
     private void Update()
     {
-        double remaining = respawnEndTime - NetworkTime.time;
-        UpdateTimerDisplay(remaining, respawnTexts);
+        double respawnRemaining = respawnEndTime - NetworkTime.time;
+        UpdateTimerDisplay(respawnRemaining, respawnTexts);
 
-        if (remaining <= 0 && isDead) Server_RespawnTank();
+        if (respawnRemaining <= 0 && isDead) Server_RespawnTank();
 
-        if (fireCooldownTimer >= 0)
-            fireCooldownTimer -= Time.deltaTime;
+        if(isReloading)
+        {
+            double reloadRemaining = reloadEndTime - NetworkTime.time;
+            UpdateReloadDisplay(reloadRemaining);
 
+            if (reloadRemaining <= 0)
+                Server_FinishReload();
+        }
     }
 
     [ServerCallback]
@@ -103,13 +115,12 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
-    public void Server_SetOffGun(CrewSeat from, double networkTime)
+    public void Server_SetOffGun(CrewSeat from)
     {
-        if (from != driver) return;
-        if (fireCooldownTimer > 0) return;
+        if (from != gunner) return;
+        if (!hasBullet) return;
 
         var velocity = turretPitchPivot.transform.forward * shellSpeed;
-        Debug.Log(turretPitchPivot.transform.rotation);
         GameObject serverShellClone = Instantiate(serverShellPrefab, muzzle.transform.position, turretPitchPivot.transform.rotation);
         Rigidbody serverShellRB = serverShellClone.GetComponent<Rigidbody>();
         serverShellRB.velocity = velocity;
@@ -117,7 +128,31 @@ public class TankBrain : NetworkBehaviour
         NetworkedShell nShell = serverShellClone.GetComponent<NetworkedShell>();
         nShell.parent = this;
         NetworkServer.Spawn(serverShellClone);
-        fireCooldownTimer = fireCooldownTime;
+
+        bulletStateText.text = "Not Ready";
+        hasBullet = false;
+        reloadGroup.alpha = 1;
+    }
+
+    [Server]
+    public void Server_ReloadGun(CrewSeat from)
+    {
+        if (from != gunner) return;
+        if (hasBullet) return;
+
+        isReloading = true;
+        reloadEndTime = NetworkTime.time + reloadTime;
+    }
+
+    [Server]
+    public void Server_FinishReload()
+    {
+        bulletStateText.text = "Ready";
+        isReloading = false;
+        hasBullet = true;
+        bulletReloadImage.fillAmount = 0;
+        reloadTimerImage.fillAmount = 0;
+        reloadGroup.alpha = 0;
     }
 
     [Server]
@@ -143,8 +178,12 @@ public class TankBrain : NetworkBehaviour
         currHealth = maxHealth;
         lives -= 1;
         isDead = false;
-        driverRespawn.alpha = 0;
-        gunnerRespawn.alpha = 0;
+
+        if(driverRespawn != null && gunnerRespawn != null)
+        {
+            driverRespawn.alpha = 0;
+            gunnerRespawn.alpha = 0;
+        }
     }
 
     [Server]
@@ -166,11 +205,21 @@ public class TankBrain : NetworkBehaviour
             text.text = $"{ts.Seconds:00}";
     }
 
+    private void UpdateReloadDisplay(double timeRemaining)
+    {
+        float progress = 1f - Mathf.Clamp01((float)(timeRemaining / reloadTime));
+        bulletReloadImage.fillAmount = progress;
+        reloadTimerImage.fillAmount = progress;
+    }
+
     private void StarRespawnTimer()
     {
         isDead = true;
-        driverRespawn.alpha = 1;
-        gunnerRespawn.alpha = 1;
+        if (driverRespawn != null && gunnerRespawn != null)
+        {
+            driverRespawn.alpha = 1;
+            gunnerRespawn.alpha = 1;
+        }
         respawnEndTime = NetworkTime.time + +respawnTime;
     }
 

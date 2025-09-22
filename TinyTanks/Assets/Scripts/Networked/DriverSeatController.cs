@@ -38,6 +38,6 @@ public class DriverSeatController : NetworkBehaviour
     private void CmdDriverShooting()
     {
         if (!seat || !seat.tank) return;
-        seat.tank.Server_SetOffGun(seat, NetworkTime.time);
+        seat.tank.Server_SetOffGun(seat);
     }
 }

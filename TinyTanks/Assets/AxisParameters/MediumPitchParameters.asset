@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a5d1a5235d14a74e8227d35944cf5ee, type: 3}
   m_Name: MediumPitchParameters
   m_EditorClassIdentifier: 
-  stallTorque: 320
+  stallTorque: 300
   freeSpeedDegPerSec: 12
   inertia: 40
   tauStatic: 46
   tauCoulomb: 30
   stribeckDegPerSec: 3
   bMechanical: 10
-  bElectricalShorted: 220
+  dynamicBrake: 0

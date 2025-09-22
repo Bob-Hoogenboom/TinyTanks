@@ -21,7 +21,13 @@ public class GunnerSeatController : NetworkBehaviour
         float pitch = Input.GetAxisRaw("Vertical");
         float yaw = Input.GetAxisRaw("Horizontal");
 
-        CmdGunnerInput(yaw, pitch);            
+        CmdGunnerInput(yaw, pitch);
+
+        if (Input.GetKeyDown(KeyCode.R))
+            CmdGunnerReload();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            CmdGunnerShooting();
     }
 
     [Command]
@@ -29,5 +35,19 @@ public class GunnerSeatController : NetworkBehaviour
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_SetGunnerInput(seat, yaw, pitch);
+    }
+
+    [Command]
+    private void CmdGunnerReload()
+    {
+        if (!seat || !seat.tank) return;
+        seat.tank.Server_ReloadGun(seat);
+    }
+
+    [Command]
+    private void CmdGunnerShooting()
+    {
+        if (!seat || !seat.tank) return;
+        seat.tank.Server_SetOffGun(seat);
     }
 }
