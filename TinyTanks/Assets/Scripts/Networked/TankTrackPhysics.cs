@@ -29,10 +29,10 @@ public class TankTrackPhysics : MonoBehaviour
     [SerializeField] private TankData currData;
 
     [Header("Lateral Model")]
-    [Tooltip("Dead-zone for side slip (m/s). Not a smoother—just avoids micro chatter.")]
+    [Tooltip("Dead-zone for side slip (m/s).")]
     [SerializeField] private float slipDead = 0.4f;
     [Tooltip("Minimum velocity magnitude to prevent division by zero")]
-    [SerializeField] private float minVelocityMagnitude = 0.001f;
+    [SerializeField] private float minVelocityMagnitude = 0.01f;
     [Tooltip("Smoothing factor for track contact (0-1, higher = more responsive)")]
     [SerializeField] private float contactSmoothing = 0.8f;
 
@@ -85,46 +85,58 @@ public class TankTrackPhysics : MonoBehaviour
         smoothedForward = Vector3.Slerp(smoothedForward, transform.forward, forwardSmoothing).normalized;
         smoothedRight = Vector3.Slerp(smoothedRight, transform.right, forwardSmoothing).normalized;
 
-        Vector3 leftBase = transform.TransformPoint(new Vector3(-trackSpacing * 0.5f, trackRayStartHeight, 0f));
-        Vector3 rightBase = transform.TransformPoint(new Vector3(trackSpacing * 0.5f, trackRayStartHeight, 0f));
-        Vector3 along = transform.forward;
-        Vector3 castDir = -transform.up;
+        // --- compute track anchor bases (midpoints) ---
+        Vector3 leftMid = transform.TransformPoint(new Vector3(-trackSpacing * 0.5f, trackRayStartHeight, 0f));
+        Vector3 rightMid = transform.TransformPoint(new Vector3(trackSpacing * 0.5f, trackRayStartHeight, 0f));
+        Vector3 fwd = transform.forward;
+        Vector3 down = -transform.up;
 
-        bool lHit = Physics.CapsuleCast(leftBase - along * contactCapsuleHalfLength, leftBase + along * contactCapsuleHalfLength, contactRadius, castDir, out RaycastHit lInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
-        bool rHit = Physics.CapsuleCast(rightBase - along * contactCapsuleHalfLength, rightBase + along * contactCapsuleHalfLength, contactRadius, castDir, out RaycastHit rInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
+        // --- define front/rear cast starts for each track ---
+        float anchorHalfLen = contactCapsuleHalfLength; // half the contact length along the track
+        Vector3 leftFrontStart = leftMid + fwd * anchorHalfLen;
+        Vector3 leftRearStart = leftMid - fwd * anchorHalfLen;
+        Vector3 rightFrontStart = rightMid + fwd * anchorHalfLen;
+        Vector3 rightRearStart = rightMid - fwd * anchorHalfLen;
 
-        float targetLeftContact = lHit ? 1f : 0f;
-        float targetRightContact = rHit ? 1f : 0f;
-        leftContactFactor = Mathf.Lerp(leftContactFactor, targetLeftContact, contactSmoothing);
-        rightContactFactor = Mathf.Lerp(rightContactFactor, targetRightContact, contactSmoothing);
+        // --- sphere casts straight down at each anchor ---
+        bool lfHit = Physics.SphereCast(leftFrontStart, contactRadius, down, out RaycastHit lfInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
+        bool lrHit = Physics.SphereCast(leftRearStart, contactRadius, down, out RaycastHit lrInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
+        bool rfHit = Physics.SphereCast(rightFrontStart, contactRadius, down, out RaycastHit rfInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
+        bool rrHit = Physics.SphereCast(rightRearStart, contactRadius, down, out RaycastHit rrInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
 
-        if (lHit)
-        {
-            CheckTrackSurface(lInfo);
-            lastLeftNormal = Vector3.Slerp(lastLeftNormal, lInfo.normal, 0.5f).normalized;
-        }
-        if (rHit)
-        {
-            CheckTrackSurface(rInfo);
-            lastRightNormal = Vector3.Slerp(lastRightNormal, rInfo.normal, 0.5f).normalized;
-        }
+        // update surface type + smoothed normals
+        if (lfHit) { CheckTrackSurface(lfInfo); lastLeftNormal = Vector3.Slerp(lastLeftNormal, lfInfo.normal, 0.5f).normalized; }
+        if (lrHit) { CheckTrackSurface(lrInfo); lastLeftNormal = Vector3.Slerp(lastLeftNormal, lrInfo.normal, 0.5f).normalized; }
+        if (rfHit) { CheckTrackSurface(rfInfo); lastRightNormal = Vector3.Slerp(lastRightNormal, rfInfo.normal, 0.5f).normalized; }
+        if (rrHit) { CheckTrackSurface(rrInfo); lastRightNormal = Vector3.Slerp(lastRightNormal, rrInfo.normal, 0.5f).normalized; }
 
+        // per-track normal load split across valid hit points
         float g = Physics.gravity.magnitude;
         float normalPerTrack = (rb.mass * g) * 0.5f;
 
-        if (leftContactFactor > 0.01f)
-        {
-            Vector3 contactPoint = lHit ? lInfo.point : leftBase - castDir * 0.5f;
-            ApplyTrackForces(contactPoint, lastLeftNormal, leftInput, rightInput, normalPerTrack * leftContactFactor, true);
-        }
+        int leftHits = (lfHit ? 1 : 0) + (lrHit ? 1 : 0);
+        int rightHits = (rfHit ? 1 : 0) + (rrHit ? 1 : 0);
 
-        if (rightContactFactor > 0.01f)
-        {
-            Vector3 contactPoint = rHit ? rInfo.point : rightBase - castDir * 0.5f;
-            ApplyTrackForces(contactPoint, lastRightNormal, rightInput, leftInput, normalPerTrack * rightContactFactor, false);
-        }
+        float leftShare = leftHits > 0 ? normalPerTrack / leftHits : 0f;
+        float rightShare = rightHits > 0 ? normalPerTrack / rightHits : 0f;
 
-        ApplyStabilization(lHit || rHit);
+        // fallbacks if a spherecast misses (keeps behavior graceful when airborne)
+        Vector3 lfPt = lfHit ? lfInfo.point : leftFrontStart - down * (trackRayLength * 0.5f);
+        Vector3 lrPt = lrHit ? lrInfo.point : leftRearStart - down * (trackRayLength * 0.5f);
+        Vector3 rfPt = rfHit ? rfInfo.point : rightFrontStart - down * (trackRayLength * 0.5f);
+        Vector3 rrPt = rrHit ? rrInfo.point : rightRearStart - down * (trackRayLength * 0.5f);
+
+        // LEFT track forces (front + rear if present)
+        if (lfHit) ApplyTrackForces(lfPt, lfHit ? lfInfo.normal : lastLeftNormal, leftInput, rightInput, leftShare, true);
+        if (lrHit) ApplyTrackForces(lrPt, lrHit ? lrInfo.normal : lastLeftNormal, leftInput, rightInput, leftShare, true);
+
+        // RIGHT track forces (front + rear if present)
+        if (rfHit) ApplyTrackForces(rfPt, rfHit ? rfInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
+        if (rrHit) ApplyTrackForces(rrPt, rrHit ? rrInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
+
+        // If none of the four hits, you can optionally keep your old "single" fallback or rely on stabilization.
+        bool anyHit = lfHit || lrHit || rfHit || rrHit;
+        ApplyStabilization(anyHit);
         ApplyYawDamping();
     }
 

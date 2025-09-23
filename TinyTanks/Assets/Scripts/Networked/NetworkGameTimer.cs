@@ -5,7 +5,7 @@ using TMPro;
 
 public class NetworkGameTimer : NetworkBehaviour
 {
-    [SyncVar, SerializeField] private double endTime;
+    [SyncVar] private double endTime;
     [SerializeField] private TMP_Text[] timerTexts;
     [SerializeField] private float gameTime;
 

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a5d1a5235d14a74e8227d35944cf5ee, type: 3}
-  m_Name: MediumPitchParameters
+  m_Name: HeavyYawParameters
   m_EditorClassIdentifier: 
   stallTorque: 300
-  freeSpeedDegPerSec: 12
-  inertia: 40
-  tauStatic: 46
-  tauCoulomb: 30
-  stribeckDegPerSec: 3
-  bMechanical: 10
-  dynamicBrake: 50
+  freeSpeedDegPerSec: 40
+  inertia: 400
+  tauStatic: 120
+  tauCoulomb: 65
+  stribeckDegPerSec: 4
+  bMechanical: 15
+  dynamicBrake: 1500

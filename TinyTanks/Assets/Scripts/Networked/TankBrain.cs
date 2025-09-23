@@ -29,15 +29,15 @@ public class TankBrain : NetworkBehaviour
 
     [Header("Firing")]
     [SerializeField] private GameObject serverShellPrefab;
-    [SerializeField] private float shellSpeed = 10f;
-    [SyncVar, SerializeField] private double reloadEndTime;
+    [SyncVar] private double reloadEndTime;
     [SerializeField] private float reloadTime = 5f;
+    [SerializeField] private float shellSpeed = 10f;
 
     [Header("Health/Life")]
     [SyncVar, SerializeField] private int lives = 3;
     [SyncVar, SerializeField] private int currHealth;
-    [SyncVar] private double respawnEndTime;
     [SerializeField] private int maxHealth = 5;
+    [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 5f;
     [SerializeField] private Transform spawnLocation;
     private bool isDead;
@@ -233,126 +233,87 @@ public class TankBrain : NetworkBehaviour
             Server_TankDeath();
     }
 
-    #region WireCapsule
+    #region TrackContactGizmos
 #if UNITY_EDITOR
-
-    [SerializeField] bool gizmoDrawCapsuleCasts = true;
+    [Header("Track Contact Gizmos")]
+    [SerializeField] bool gizmoDrawTrackCasts = true;
     [SerializeField] bool gizmoOnlyWhenSelected = true;
-    [SerializeField] bool gizmoDrawHitAndNormal = true;
+    [SerializeField] bool gizmoDrawNormals = true;
+    [SerializeField] bool gizmoLabelPoints = false;
 
-    // If your track runs along local RIGHT instead of FORWARD, flip this:
-    [SerializeField] bool trackAxisIsRight = false;
-
-    [ExecuteAlways]  // so it draws in Edit + Play
     void OnDrawGizmos()
     {
-        if (!gizmoDrawCapsuleCasts || gizmoOnlyWhenSelected) return;
-        DrawTrackCapsuleCasts();
+        if (!gizmoDrawTrackCasts || gizmoOnlyWhenSelected) return;
+        DrawTrackContactGizmos();
     }
+
     void OnDrawGizmosSelected()
     {
-        if (!gizmoDrawCapsuleCasts) return;
-        DrawTrackCapsuleCasts();
+        if (!gizmoDrawTrackCasts) return;
+        DrawTrackContactGizmos();
     }
 
-    void DrawTrackCapsuleCasts()
+    void DrawTrackContactGizmos()
     {
-        // Same math as your cast
-        Vector3 leftBase = transform.TransformPoint(new Vector3(-trackSpacing * 0.5f, trackRayStartHeight, 0f));
-        Vector3 rightBase = transform.TransformPoint(new Vector3(trackSpacing * 0.5f, trackRayStartHeight, 0f));
+        // Per-track midpoints at cast start height
+        Vector3 leftMid = transform.TransformPoint(new Vector3(-trackSpacing * 0.5f, trackRayStartHeight, 0f));
+        Vector3 rightMid = transform.TransformPoint(new Vector3(trackSpacing * 0.5f, trackRayStartHeight, 0f));
 
-        Vector3 axisAlongTrack = (trackAxisIsRight ? transform.right : transform.forward) * contactCapsuleHalfLength;
-        Vector3 castDir = -transform.up;
-        float dist = trackRayLength;
+        Vector3 fwd = transform.forward;      // along the track
+        Vector3 down = -transform.up;          // cast direction
+        float off = contactCapsuleHalfLength; // front/back offset along track
+        float r = contactRadius;
+        float len = trackRayLength;
 
-        // Draw the swept capsule volumes
-        DrawCapsuleCastGizmo(leftBase - axisAlongTrack, leftBase + axisAlongTrack,
-                             contactRadius, castDir, dist, new Color(0f, 0.8f, 1f, 1f));  // left = cyan
+        // LEFT track (front + rear)
+        DrawTrackSphereCast(leftMid + fwd * off, down, r, len, new Color(0f, 0.75f, 1f, 1f), "L-F");
+        DrawTrackSphereCast(leftMid - fwd * off, down, r, len, new Color(0f, 0.55f, 1f, 1f), "L-R");
 
-        DrawCapsuleCastGizmo(rightBase - axisAlongTrack, rightBase + axisAlongTrack,
-                             contactRadius, castDir, dist, new Color(1f, 0.85f, 0f, 1f)); // right = yellow
-
-        // Optionally show the actual hit point & normal (uses current LayerMask)
-        if (gizmoDrawHitAndNormal)
-        {
-            if (Physics.CapsuleCast(leftBase - axisAlongTrack, leftBase + axisAlongTrack, contactRadius,
-                                    castDir, out RaycastHit L, dist, groundMask, QueryTriggerInteraction.Ignore))
-            {
-                Gizmos.color = Color.green;
-                Gizmos.DrawSphere(L.point, contactRadius * 0.15f);
-                Gizmos.DrawLine(L.point, L.point + L.normal * 0.6f);
-            }
-
-            if (Physics.CapsuleCast(rightBase - axisAlongTrack, rightBase + axisAlongTrack, contactRadius,
-                                    castDir, out RaycastHit R, dist, groundMask, QueryTriggerInteraction.Ignore))
-            {
-                Gizmos.color = Color.green;
-                Gizmos.DrawSphere(R.point, contactRadius * 0.15f);
-                Gizmos.DrawLine(R.point, R.point + R.normal * 0.6f);
-            }
-        }
+        // RIGHT track (front + rear)
+        DrawTrackSphereCast(rightMid + fwd * off, down, r, len, new Color(1f, 0.85f, 0f, 1f), "R-F");
+        DrawTrackSphereCast(rightMid - fwd * off, down, r, len, new Color(1f, 0.65f, 0f, 1f), "R-R");
     }
 
-    /// Draws start/end capsules and the swept rails between them (wireframe).
-    void DrawCapsuleCastGizmo(Vector3 p1, Vector3 p2, float radius, Vector3 dir, float distance, Color color, int segments = 24)
+    void DrawTrackSphereCast(Vector3 origin, Vector3 dir, float radius, float distance, Color c, string label)
     {
-        if (radius <= 0f) { Gizmos.color = color; Gizmos.DrawLine(p1, p1 + dir.normalized * distance); return; }
-
-        Gizmos.color = color;
         Vector3 n = dir.normalized;
-        Vector3 off = n * distance;
-        Vector3 a1 = p1, a2 = p2;           // start capsule endpoints
-        Vector3 b1 = p1 + off, b2 = p2 + off; // end capsule endpoints
+        Vector3 end = origin + n * distance;
 
-        // Draw the two capsules
-        DrawCapsuleWire(a1, a2, radius, color, segments);
-        DrawCapsuleWire(b1, b2, radius, color, segments);
-
-        // Connect a few rails so the sweep volume reads clearly
-        Vector3 axis = (a2 - a1).normalized;
-        // orthonormal basis around the capsule axis
-        Vector3 t = Vector3.Cross(axis, Vector3.up); if (t.sqrMagnitude < 1e-6f) t = Vector3.Cross(axis, Vector3.right);
-        t.Normalize();
-        Vector3 s = Vector3.Cross(axis, t);
-
-        // Four evenly spaced rails
-        for (int i = 0; i < 4; i++)
-        {
-            float ang = i * 0.5f * Mathf.PI; // 0, 90, 180, 270 deg
-            Vector3 rim = (Mathf.Cos(ang) * t + Mathf.Sin(ang) * s) * radius;
-            Gizmos.DrawLine(a1 + rim, b1 + rim);
-            Gizmos.DrawLine(a2 + rim, b2 + rim);
-        }
-    }
-
-    /// Wireframe capsule between endpoints a & b with radius r.
-    void DrawCapsuleWire(Vector3 a, Vector3 b, float r, Color c, int segments = 24)
-    {
+        // start ring
         Gizmos.color = c;
+        Gizmos.DrawWireSphere(origin, Mathf.Max(0.02f, radius * 0.9f));
 
-        Vector3 axis = (b - a);
-        float len = axis.magnitude;
-        Vector3 n = (len > 1e-6f) ? axis / len : Vector3.up;
-
-        // basis perpendicular to n
-        Vector3 t = Vector3.Cross(n, Vector3.up); if (t.sqrMagnitude < 1e-6f) t = Vector3.Cross(n, Vector3.right);
-        t.Normalize();
-        Vector3 s = Vector3.Cross(n, t);
-
-        // end rings + side lines
-        float step = Mathf.PI * 2f / segments;
-        for (int i = 0; i < segments; i++)
+        // cast + hit
+        if (Physics.SphereCast(origin, radius, n, out RaycastHit hit, distance, groundMask, QueryTriggerInteraction.Ignore))
         {
-            float a0 = i * step, a1 = (i + 1) * step;
-            Vector3 r0 = (Mathf.Cos(a0) * t + Mathf.Sin(a0) * s) * r;
-            Vector3 r1 = (Mathf.Cos(a1) * t + Mathf.Sin(a1) * s) * r;
+            Gizmos.DrawLine(origin, hit.point);
+            Gizmos.DrawWireSphere(hit.point, Mathf.Max(0.01f, radius * 0.2f));
 
-            Vector3 A0 = a + r0, A1 = a + r1;
-            Vector3 B0 = b + r0, B1 = b + r1;
+            if (gizmoDrawNormals)
+                Gizmos.DrawLine(hit.point, hit.point + hit.normal * 0.6f);
 
-            Gizmos.DrawLine(A0, A1); // start ring
-            Gizmos.DrawLine(B0, B1); // end ring
-            Gizmos.DrawLine(A0, B0); // side
+#if UNITY_EDITOR
+            if (gizmoLabelPoints)
+                UnityEditor.Handles.Label(hit.point + Vector3.up * 0.05f, label);
+#endif
+        }
+        else
+        {
+            // miss: draw full ray and a small X at the end
+            Gizmos.DrawLine(origin, end);
+
+            Vector3 right = Vector3.Cross(n, Vector3.up);
+            if (right.sqrMagnitude < 1e-6f) right = Vector3.Cross(n, Vector3.right);
+            right.Normalize();
+            Vector3 up = Vector3.Cross(n, right);
+            float s = Mathf.Max(0.01f, radius * 0.25f);
+            Gizmos.DrawLine(end - right * s, end + right * s);
+            Gizmos.DrawLine(end - up * s, end + up * s);
+
+#if UNITY_EDITOR
+            if (gizmoLabelPoints)
+                UnityEditor.Handles.Label(end, label + " (miss)");
+#endif
         }
     }
 #endif

@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddb7072dd91b4c1498a435ba6d873c27, type: 3}
   m_Name: MediumTankWetFloor
   m_EditorClassIdentifier: 
-  enginePowerHP: 340
+  enginePowerHP: 100
   maxForcePerTrack: 80000
-  muLong: 0.45
-  muLat: 0.65
+  muLong: 0.25
+  muLat: 0.45
   rollingResistance: 0.001
   speedDrag: 360
-  contactHalfLength: 1
-  linearLatDrag: 1000
-  quadLatDrag: 2000
-  lateralStiffness: 20000
+  contactHalfLength: 1.8
+  linearLatDrag: 800
+  quadLatDrag: 1200
+  lateralStiffness: 10000
   trackBrakeForce: 80000
   brakeDeadzone: 0.15
   steerBrakeMultiplier: 1
-  neutralSteerTorqueBoost: 1
+  neutralSteerTorqueBoost: 4

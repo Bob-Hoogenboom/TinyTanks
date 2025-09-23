@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddb7072dd91b4c1498a435ba6d873c27, type: 3}
   m_Name: MediumTankCarpet
   m_EditorClassIdentifier: 
-  enginePowerHP: 340
-  maxForcePerTrack: 200000
-  muLong: 1
-  muLat: 2
-  rollingResistance: 0.04
-  speedDrag: 360
-  contactHalfLength: 1
+  enginePowerHP: 100
+  maxForcePerTrack: 450000
+  muLong: 1.5
+  muLat: 2.5
+  rollingResistance: 0.05
+  speedDrag: 720
+  contactHalfLength: 1.8
   linearLatDrag: 8000
   quadLatDrag: 6500
   lateralStiffness: 75000
-  trackBrakeForce: 200000
+  trackBrakeForce: 350000
   brakeDeadzone: 0.15
-  steerBrakeMultiplier: 1
-  neutralSteerTorqueBoost: 1
+  steerBrakeMultiplier: 1.5
+  neutralSteerTorqueBoost: 3
