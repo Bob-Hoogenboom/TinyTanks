@@ -4543,7 +4543,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.786
+      value: -1.995
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
         type: 3}
@@ -4553,7 +4553,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.74
+      value: -1.808
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
         type: 3}
@@ -4589,6 +4589,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4156778931685447926, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
+        type: 3}
+      propertyPath: m_DirtyAABB
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4156778931685447926, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
+        type: 3}
+      propertyPath: m_AABB.m_Center.x
+      value: 0.5347943
+      objectReference: {fileID: 0}
+    - target: {fileID: -4156778931685447926, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
+        type: 3}
+      propertyPath: m_AABB.m_Center.y
+      value: 0.28547353
+      objectReference: {fileID: 0}
+    - target: {fileID: -4156778931685447926, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
+        type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: -0.019825786
+      objectReference: {fileID: 0}
+    - target: {fileID: -4156778931685447926, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.x
+      value: 0.1744567
+      objectReference: {fileID: 0}
+    - target: {fileID: -4156778931685447926, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.y
+      value: 0.28453892
+      objectReference: {fileID: 0}
+    - target: {fileID: -4156778931685447926, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 0.8307164
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
         type: 3}
@@ -4643,7 +4678,7 @@ PrefabInstance:
     - target: {fileID: 5394448612222961344, guid: 5f8ccbdb5ed815049a7831e88f0f0657,
         type: 3}
       propertyPath: m_BlendShapeWeights.Array.data[0]
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
