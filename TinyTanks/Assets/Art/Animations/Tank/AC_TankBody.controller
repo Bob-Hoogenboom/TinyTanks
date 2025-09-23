@@ -37,7 +37,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 7587700963846585362}
-    m_Position: {x: 330, y: 140, z: 0}
+    m_Position: {x: 250, y: 220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6660942148059084074}
     m_Position: {x: 270, y: 100, z: 0}
@@ -64,7 +64,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: e80edf6662d933f41a0a27b056c61142, type: 2}
     m_Threshold: -1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: -5
+    m_TimeScale: -1
     m_CycleOffset: 0
     m_DirectBlendParameter: Throttle
     m_Mirror: 0
@@ -72,7 +72,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: e80edf6662d933f41a0a27b056c61142, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 5
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Throttle
     m_Mirror: 0
@@ -117,13 +117,13 @@ AnimatorController:
   m_AnimatorParameters:
   - m_Name: LeftTrack
     m_Type: 1
-    m_DefaultFloat: 0.5
+    m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: RightTrack
     m_Type: 1
-    m_DefaultFloat: 0.5
+    m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
@@ -299,7 +299,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: eccf9551d13132b4989453aa132b8cad, type: 2}
     m_Threshold: -1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: -5
+    m_TimeScale: -1
     m_CycleOffset: 0
     m_DirectBlendParameter: LeftTrack
     m_Mirror: 0
@@ -307,7 +307,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: eccf9551d13132b4989453aa132b8cad, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 5
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: LeftTrack
     m_Mirror: 0
