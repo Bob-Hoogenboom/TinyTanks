@@ -64,13 +64,13 @@ public class TankTurretPhysics : NetworkBehaviour
     [SerializeField] private float yawAngleSnapDeg = 0.005f;
 
     // Runtime state
-    private float yawRelDeg, yawRateDeg;     // yaw relative to start
-    private float yawStartDeg;
-    private float pitchDeg, pitchRateDeg;
+    private float _yawRelDeg, _yawRateDeg;     // yaw relative to start
+    private float _yawStartDeg;
+    private float _pitchDeg, _pitchRateDeg;
     private bool _yawSleeping = false;
     private float _yawSleepAngleDeg = 0f;
 
-    private float cmdYaw, cmdPitch; // [-1..1]
+    private float _cmdYaw, _cmdPitch; // [-1..1]
 
     // Input from your seat controller
     public void SetInputs(float yawAxis, float pitchAxis)
