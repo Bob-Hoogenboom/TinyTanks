@@ -32,9 +32,9 @@ public class TankTurretPhysics : NetworkBehaviour
     [Range(0f, 180f)] [SerializeField] private float yawHalfRange = 0f;
     [Tooltip("Soft zone width before hard yaw limit [deg].")]
     [SerializeField] private float yawSoftZone = 8f;
-    [Tooltip("Soft limit spring [N穖/rad].")]
+    [Tooltip("Soft limit spring [N路m/rad].")]
     [SerializeField] private float yawLimitK = 1200f;
-    [Tooltip("Soft limit damper [N穖穝/rad].")]
+    [Tooltip("Soft limit damper [N路m路s/rad].")]
     [SerializeField] private float yawLimitC = 80f;
 
     [Header("Pitch Limits")]
@@ -42,9 +42,9 @@ public class TankTurretPhysics : NetworkBehaviour
     [SerializeField] private float pitchMin = -10f, pitchMax = 30f;
     [Tooltip("Soft zone width before hard pitch limit [deg].")]
     [SerializeField] private float pitchSoftZone = 5f;
-    [Tooltip("Soft limit spring [N穖/rad].")]
+    [Tooltip("Soft limit spring [N路m/rad].")]
     [SerializeField] private float pitchLimitK = 1500f;
-    [Tooltip("Soft limit damper [N穖穝/rad].")]
+    [Tooltip("Soft limit damper [N路m路s/rad].")]
     [SerializeField] private float pitchLimitC = 100f;
 
     [Header("Pitch Gravity (optional)")]
@@ -56,7 +56,7 @@ public class TankTurretPhysics : NetworkBehaviour
     [Header("Anti-Jitter Sleep")]
     [Tooltip("If |angular speed| is below this (deg/s) with no input, axis can sleep.")]
     [SerializeField] private float sleepSpeedDeg = 0.05f;
-    [Tooltip("If |net torque| is below this (N穖) with no input, axis can sleep.")]
+    [Tooltip("If |net torque| is below this (N路m) with no input, axis can sleep.")]
     [SerializeField] private float sleepTorque = 0.25f;
     [Tooltip("Input needed to wake the yaw from sleep.")]
     [SerializeField] private float yawWakeInput = 0.02f;
@@ -162,7 +162,6 @@ public class TankTurretPhysics : NetworkBehaviour
 
             if (yawPivot)
             {
-                // Keep your existing wrapping if you rely on it elsewhere
                 float wrapped = Wrap360(yawStartDeg + yawRelDeg);
                 yawPivot.localRotation = Quaternion.Euler(0f, wrapped, 0f);
             }
