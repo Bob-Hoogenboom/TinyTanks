@@ -40,7 +40,7 @@ public class TankBrain : NetworkBehaviour
     [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 5f;
     [SerializeField] private Transform spawnLocation;
-    private bool isDead;
+    private bool _isDead;
 
     [Header("RayCast")]
     [SerializeField] float contactRadius = 0.22f;
