@@ -16,13 +16,13 @@ public class NetworkGameTimer : NetworkBehaviour
 
     private void Update()
     {
-        double remaining = endTime - NetworkTime.time;
+        double remaining = _endTime - NetworkTime.time;
         UpdateTimerDisplay(remaining);
     }
 
     private void StarTimer()
     {
-        endTime = NetworkTime.time + gameTime;
+        _endTime = NetworkTime.time + gameTime;
     }
 
     private void UpdateTimerDisplay(double timeRemaining)

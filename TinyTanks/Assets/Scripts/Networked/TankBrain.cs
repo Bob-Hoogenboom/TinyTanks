@@ -69,7 +69,7 @@ public class TankBrain : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         if (!tracks) tracks = GetComponent<TankTrackPhysics>();
         currHealth = maxHealth;
-        isDead = false;
+        _isDead = false;
     }
 
     [Server]
@@ -84,7 +84,7 @@ public class TankBrain : NetworkBehaviour
         double respawnRemaining = respawnEndTime - NetworkTime.time;
         UpdateTimerDisplay(respawnRemaining, respawnTexts);
 
-        if (respawnRemaining <= 0 && isDead) Server_RespawnTank();
+        if (respawnRemaining <= 0 && _isDead) Server_RespawnTank();
 
         if(isReloading)
         {
@@ -100,7 +100,7 @@ public class TankBrain : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!isServer || rb == null) return;
-        if (isDead) return;
+        if (_isDead) return;
         if (tracks) tracks.SetInputs(leftTrack, rightTrack);
         if (turret) turret.SetInputs(yaw, pitch);
     }
@@ -177,7 +177,7 @@ public class TankBrain : NetworkBehaviour
         gameObject.transform.position = spawnLocation.transform.position;
         currHealth = maxHealth;
         lives -= 1;
-        isDead = false;
+        _isDead = false;
 
         if(driverRespawn != null && gunnerRespawn != null)
         {
@@ -214,7 +214,7 @@ public class TankBrain : NetworkBehaviour
 
     private void StarRespawnTimer()
     {
-        isDead = true;
+        _isDead = true;
         if (driverRespawn != null && gunnerRespawn != null)
         {
             driverRespawn.alpha = 1;
@@ -225,7 +225,7 @@ public class TankBrain : NetworkBehaviour
 
     public void TakeDamge(int dmg)
     {
-        if (isDead) return;
+        if (_isDead) return;
 
         currHealth -= dmg;
 
