@@ -23,16 +23,25 @@ public class GunnerSeatController : NetworkBehaviour
 
         CmdGunnerInput(yaw, pitch);
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.R))
+            CmdGunnerReload();
+
+        if (Input.GetKeyDown(KeyCode.Space))
             CmdGunnerShooting();
-            
     }
 
     [Command]
     private void CmdGunnerInput(float yaw, float pitch)
     {
         if (!seat || !seat.tank) return;
-        seat.tank.Server_SetGunnerAim(seat, yaw, pitch);
+        seat.tank.Server_SetGunnerInput(seat, yaw, pitch);
+    }
+
+    [Command]
+    private void CmdGunnerReload()
+    {
+        if (!seat || !seat.tank) return;
+        seat.tank.Server_ReloadGun(seat);
     }
 
     [Command]

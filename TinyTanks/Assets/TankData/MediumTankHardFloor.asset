@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddb7072dd91b4c1498a435ba6d873c27, type: 3}
   m_Name: MediumTankHardFloor
   m_EditorClassIdentifier: 
-  enginePowerHP: 340
-  maxForcePerTrack: 180000
-  muLong: 0.85
-  muLat: 1.65
-  rollingResistance: 0.04
-  speedDrag: 360
-  contactHalfLength: 2.5
-  linearLatDrag: 5000
-  quadLatDrag: 2000
-  lateralStiffness: 50000
-  trackBrakeForce: 180000
+  enginePowerHP: 100
+  maxForcePerTrack: 200000
+  muLong: 0.8
+  muLat: 1.1
+  rollingResistance: 0.05
+  speedDrag: 720
+  contactHalfLength: 1.8
+  linearLatDrag: 3000
+  quadLatDrag: 5000
+  lateralStiffness: 30000
+  trackBrakeForce: 300000
   brakeDeadzone: 0.15
   steerBrakeMultiplier: 1
   neutralSteerTorqueBoost: 1

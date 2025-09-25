@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ddb7072dd91b4c1498a435ba6d873c27, type: 3}
-  m_Name: MediumTankCarpet
+  m_Name: HeavyTankHardFloor
   m_EditorClassIdentifier: 
-  enginePowerHP: 100
+  enginePowerHP: 150
   maxForcePerTrack: 450000
-  muLong: 1.5
-  muLat: 2.5
+  muLong: 1
+  muLat: 1.6
   rollingResistance: 0.05
-  speedDrag: 720
-  contactHalfLength: 1.8
-  linearLatDrag: 8000
-  quadLatDrag: 6500
-  lateralStiffness: 75000
-  trackBrakeForce: 350000
+  speedDrag: 650
+  contactHalfLength: 2
+  linearLatDrag: 7500
+  quadLatDrag: 5000
+  lateralStiffness: 50000
+  trackBrakeForce: 500000
   brakeDeadzone: 0.15
-  steerBrakeMultiplier: 1.5
-  neutralSteerTorqueBoost: 3
+  steerBrakeMultiplier: 1
+  neutralSteerTorqueBoost: 1

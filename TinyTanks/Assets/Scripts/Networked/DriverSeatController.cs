@@ -22,6 +22,9 @@ public class DriverSeatController : NetworkBehaviour
         float leftTrack = Input.GetAxisRaw("Vertical");
         float rightTrack = Input.GetAxisRaw("Vertical2");
         CmdDriverInput(leftTrack, rightTrack);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            CmdDriverShooting();
     }
 
     [Command]
@@ -29,5 +32,12 @@ public class DriverSeatController : NetworkBehaviour
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_SetDriverInput(seat, leftTrack, rightTrack);
+    }
+
+    [Command]
+    private void CmdDriverShooting()
+    {
+        if (!seat || !seat.tank) return;
+        seat.tank.Server_SetOffGun(seat);
     }
 }
