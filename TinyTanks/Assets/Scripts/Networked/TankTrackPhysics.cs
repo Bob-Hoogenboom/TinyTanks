@@ -9,6 +9,13 @@ public class TankTrackPhysics : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private LayerMask groundMask = ~0;
 
+    [Header("Animation")]
+    [SerializeField] private Animator anim;
+    [Tooltip("This is a multiplier. it does the default animator speed and multiplies that by animSpeed. \n(animator.speed * animSpeed)")]
+    [SerializeField] private float animSpeed = 1f;
+    private int _leftTrackAnim = Animator.StringToHash("LeftTrack");
+    private int _rightTrackAnim = Animator.StringToHash("RightTrack");
+
     [Header("RayCast")]
     [SerializeField] float contactRadius = 0.22f;
     [SerializeField] float contactCapsuleHalfLength = 0.45f;
@@ -76,6 +83,9 @@ public class TankTrackPhysics : MonoBehaviour
     {
         leftInput = left;
         rightInput = right;
+        
+        anim.SetFloat(_leftTrackAnim, leftInput);
+        anim.SetFloat(_rightTrackAnim, rightInput);
     }
 
     private void FixedUpdate()
@@ -134,16 +144,13 @@ public class TankTrackPhysics : MonoBehaviour
         if (rfHit) ApplyTrackForces(rfPt, rfHit ? rfInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
         if (rrHit) ApplyTrackForces(rrPt, rrHit ? rrInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
 
-        // If none of the four hits, you can optionally keep your old "single" fallback or rely on stabilization.
-        bool anyHit = lfHit || lrHit || rfHit || rrHit;
-        ApplyStabilization(anyHit);
-        ApplyYawDamping();
+        var velMag = rb.velocity.magnitude;
+        anim.speed = velMag * 2;
+        Debug.Log(velMag * 2);
     }
 
     private void ApplyTrackForces( Vector3 contactPoint, Vector3 contactNormal, float input, float otherInput, float normalForce, bool isLeft)
     {
-        Debug.Log(input);
-
         Vector3 lateral = Vector3.ProjectOnPlane(smoothedRight, contactNormal);
         float latMag = lateral.magnitude;
 
