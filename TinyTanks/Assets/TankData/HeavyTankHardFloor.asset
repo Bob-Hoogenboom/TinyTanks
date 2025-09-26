@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: HeavyTankHardFloor
   m_EditorClassIdentifier: 
   enginePowerHP: 150
-  maxForcePerTrack: 450000
-  muLong: 1
-  muLat: 1.6
-  rollingResistance: 0.05
-  speedDrag: 650
+  maxForcePerTrack: 600000
+  muLong: 1.4
+  muLat: 1.4
+  rollingResistance: 0.06
+  speedDrag: 1500
   contactHalfLength: 2
-  linearLatDrag: 7500
+  linearLatDrag: 10000
   quadLatDrag: 5000
   lateralStiffness: 50000
-  trackBrakeForce: 500000
+  trackBrakeForce: 1000000
   brakeDeadzone: 0.15
   steerBrakeMultiplier: 1
   neutralSteerTorqueBoost: 1

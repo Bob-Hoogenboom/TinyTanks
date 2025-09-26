@@ -11,6 +11,7 @@ public class TankTrackPhysics : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] private Animator anim;
+    [SerializeField] private Animator netAnim;
     [Tooltip("This is a multiplier. it does the default animator speed and multiplies that by animSpeed. \n(animator.speed * animSpeed)")]
     [SerializeField] private float animSpeed = 1f;
     private int _leftTrackAnim = Animator.StringToHash("LeftTrack");
@@ -146,7 +147,6 @@ public class TankTrackPhysics : MonoBehaviour
 
         var velMag = rb.velocity.magnitude;
         anim.speed = velMag * 2;
-        Debug.Log(velMag * 2);
     }
 
     private void ApplyTrackForces( Vector3 contactPoint, Vector3 contactNormal, float input, float otherInput, float normalForce, bool isLeft)
@@ -269,7 +269,7 @@ public class TankTrackPhysics : MonoBehaviour
         {
             totalForce = totalForce * (maxForce / forceMag);
         }
-
+        
         rb.AddForceAtPosition(totalForce, contactPoint, ForceMode.Force);
 
         // Apply lateral damping forces
