@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enginePowerHP: 150
   maxForcePerTrack: 600000
-  muLong: 1.4
-  muLat: 1.4
-  rollingResistance: 0.06
-  speedDrag: 1500
+  muLong: 2
+  muLat: 2
+  rollingResistance: 0.1
+  speedDrag: 3000
   contactHalfLength: 2
   linearLatDrag: 10000
   quadLatDrag: 5000
-  lateralStiffness: 50000
-  trackBrakeForce: 1000000
+  lateralStiffness: 100000
+  trackBrakeForce: 600000
   brakeDeadzone: 0.15
   steerBrakeMultiplier: 1
-  neutralSteerTorqueBoost: 1
+  neutralSteerTorqueBoost: 1.5

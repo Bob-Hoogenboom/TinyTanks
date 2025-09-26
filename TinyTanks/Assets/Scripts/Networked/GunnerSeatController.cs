@@ -28,6 +28,9 @@ public class GunnerSeatController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             CmdGunnerShooting();
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            CmdGunnerStabalize();
     }
 
     [Command]
@@ -35,6 +38,13 @@ public class GunnerSeatController : NetworkBehaviour
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_SetGunnerInput(seat, yaw, pitch);
+    }
+
+    [Command]
+    private void CmdGunnerStabalize()
+    {
+        if (!seat || !seat.tank) return;
+        seat.tank.Server_SetStabilization(seat);
     }
 
     [Command]
