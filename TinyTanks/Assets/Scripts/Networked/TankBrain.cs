@@ -124,17 +124,6 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
-    public void Server_SetStabilization(CrewSeat from)
-    {
-        if (from != gunner) return;
-
-        if(turret.stabalized == true)
-            turret.SetStabilized(false);
-        else if (turret.stabalized == false)
-            turret.SetStabilized(true);
-    }
-
-    [Server]
     public void Server_SetOffGun(CrewSeat from)
     {
         if (from != driver) return;
