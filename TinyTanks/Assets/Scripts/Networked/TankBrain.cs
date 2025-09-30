@@ -3,6 +3,8 @@ using UnityEngine;
 using Mirror;
 using TMPro;
 using UnityEngine.UI;
+using System.Linq;
+using System.Collections.Generic;
 
 [DefaultExecutionOrder(-100)]
 public class TankBrain : NetworkBehaviour
@@ -10,8 +12,8 @@ public class TankBrain : NetworkBehaviour
     [SyncVar] private CrewSeat driver;
     [SyncVar] private CrewSeat gunner;
 
-    [Header("Driver controlls")]
     private Rigidbody rb;
+    private NetworkTransformReliable netTrans;
 
     [Header("Physics based movement")]
     [SerializeField] private TankTrackPhysics tracks;
@@ -39,7 +41,7 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private int maxHealth = 5;
     [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 5f;
-    [SerializeField] private Transform spawnLocation;
+    
     private bool _isDead;
 
     [Header("RayCast")]
@@ -62,12 +64,19 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Image reloadTimerImage;
 
     [SyncVar] private bool isReloading = false;
-    [SyncVar] private bool hasBullet = true;
+    [SyncVar, SerializeField] private bool hasBullet = true;
+
+    [Header("Spawning")]
+    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private Transform spawnLocation;
+    [SerializeField] private float minSpawnDistance = 20;
 
     public override void OnStartServer()
     {
         rb = GetComponent<Rigidbody>();
+        netTrans = GetComponent<NetworkTransformReliable>();
         if (!tracks) tracks = GetComponent<TankTrackPhysics>();
+        if (!turret) turret = GetComponent<TankTurretPhysics>();
         currHealth = maxHealth;
         _isDead = false;
     }
@@ -139,6 +148,7 @@ public class TankBrain : NetworkBehaviour
     {
         if (from != gunner) return;
         if (hasBullet) return;
+        if (isReloading) return;
 
         isReloading = true;
         reloadEndTime = NetworkTime.time + reloadTime;
@@ -174,7 +184,25 @@ public class TankBrain : NetworkBehaviour
     [Server]
     private void Server_RespawnTank()
     {
-        gameObject.transform.position = spawnLocation.transform.position;
+        var players = FindObjectsOfType<TankBrain>().ToList();
+        players.Remove(this);
+
+        var possibleSpawnLocations = new List<Transform>();
+        foreach(var player in players)
+        {
+            var go = player.gameObject;
+            foreach(var location in spawnPoints)
+            {
+                if (Vector3.Distance(go.transform.position, location.position) > minSpawnDistance)
+                    possibleSpawnLocations.Add(location);
+            }
+        }
+
+        var idx = UnityEngine.Random.Range(0, possibleSpawnLocations.Count);
+        spawnLocation = possibleSpawnLocations[idx];
+
+        netTrans.RpcTeleport(spawnLocation.position);
+
         currHealth = maxHealth;
         lives -= 1;
         _isDead = false;
@@ -184,6 +212,8 @@ public class TankBrain : NetworkBehaviour
             driverRespawn.alpha = 0;
             gunnerRespawn.alpha = 0;
         }
+
+        Debug.Log(this.name + $" respawned on location: " + spawnLocation);
     }
 
     [Server]
