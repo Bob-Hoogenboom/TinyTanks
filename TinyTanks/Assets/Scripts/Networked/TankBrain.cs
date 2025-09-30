@@ -90,10 +90,13 @@ public class TankBrain : NetworkBehaviour
 
     private void Update()
     {
-        double respawnRemaining = respawnEndTime - NetworkTime.time;
-        UpdateTimerDisplay(respawnRemaining, respawnTexts);
+        if(_isDead)
+        {
+            double respawnRemaining = respawnEndTime - NetworkTime.time;
+            UpdateTimerDisplay(respawnRemaining, respawnTexts);
 
-        if (respawnRemaining <= 0 && _isDead) Server_RespawnTank();
+            if (respawnRemaining <= 0 && _isDead) Server_RespawnTank();
+        }            
 
         if(isReloading)
         {

@@ -194,6 +194,7 @@ GameObject:
   - component: {fileID: 7406623413982516703}
   - component: {fileID: 1009062528977614006}
   - component: {fileID: 3488135252534558032}
+  - component: {fileID: -66084997861906374}
   m_Layer: 0
   m_Name: TestPowerUp
   m_TagString: Untagged
@@ -251,6 +252,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0832c5c88a23c46a7c402b9ef00d33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   effect: {fileID: 0}
   coolDownTimer: 5
   col: {fileID: 1009062528977614006}
@@ -258,6 +262,23 @@ MonoBehaviour:
   onGrabPowerUp:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-66084997861906374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8529855418609762066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 1992142668
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &8687891182351790208
 GameObject:
   m_ObjectHideFlags: 0

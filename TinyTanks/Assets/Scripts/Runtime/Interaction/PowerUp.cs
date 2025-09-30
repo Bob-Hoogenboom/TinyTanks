@@ -1,12 +1,13 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using Mirror;
 
 /// <summary>
 /// This script accually goesd on the power-up gameObject
 /// When the player drives against this, it will activate the effect given to this object
 /// </summary>
-public class PowerUp : MonoBehaviour
+public class PowerUp : NetworkBehaviour
 {
     [Header("Variables")]
 
@@ -27,10 +28,11 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PowerUpHandler tank = other.GetComponent<PowerUpHandler>();
+        PowerUpHandler tank = other.GetComponentInParent<PowerUpHandler>();
         if (tank != null) StartPowerUp(tank);
     }
 
+    [Server]
     private void StartPowerUp(PowerUpHandler tank)
     {
         onGrabPowerUp.Invoke();
@@ -39,13 +41,16 @@ public class PowerUp : MonoBehaviour
         StartCoroutine(CoolDown());
     }
 
+    [Server]
     private IEnumerator CoolDown()
     {
         col.enabled = false;
         visual.SetActive(false);
+        Debug.Log("Cooldown start");
 
         yield return new WaitForSeconds(coolDownTimer);
 
+        Debug.Log("Cooldown end");
         col.enabled = true;
         visual.SetActive(true);
     }
