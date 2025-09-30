@@ -9,6 +9,14 @@ public class TankTrackPhysics : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private LayerMask groundMask = ~0;
 
+    [Header("Animation")]
+    [SerializeField] private Animator anim;
+    [SerializeField] private Animator netAnim;
+    [Tooltip("This is a multiplier. it does the default animator speed and multiplies that by animSpeed. \n(animator.speed * animSpeed)")]
+    [SerializeField] private float animSpeed = 1f;
+    private int _leftTrackAnim = Animator.StringToHash("LeftTrack");
+    private int _rightTrackAnim = Animator.StringToHash("RightTrack");
+
     [Header("RayCast")]
     [SerializeField] float contactRadius = 0.22f;
     [SerializeField] float contactCapsuleHalfLength = 0.45f;
@@ -76,6 +84,9 @@ public class TankTrackPhysics : MonoBehaviour
     {
         leftInput = left;
         rightInput = right;
+        
+        anim.SetFloat(_leftTrackAnim, leftInput);
+        anim.SetFloat(_rightTrackAnim, rightInput);
     }
 
     private void FixedUpdate()
@@ -134,16 +145,12 @@ public class TankTrackPhysics : MonoBehaviour
         if (rfHit) ApplyTrackForces(rfPt, rfHit ? rfInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
         if (rrHit) ApplyTrackForces(rrPt, rrHit ? rrInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
 
-        // If none of the four hits, you can optionally keep your old "single" fallback or rely on stabilization.
-        bool anyHit = lfHit || lrHit || rfHit || rrHit;
-        ApplyStabilization(anyHit);
-        ApplyYawDamping();
+        var velMag = rb.velocity.magnitude;
+        anim.speed = velMag * 2;
     }
 
     private void ApplyTrackForces( Vector3 contactPoint, Vector3 contactNormal, float input, float otherInput, float normalForce, bool isLeft)
     {
-        Debug.Log(input);
-
         Vector3 lateral = Vector3.ProjectOnPlane(smoothedRight, contactNormal);
         float latMag = lateral.magnitude;
 
@@ -204,15 +211,13 @@ public class TankTrackPhysics : MonoBehaviour
             latF = -vSlipVec * (currData.lateralStiffness * 0.1f);
         }
 
-        // Rolling resistance with stability
-        float resistMag = currData.rollingResistance * normalForce;
-        if (Mathf.Abs(vFwd) > minVelocityMagnitude)
-        {
-            resistMag += currData.speedDrag * vFwd;
-        }
-        Vector3 resist = -forward * resistMag;
+        // Longitudinal resistance
+        float sign = (Mathf.Abs(vFwd) > minVelocityMagnitude) ? Mathf.Sign(vFwd) : 0f; // direction
+        float rr = currData.rollingResistance * normalForce * sign;  // rolling resistance
+        float sd = currData.speedDrag * vFwd; // speeddrag
+        Vector3 resist = -forward * (rr + sd); // total resistance
 
-        // Front/rear lateral damping (no smoothing)
+        // Front/rear lateral damping
         Vector3 pFront = contactPoint + forward * currData.contactHalfLength;
         Vector3 pRear = contactPoint - forward * currData.contactHalfLength;
 
@@ -248,8 +253,31 @@ public class TankTrackPhysics : MonoBehaviour
             Frear *= scale;
         }
 
+        bool thisTrackIdle = Mathf.Abs(input) < currData.brakeDeadzone;
+        bool otherTrackDrive = Mathf.Abs(otherInput) >= currData.brakeDeadzone;
+
+        Vector3 steerBrake = new Vector3();
+
+        if (thisTrackIdle && otherTrackDrive)
+        {
+            // Oppose the current forward motion at this contact
+            float brakeDir = Mathf.Sign(vFwd); //  direction
+                                               
+            float rawBrake = currData.trackBrakeForce * currData.steerBrakeMultiplier * Mathf.Clamp01(Mathf.Abs(otherInput)); // Scale brake by how hard the other track is trying to move
+
+            // Never exceed what the contact can transmit longitudinally
+            float brakeCap = tractionLong; // available long traction at this contact
+            float brakeMag = Mathf.Min(rawBrake, brakeCap);
+
+            steerBrake = -forward * brakeDir * brakeMag;
+
+            // Fold the steer-brake into the force budget
+            resist += steerBrake; // treat it like extra longitudinal resistance
+        }
+
         // Debug rays
         Debug.DrawRay(contactPoint, forward * (drive * 0.0005f), isLeft ? Color.green : Color.cyan, Time.fixedDeltaTime, false);
+        Debug.DrawRay(contactPoint, steerBrake * 0.0005f, Color.yellow, Time.fixedDeltaTime, false);
         Debug.DrawRay(contactPoint, resist * 0.0005f, Color.red, Time.fixedDeltaTime, false);
         Debug.DrawRay(contactPoint, latF * 0.05f, Color.magenta, Time.fixedDeltaTime, false);
 
@@ -262,7 +290,7 @@ public class TankTrackPhysics : MonoBehaviour
         {
             totalForce = totalForce * (maxForce / forceMag);
         }
-
+        
         rb.AddForceAtPosition(totalForce, contactPoint, ForceMode.Force);
 
         // Apply lateral damping forces
@@ -279,38 +307,6 @@ public class TankTrackPhysics : MonoBehaviour
         if (normalForce > 0.1f)
         {
             rb.AddForceAtPosition(contactNormal * (-extraDownForce - groundingForce * Time.fixedDeltaTime), contactPoint, ForceMode.Force);
-        }
-    }
-
-    private void ApplyStabilization(bool hasGroundContact)
-    {
-        if (!hasGroundContact) return;
-
-        // Anti-roll stabilization
-        Vector3 up = transform.up;
-        Vector3 targetUp = Vector3.up;
-        Vector3 torque = Vector3.Cross(up, targetUp) * stabilizationForce;
-
-        // Only apply roll/pitch stabilization, not yaw
-        torque = Vector3.ProjectOnPlane(torque, Vector3.up);
-
-        rb.AddTorque(torque, ForceMode.Force);
-    }
-
-    private void ApplyYawDamping()
-    {
-        // Extra yaw damping to prevent spinning
-        Vector3 angVel = rb.angularVelocity;
-        float yawRate = Vector3.Dot(angVel, transform.up);
-
-        // Apply stronger damping at low speeds to prevent spin-up
-        float speedFactor = Mathf.Clamp01(rb.velocity.magnitude / 5f);
-        float dampingStrength = Mathf.Lerp(yawDamping * 2f, yawDamping, speedFactor);
-
-        if (Mathf.Abs(yawRate) > minVelocityMagnitude)
-        {
-            Vector3 yawDampTorque = -transform.up * yawRate * dampingStrength * rb.mass;
-            rb.AddTorque(yawDampTorque, ForceMode.Force);
         }
     }
 
