@@ -35,8 +35,8 @@ public class TankBrain : NetworkBehaviour
 
     [Header("Health/Life")]
     [SyncVar, SerializeField] private int lives = 3;
-    [SyncVar, SerializeField] private int currHealth;
-    [SerializeField] private int maxHealth = 5;
+    [SyncVar, SerializeField] public int currHealth;
+    public int maxHealth { get; private set; } = 5;
     [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 5f;
     [SerializeField] private Transform spawnLocation;
