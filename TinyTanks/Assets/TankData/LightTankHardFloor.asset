@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: LightTankHardFloor
   m_EditorClassIdentifier: 
   enginePowerHP: 100
-  maxForcePerTrack: 180000
+  maxForcePerTrack: 500000
   muLong: 0.8
   muLat: 1.5
-  rollingResistance: 0.04
-  speedDrag: 360
-  contactHalfLength: 1.8
-  linearLatDrag: 7500
+  rollingResistance: 0.1
+  speedDrag: 1080
+  contactHalfLength: 1.2
+  linearLatDrag: 4000
   quadLatDrag: 5000
   lateralStiffness: 50000
-  trackBrakeForce: 200000
+  trackBrakeForce: 500000
   brakeDeadzone: 0.15
   steerBrakeMultiplier: 1
-  neutralSteerTorqueBoost: 1
+  neutralSteerTorqueBoost: 3
