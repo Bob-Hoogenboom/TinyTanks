@@ -13,7 +13,7 @@ public class TankTrackPhysics : MonoBehaviour
     [SerializeField] private Animator anim;
     [SerializeField] private Animator netAnim;
     [Tooltip("This is a multiplier. it does the default animator speed and multiplies that by animSpeed. \n(animator.speed * animSpeed)")]
-    [SerializeField] private float animSpeed = 1f;
+    //[SerializeField] private float animSpeed = 1f;
     private int _leftTrackAnim = Animator.StringToHash("LeftTrack");
     private int _rightTrackAnim = Animator.StringToHash("RightTrack");
 
@@ -26,8 +26,8 @@ public class TankTrackPhysics : MonoBehaviour
 
     [Header("Tuning")]
     [SerializeField] private float extraDownForce = 0f;
-    [SerializeField] private float yawDamping = 0.2f;
-    [SerializeField] private float stabilizationForce = 500f;
+    //[SerializeField] private float yawDamping = 0.2f;
+    //[SerializeField] private float stabilizationForce = 500f;
     [SerializeField] private float groundingForce = 1000f;
 
     [Header("Movement Variables")]
@@ -42,18 +42,18 @@ public class TankTrackPhysics : MonoBehaviour
     [Tooltip("Minimum velocity magnitude to prevent division by zero")]
     [SerializeField] private float minVelocityMagnitude = 0.01f;
     [Tooltip("Smoothing factor for track contact (0-1, higher = more responsive)")]
-    [SerializeField] private float contactSmoothing = 0.8f;
+    //[SerializeField] private float contactSmoothing = 0.8f;
 
     private float leftInput;
     private float rightInput;
 
     // Track contact state
-    private float leftContactFactor = 0f;
-    private float rightContactFactor = 0f;
+    //private float leftContactFactor = 0f;
+    //private float rightContactFactor = 0f;
     private Vector3 lastLeftNormal = Vector3.up;
     private Vector3 lastRightNormal = Vector3.up;
 
-    // Stability helpers
+    //Stability helpers
     private Vector3 smoothedForward = Vector3.forward;
     private Vector3 smoothedRight = Vector3.right;
     private float forwardSmoothing = 0.9f;

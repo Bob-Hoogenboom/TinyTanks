@@ -41,7 +41,10 @@ public class TankBrain : NetworkBehaviour
     public int maxHealth { get; private set; } = 5;
     [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 5f;
-    
+
+    [SyncVar] public float currentBtry = 50f;           //TODO make movement and shooting consume this
+    public float maxBtry = 100f;
+
     private bool _isDead;
 
     [Header("RayCast")]

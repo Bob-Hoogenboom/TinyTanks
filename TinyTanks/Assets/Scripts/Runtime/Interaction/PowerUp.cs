@@ -32,25 +32,21 @@ public class PowerUp : NetworkBehaviour
         if (tank != null) StartPowerUp(tank);
     }
 
-    [Server]
+    [ClientRpc]
     private void StartPowerUp(PowerUpHandler tank)
     {
         onGrabPowerUp.Invoke();
         tank.ActivatePowerUp(effect);
-
         StartCoroutine(CoolDown());
     }
 
-    [Server]
     private IEnumerator CoolDown()
     {
         col.enabled = false;
         visual.SetActive(false);
-        Debug.Log("Cooldown start");
 
         yield return new WaitForSeconds(coolDownTimer);
 
-        Debug.Log("Cooldown end");
         col.enabled = true;
         visual.SetActive(true);
     }
