@@ -37,7 +37,6 @@ public class PowerUp : NetworkBehaviour
     {
         onGrabPowerUp.Invoke();
         tank.ActivatePowerUp(effect);
-        Debug.Log(tank);
         StartCoroutine(CoolDown());
     }
 
@@ -45,11 +44,9 @@ public class PowerUp : NetworkBehaviour
     {
         col.enabled = false;
         visual.SetActive(false);
-        Debug.Log("Cooldown start");
 
         yield return new WaitForSeconds(coolDownTimer);
 
-        Debug.Log("Cooldown end");
         col.enabled = true;
         visual.SetActive(true);
     }

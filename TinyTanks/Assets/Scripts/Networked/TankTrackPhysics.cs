@@ -53,7 +53,7 @@ public class TankTrackPhysics : MonoBehaviour
     private Vector3 lastLeftNormal = Vector3.up;
     private Vector3 lastRightNormal = Vector3.up;
 
-    // Stability helpers
+    //Stability helpers
     private Vector3 smoothedForward = Vector3.forward;
     private Vector3 smoothedRight = Vector3.right;
     private float forwardSmoothing = 0.9f;
