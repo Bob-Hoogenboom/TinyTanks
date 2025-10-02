@@ -8,10 +8,12 @@ public class GunnerSeatController : NetworkBehaviour
 {
     [SerializeField] CrewSeat seat;
     [SerializeField] private Camera seatCam;
+    [SerializeField] private Canvas canvas;
 
     public override void OnStartLocalPlayer()
     {
         if (seatCam) seatCam.gameObject.SetActive(true); // Set camera
+        if (canvas) canvas.gameObject.SetActive(true); //Set Canvas
     }
 
     private void FixedUpdate()
