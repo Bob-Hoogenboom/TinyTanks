@@ -51,7 +51,7 @@ Canvas:
   m_GameObject: {fileID: 614462684347698548}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -626,6 +626,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameTimer
       objectReference: {fileID: 0}
+    - target: {fileID: 7534241525584037463, guid: afae3c8d4d7bfdf47a7b026dcd635710,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0,
+        type: 2}
+    - target: {fileID: 7534241525584037463, guid: afae3c8d4d7bfdf47a7b026dcd635710,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -8889266876984893011, guid: 44df75db63e7ee84f8b11285bd1250e0,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
