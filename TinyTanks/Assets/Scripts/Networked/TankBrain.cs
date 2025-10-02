@@ -37,8 +37,8 @@ public class TankBrain : NetworkBehaviour
 
     [Header("Health/Life")]
     [SyncVar, SerializeField] private int lives = 3;
-    [SyncVar, SerializeField] private int currHealth;
-    [SerializeField] private int maxHealth = 5;
+    [SyncVar, SerializeField] public int currHealth;
+    public int maxHealth { get; private set; } = 5;
     [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 5f;
     
@@ -63,8 +63,11 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Image bulletReloadImage;
     [SerializeField] private Image reloadTimerImage;
 
-    [SyncVar] private bool isReloading = false;
-    [SyncVar, SerializeField] private bool hasBullet = true;
+    [SyncVar(hook = nameof(OnIsReloadingChanged))]
+    private bool isReloading = false;
+
+    [SyncVar(hook = nameof(OnHasBulletChanged))]
+    [SerializeField] private bool hasBullet = true;
 
     [Header("Spawning")]
     [SerializeField] private Transform[] spawnPoints;
@@ -90,10 +93,13 @@ public class TankBrain : NetworkBehaviour
 
     private void Update()
     {
-        double respawnRemaining = respawnEndTime - NetworkTime.time;
-        UpdateTimerDisplay(respawnRemaining, respawnTexts);
+        if(_isDead)
+        {
+            double respawnRemaining = respawnEndTime - NetworkTime.time;
+            UpdateTimerDisplay(respawnRemaining, respawnTexts);
 
-        if (respawnRemaining <= 0 && _isDead) Server_RespawnTank();
+            if (respawnRemaining <= 0 && _isDead) Server_RespawnTank();
+        }            
 
         if(isReloading)
         {
@@ -138,9 +144,7 @@ public class TankBrain : NetworkBehaviour
         nShell.parent = this;
         NetworkServer.Spawn(serverShellClone);
 
-        bulletStateText.text = "Not Ready";
         hasBullet = false;
-        reloadGroup.alpha = 1;
     }
 
     [Server]
@@ -157,12 +161,8 @@ public class TankBrain : NetworkBehaviour
     [Server]
     public void Server_FinishReload()
     {
-        bulletStateText.text = "Ready";
         isReloading = false;
         hasBullet = true;
-        bulletReloadImage.fillAmount = 0;
-        reloadTimerImage.fillAmount = 0;
-        reloadGroup.alpha = 0;
     }
 
     [Server]
@@ -224,6 +224,25 @@ public class TankBrain : NetworkBehaviour
             var roomMgr = (NetworkRoomManager)NetworkManager.singleton;
             NetworkManager.singleton.ServerChangeScene(roomMgr.RoomScene);
         }
+    }
+
+    [Client]
+    void OnHasBulletChanged(bool _, bool hasBullet)
+    {
+        if (bulletStateText) bulletStateText.text = hasBullet ? "Ready" : "Not Ready";
+        if (reloadGroup) reloadGroup.alpha = hasBullet ? 0f : 1f;
+
+        if (hasBullet)
+        {
+            if (bulletReloadImage) bulletReloadImage.fillAmount = 0f;
+            if (reloadTimerImage) reloadTimerImage.fillAmount = 0f;
+        }
+    }
+
+    [Client]
+    void OnIsReloadingChanged(bool _, bool reloading)
+    {
+        // For sound sfx etc.
     }
 
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)

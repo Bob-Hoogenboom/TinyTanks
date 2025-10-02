@@ -86,7 +86,7 @@ public class RoleVisuals : MonoBehaviour
                         else
                         {
                             // ghost: make it transparent / faded
-                            mat.color = Color.gray;
+                            mat.color = Color.black;
                         }
 
                         // IMPORTANT: material must use a Transparent shader mode

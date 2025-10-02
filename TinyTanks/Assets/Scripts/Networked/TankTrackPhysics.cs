@@ -174,8 +174,8 @@ public class TankTrackPhysics : MonoBehaviour
         Vector3 vGround = Vector3.ProjectOnPlane(vPt, contactNormal);
 
         float vFwd = Vector3.Dot(vGround, forward);
-        Vector3 vSlipVec = vGround - forward * vFwd;       // lateral slip vector
-        float vSlipMag = vSlipVec.magnitude;             // no smoothing
+        Vector3 vSlipVec = vGround - forward * vFwd;
+        float vSlipMag = vSlipVec.magnitude;
 
         // Traction limits
         float tractionLong = Mathf.Max(0.1f, currData.muLong * normalForce);
@@ -266,7 +266,7 @@ public class TankTrackPhysics : MonoBehaviour
             float rawBrake = currData.trackBrakeForce * currData.steerBrakeMultiplier * Mathf.Clamp01(Mathf.Abs(otherInput)); // Scale brake by how hard the other track is trying to move
 
             // Never exceed what the contact can transmit longitudinally
-            float brakeCap = tractionLong; // available long traction at this contact
+            float brakeCap = tractionLong;
             float brakeMag = Mathf.Min(rawBrake, brakeCap);
 
             steerBrake = -forward * brakeDir * brakeMag;
