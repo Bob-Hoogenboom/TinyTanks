@@ -227,13 +227,12 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Client]
-    void OnHasBulletChanged(bool _, bool newHasBullet)
+    void OnHasBulletChanged(bool _, bool hasBullet)
     {
-        if (bulletStateText) bulletStateText.text = newHasBullet ? "Ready" : "Not Ready";
-        if (reloadGroup) reloadGroup.alpha = newHasBullet ? 0f : 1f;
+        if (bulletStateText) bulletStateText.text = hasBullet ? "Ready" : "Not Ready";
+        if (reloadGroup) reloadGroup.alpha = hasBullet ? 0f : 1f;
 
-        // When a round is chambered again, reset the bars locally
-        if (newHasBullet)
+        if (hasBullet)
         {
             if (bulletReloadImage) bulletReloadImage.fillAmount = 0f;
             if (reloadTimerImage) reloadTimerImage.fillAmount = 0f;
@@ -241,9 +240,9 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Client]
-    void OnIsReloadingChanged(bool _, bool nowReloading)
+    void OnIsReloadingChanged(bool _, bool reloading)
     {
-        // For sound sfx etx.
+        // For sound sfx etc.
     }
 
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
