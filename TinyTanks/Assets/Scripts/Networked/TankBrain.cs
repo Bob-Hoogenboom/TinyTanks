@@ -63,8 +63,11 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Image bulletReloadImage;
     [SerializeField] private Image reloadTimerImage;
 
-    [SyncVar] private bool isReloading = false;
-    [SyncVar, SerializeField] private bool hasBullet = true;
+    [SyncVar(hook = nameof(OnIsReloadingChanged))]
+    private bool isReloading = false;
+
+    [SyncVar(hook = nameof(OnHasBulletChanged))]
+    [SerializeField] private bool hasBullet = true;
 
     [Header("Spawning")]
     [SerializeField] private Transform[] spawnPoints;
@@ -141,9 +144,7 @@ public class TankBrain : NetworkBehaviour
         nShell.parent = this;
         NetworkServer.Spawn(serverShellClone);
 
-        bulletStateText.text = "Not Ready";
         hasBullet = false;
-        reloadGroup.alpha = 1;
     }
 
     [Server]
@@ -160,12 +161,8 @@ public class TankBrain : NetworkBehaviour
     [Server]
     public void Server_FinishReload()
     {
-        bulletStateText.text = "Ready";
         isReloading = false;
         hasBullet = true;
-        bulletReloadImage.fillAmount = 0;
-        reloadTimerImage.fillAmount = 0;
-        reloadGroup.alpha = 0;
     }
 
     [Server]
@@ -227,6 +224,26 @@ public class TankBrain : NetworkBehaviour
             var roomMgr = (NetworkRoomManager)NetworkManager.singleton;
             NetworkManager.singleton.ServerChangeScene(roomMgr.RoomScene);
         }
+    }
+
+    [Client]
+    void OnHasBulletChanged(bool _, bool newHasBullet)
+    {
+        if (bulletStateText) bulletStateText.text = newHasBullet ? "Ready" : "Not Ready";
+        if (reloadGroup) reloadGroup.alpha = newHasBullet ? 0f : 1f;
+
+        // When a round is chambered again, reset the bars locally
+        if (newHasBullet)
+        {
+            if (bulletReloadImage) bulletReloadImage.fillAmount = 0f;
+            if (reloadTimerImage) reloadTimerImage.fillAmount = 0f;
+        }
+    }
+
+    [Client]
+    void OnIsReloadingChanged(bool _, bool nowReloading)
+    {
+        // For sound sfx etx.
     }
 
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)

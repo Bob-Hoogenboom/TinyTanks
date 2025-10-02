@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: You died
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e2550c6143107084fa7c0bf7c445ab02, type: 2}
-  m_sharedMaterial: {fileID: -8889266876984893011, guid: e2550c6143107084fa7c0bf7c445ab02,
+  m_fontAsset: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0, type: 2}
+  m_sharedMaterial: {fileID: -8889266876984893011, guid: 44df75db63e7ee84f8b11285bd1250e0,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -144,6 +144,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 662653501019353343}
+  - component: {fileID: 7340740286313684415}
   m_Layer: 5
   m_Name: Respawn UI
   m_TagString: Untagged
@@ -171,6 +172,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &7340740286313684415
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718054466197410639}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 1
 --- !u!1 &1800883202539758528
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,8 +329,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 3
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e2550c6143107084fa7c0bf7c445ab02, type: 2}
-  m_sharedMaterial: {fileID: -8889266876984893011, guid: e2550c6143107084fa7c0bf7c445ab02,
+  m_fontAsset: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0, type: 2}
+  m_sharedMaterial: {fileID: -8889266876984893011, guid: 44df75db63e7ee84f8b11285bd1250e0,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -451,8 +464,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Respawn in:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e2550c6143107084fa7c0bf7c445ab02, type: 2}
-  m_sharedMaterial: {fileID: -8889266876984893011, guid: e2550c6143107084fa7c0bf7c445ab02,
+  m_fontAsset: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0, type: 2}
+  m_sharedMaterial: {fileID: -8889266876984893011, guid: 44df75db63e7ee84f8b11285bd1250e0,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
