@@ -13,11 +13,9 @@ public class PowerUp : NetworkBehaviour
 
     [Tooltip("Add the Power-Up Effect you wish this object to give the TankBrain Object")]
     [SerializeField] private PowerUpEffect effect;
-
     [SerializeField] private float coolDownTimer = 20f;
 
     [Header("References")]
-
     [SerializeField] private Collider col;
     [SerializeField] private GameObject visual;
 
@@ -28,26 +26,49 @@ public class PowerUp : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!isServer) return;
+
         PowerUpHandler tank = other.GetComponentInParent<PowerUpHandler>();
-        if (tank != null) StartPowerUp(tank);
+        if (tank != null) Server_StartPowerUp(tank);
     }
 
-    [ClientRpc]
-    private void StartPowerUp(PowerUpHandler tank)
+    [Server]
+    private void Server_StartPowerUp(PowerUpHandler tank)
     {
-        onGrabPowerUp.Invoke();
+        RpcOnGrabVFX();
         tank.ActivatePowerUp(effect);
         StartCoroutine(CoolDown());
     }
 
+    [ClientRpc]
+    private void RpcOnGrabVFX()
+    {
+        onGrabPowerUp?.Invoke();
+    }
+
+    [Server]
     private IEnumerator CoolDown()
     {
-        col.enabled = false;
-        visual.SetActive(false);
+        SetPickupActive(false);
+        RpcSetPickupActive(false);
 
         yield return new WaitForSeconds(coolDownTimer);
 
-        col.enabled = true;
-        visual.SetActive(true);
+        SetPickupActive(true);
+        RpcSetPickupActive(true);
+    }
+
+    [Server]
+    private void SetPickupActive(bool active)
+    {
+        if (col) col.enabled = active;
+        if (visual) visual.SetActive(active);
+    }
+
+    [ClientRpc]
+    private void RpcSetPickupActive(bool active)
+    {
+        if (col) col.enabled = active;
+        if (visual) visual.SetActive(active);
     }
 }
