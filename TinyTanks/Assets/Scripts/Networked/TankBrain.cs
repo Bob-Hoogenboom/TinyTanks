@@ -72,7 +72,7 @@ public class TankBrain : NetworkBehaviour
 
     [Header("UI Bullet")]
     [SerializeField] private CanvasGroup reloadGroup;
-    [SerializeField] private TMP_Text bulletStateText;
+    [SerializeField] private TMP_Text[] bulletStateTexts;
     [SerializeField] private Image bulletReloadImage;
     [SerializeField] private Image reloadTimerImage;
 
@@ -280,7 +280,9 @@ public class TankBrain : NetworkBehaviour
     [Client]
     private void OnHasBulletChanged(bool _, bool hasBullet)
     {
-        if (bulletStateText) bulletStateText.text = hasBullet ? "Ready" : "Not Ready";
+        foreach(var text in bulletStateTexts)
+            if (text) text.text = hasBullet ? "Ready" : "Not Ready";
+        
         if (reloadGroup) reloadGroup.alpha = hasBullet ? 0f : 1f;
 
         if (hasBullet)
