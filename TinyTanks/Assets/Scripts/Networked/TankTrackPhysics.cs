@@ -8,10 +8,11 @@ public class TankTrackPhysics : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
     [SerializeField] private LayerMask groundMask = ~0;
+    [SerializeField] private bool isSupposedToHaveServer = true;
 
     [Header("Animation")]
     [SerializeField] private Animator anim;
-    [SerializeField] private Animator netAnim;
+    [SerializeField] private Animator netAnim;  //Not used?
     [Tooltip("This is a multiplier. it does the default animator speed and multiplies that by animSpeed. \n(animator.speed * animSpeed)")]
     //[SerializeField] private float animSpeed = 1f;
     private int _leftTrackAnim = Animator.StringToHash("LeftTrack");
@@ -91,7 +92,10 @@ public class TankTrackPhysics : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!NetworkServer.active) return;
+        if (isSupposedToHaveServer)
+        {
+            if (!NetworkServer.active) return;
+        }
 
         smoothedForward = Vector3.Slerp(smoothedForward, transform.forward, forwardSmoothing).normalized;
         smoothedRight = Vector3.Slerp(smoothedRight, transform.right, forwardSmoothing).normalized;
