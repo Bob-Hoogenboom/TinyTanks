@@ -10,12 +10,17 @@ public class GunnerSeatController : NetworkBehaviour
     [SerializeField] private Camera seatCam;
     [SerializeField] private Canvas canvas;
 
+    private void Awake()
+    {
+        if (!seat) seat = GetComponent<CrewSeat>();
+    }
     public override void OnStartLocalPlayer()
     {
-        if (seatCam) seatCam.gameObject.SetActive(true); // Set camera
-        if (canvas) canvas.gameObject.SetActive(true); //Set Canvas
-    }
+        CameraInit();
 
+        if (seatCam) seatCam.gameObject.SetActive(true);
+        if (canvas) canvas.gameObject.SetActive(true);
+    }
     private void FixedUpdate()
     {
         if (!isLocalPlayer) return;
@@ -51,5 +56,20 @@ public class GunnerSeatController : NetworkBehaviour
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_SetOffGun(seat);
+    }
+
+    [Client]
+    private void CameraInit()
+    {
+        if (!seat) return;
+        var t = seat.tank;
+        if (!t) return;
+
+        // [EDIT] use GUNNER tags (the previous version searched driver tags)
+        foreach (var cam in t.GetComponentsInChildren<Camera>(true))
+            if (cam.CompareTag("gunnerCam")) { seatCam = cam; break; }
+
+        foreach (var can in t.GetComponentsInChildren<Canvas>(true))
+            if (can.CompareTag("gunnerCanvas")) { canvas = can; break; }
     }
 }

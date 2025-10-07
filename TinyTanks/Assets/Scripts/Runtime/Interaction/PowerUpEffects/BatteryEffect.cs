@@ -10,14 +10,7 @@ public class BatteryEffect : PowerUpEffect
 
     public override void ApplyPowerUp(TankBrain brain)
     {
-        float newBtry = brain.currentBtry + battery;
-
-        if(newBtry > brain.maxBtry)
-        {
-            newBtry = brain.maxBtry;
-        }
-
-        brain.currentBtry = newBtry;
+        brain.Server_RechargeBattery(battery);
     }
 
     public override void RemovePowerUp(TankBrain brain)

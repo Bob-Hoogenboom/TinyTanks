@@ -15,16 +15,17 @@ public class PowerUpHandler : NetworkBehaviour
     {
         if (tank == null)
         {
-            tank = GetComponent<TankBrain>();
+            tank = GetComponent<TankBrain>() ?? GetComponentInParent<TankBrain>();
         }
     }
 
-    [ServerCallback]
+    [Server]
     public void ActivatePowerUp(PowerUpEffect effect)
     {
         StartCoroutine(PowerUpRoutine(effect));
     }
 
+    [Server]
     private IEnumerator PowerUpRoutine(PowerUpEffect effect) 
     {
         effect.ApplyPowerUp(tank);

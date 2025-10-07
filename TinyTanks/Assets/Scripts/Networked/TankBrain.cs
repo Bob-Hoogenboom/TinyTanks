@@ -12,16 +12,16 @@ public class TankBrain : NetworkBehaviour
     [SyncVar] private CrewSeat driver;
     [SyncVar] private CrewSeat gunner;
 
-    private Rigidbody rb;
-    private NetworkTransformReliable netTrans;
+    private Rigidbody _rb;
+    private NetworkTransformReliable _netTrans;
 
     [Header("Physics based movement")]
     [SerializeField] private TankTrackPhysics tracks;
-    private float leftTrack;
-    private float rightTrack;
+    private float _leftTrack;
+    private float _rightTrack;
     [SerializeField] private TankTurretPhysics turret;
-    private float yaw;
-    private float pitch;
+    private float _yaw;
+    private float _pitch;
 
     [Header("Tank Parts")]
     [SerializeField] private GameObject tankBody;
@@ -31,9 +31,13 @@ public class TankBrain : NetworkBehaviour
 
     [Header("Firing")]
     [SerializeField] private GameObject serverShellPrefab;
-    [SyncVar] private double reloadEndTime;
+    [SyncVar] private double _reloadEndTime;
     [SerializeField] private float reloadTime = 5f;
     [SerializeField] private float shellSpeed = 10f;
+    [SyncVar(hook = nameof(OnIsReloadingChanged))]
+    private bool isReloading = false;
+    [SyncVar(hook = nameof(OnHasBulletChanged))]
+    [SerializeField] private bool hasBullet = true;
 
     [Header("Health/Life")]
     [SyncVar, SerializeField] private int lives = 3;
@@ -41,11 +45,17 @@ public class TankBrain : NetworkBehaviour
     public int maxHealth { get; private set; } = 5;
     [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 5f;
-
-    [SyncVar] public float currentBtry = 50f;           //TODO make movement and shooting consume this
-    public float maxBtry = 100f;
-
     private bool _isDead;
+
+    [Header("Battery")]
+    [SyncVar(hook = nameof(OnBatteryChanged))]
+    public float currentBtry = 50f;
+    [SerializeField] public float maxBtry { private set; get; } = 100f;
+    [SerializeField] private float batteryDrainMove = 0.5f;
+    [SerializeField] private float batteryDrainTurning = 0.3f;
+    [SerializeField] private float batteryDrainNeutralSteer = 0.2f;
+    [SerializeField] private float batteryDrainShot = 6f;
+    [SerializeField] private float moveInputThreshold = 0.05f;
 
     [Header("RayCast")]
     [SerializeField] float contactRadius = 0.22f;
@@ -66,12 +76,6 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Image bulletReloadImage;
     [SerializeField] private Image reloadTimerImage;
 
-    [SyncVar(hook = nameof(OnIsReloadingChanged))]
-    private bool isReloading = false;
-
-    [SyncVar(hook = nameof(OnHasBulletChanged))]
-    [SerializeField] private bool hasBullet = true;
-
     [Header("Spawning")]
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private Transform spawnLocation;
@@ -79,12 +83,14 @@ public class TankBrain : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        rb = GetComponent<Rigidbody>();
-        netTrans = GetComponent<NetworkTransformReliable>();
+        _rb = GetComponent<Rigidbody>();
+        _netTrans = GetComponent<NetworkTransformReliable>();
         if (!tracks) tracks = GetComponent<TankTrackPhysics>();
         if (!turret) turret = GetComponent<TankTurretPhysics>();
         currHealth = maxHealth;
         _isDead = false;
+
+        currentBtry = maxBtry;
     }
 
     [Server]
@@ -96,17 +102,17 @@ public class TankBrain : NetworkBehaviour
 
     private void Update()
     {
-        if(_isDead)
+        if (_isDead)
         {
             double respawnRemaining = respawnEndTime - NetworkTime.time;
             UpdateTimerDisplay(respawnRemaining, respawnTexts);
 
             if (respawnRemaining <= 0 && _isDead) Server_RespawnTank();
-        }            
+        }
 
-        if(isReloading)
+        if (isReloading)
         {
-            double reloadRemaining = reloadEndTime - NetworkTime.time;
+            double reloadRemaining = _reloadEndTime - NetworkTime.time;
             UpdateReloadDisplay(reloadRemaining);
 
             if (reloadRemaining <= 0)
@@ -117,10 +123,12 @@ public class TankBrain : NetworkBehaviour
     [ServerCallback]
     private void FixedUpdate()
     {
-        if (!isServer || rb == null) return;
+        if (!isServer || _rb == null) return;
         if (_isDead) return;
-        if (tracks) tracks.SetInputs(leftTrack, rightTrack);
-        if (turret) turret.SetInputs(yaw, pitch);
+        if (tracks) tracks.SetInputs(_leftTrack, _rightTrack);
+        if (turret) turret.SetInputs(_yaw, _pitch);
+
+        Server_ApplyBatteryMovementDrain(Time.fixedDeltaTime);
     }
 
     [Server]
@@ -128,8 +136,8 @@ public class TankBrain : NetworkBehaviour
     {
         if (from != gunner) return;
 
-        yaw = Mathf.Clamp(yawDelta, -1f, 1f);
-        pitch = Mathf.Clamp(pitchDelta, -1f, 1f);
+        _yaw = Mathf.Clamp(yawDelta, -1f, 1f);
+        _pitch = Mathf.Clamp(pitchDelta, -1f, 1f);
     }
 
     [Server]
@@ -148,6 +156,7 @@ public class TankBrain : NetworkBehaviour
         NetworkServer.Spawn(serverShellClone);
 
         hasBullet = false;
+        Server_ConsumeBattery(batteryDrainShot);
     }
 
     [Server]
@@ -158,7 +167,7 @@ public class TankBrain : NetworkBehaviour
         if (isReloading) return;
 
         isReloading = true;
-        reloadEndTime = NetworkTime.time + reloadTime;
+        _reloadEndTime = NetworkTime.time + reloadTime;
     }
 
     [Server]
@@ -169,11 +178,50 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
+    private void Server_ApplyBatteryMovementDrain(float dt)
+    {
+        float aL = Mathf.Abs(_leftTrack);
+        float aR = Mathf.Abs(_rightTrack);
+        bool moving = (aL > moveInputThreshold) || (aR > moveInputThreshold);
+        if (!moving) return;
+
+        float drain = batteryDrainMove;
+        float turnFactor = Mathf.Clamp01(Mathf.Abs(aL - aR));
+        drain += batteryDrainTurning * turnFactor;
+
+        bool neutralSteer = (_leftTrack * _rightTrack) < -0.2f;
+        if (neutralSteer) drain += batteryDrainNeutralSteer;
+
+        Server_ConsumeBattery(drain * dt);
+    }
+
+    [Server]
+    private void Server_ConsumeBattery(float amount)
+    {
+        if (amount <= 0f) return;
+        currentBtry = Mathf.Max(0f, currentBtry - amount);
+    }
+
+    [Server]
+    public void Server_RechargeBattery(float amount)
+    {
+        Debug.Log("Applied battery Effect");
+        float newBtry = currentBtry + amount;
+
+        if (newBtry > maxBtry)
+        {
+            newBtry = maxBtry;
+        }
+
+        currentBtry = newBtry;
+    }
+
+    [Server]
     public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
     {
         if (from != driver) return;
-        leftTrack = Mathf.Clamp(_leftTrack, -1f, 1f);
-        rightTrack = Mathf.Clamp(_rightTrack, -1f, 1f);
+        this._leftTrack = Mathf.Clamp(_leftTrack, -1f, 1f);
+        this._rightTrack = Mathf.Clamp(_rightTrack, -1f, 1f);
     }
 
     [Server]
@@ -191,10 +239,10 @@ public class TankBrain : NetworkBehaviour
         players.Remove(this);
 
         var possibleSpawnLocations = new List<Transform>();
-        foreach(var player in players)
+        foreach (var player in players)
         {
             var go = player.gameObject;
-            foreach(var location in spawnPoints)
+            foreach (var location in spawnPoints)
             {
                 if (Vector3.Distance(go.transform.position, location.position) > minSpawnDistance)
                     possibleSpawnLocations.Add(location);
@@ -204,13 +252,13 @@ public class TankBrain : NetworkBehaviour
         var idx = UnityEngine.Random.Range(0, possibleSpawnLocations.Count);
         spawnLocation = possibleSpawnLocations[idx];
 
-        netTrans.RpcTeleport(spawnLocation.position);
+        _netTrans.RpcTeleport(spawnLocation.position);
 
         currHealth = maxHealth;
         lives -= 1;
         _isDead = false;
 
-        if(driverRespawn != null && gunnerRespawn != null)
+        if (driverRespawn != null && gunnerRespawn != null)
         {
             driverRespawn.alpha = 0;
             gunnerRespawn.alpha = 0;
@@ -230,7 +278,7 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Client]
-    void OnHasBulletChanged(bool _, bool hasBullet)
+    private void OnHasBulletChanged(bool _, bool hasBullet)
     {
         if (bulletStateText) bulletStateText.text = hasBullet ? "Ready" : "Not Ready";
         if (reloadGroup) reloadGroup.alpha = hasBullet ? 0f : 1f;
@@ -243,9 +291,15 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Client]
-    void OnIsReloadingChanged(bool _, bool reloading)
+    private void OnIsReloadingChanged(bool _, bool reloading)
     {
         // For sound sfx etc.
+    }
+
+    [Client]
+    private void OnBatteryChanged(float oldVal, float newVal)
+    {
+        // update UI
     }
 
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
@@ -253,7 +307,7 @@ public class TankBrain : NetworkBehaviour
         if (timeRemaining <= 0) timeRemaining = 0;
         var ts = TimeSpan.FromSeconds(timeRemaining);
 
-        foreach(var text in uiTexts)
+        foreach (var text in uiTexts)
             text.text = $"{ts.Seconds:00}";
     }
 

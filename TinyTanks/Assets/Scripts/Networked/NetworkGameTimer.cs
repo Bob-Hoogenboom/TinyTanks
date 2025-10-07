@@ -2,44 +2,66 @@ using System;
 using UnityEngine;
 using Mirror;
 using TMPro;
+using System.Collections.Generic;
+using System.Linq;
 
 public class NetworkGameTimer : NetworkBehaviour
 {
     [SyncVar] private double _endTime;
-    [SerializeField] private TMP_Text[] timerTexts;
+    [SerializeField] private string timerTag = "gameTimer";
+    [SerializeField] private List<TMP_Text> timerTexts = new List<TMP_Text>();
     [SerializeField] private float gameTime;
 
+    [ClientCallback]
     private void Start()
     {
-        StarTimer();
+        TryBindTimerTexts();                // first attempt (works if things are already active)
+        InvokeRepeating(nameof(TryBindTimerTexts), 0.25f, 0.25f);
+    }
+
+    public override void OnStartServer()
+    {
+        _endTime = NetworkTime.time + gameTime;
     }
 
     private void Update()
     {
         double remaining = _endTime - NetworkTime.time;
         UpdateTimerDisplay(remaining);
+
+        if (isServer && remaining <= 0) ReturnToLobby();
     }
 
-    private void StarTimer()
+    [Client]
+    private void TryBindTimerTexts()
     {
-        _endTime = NetworkTime.time + gameTime;
+        if (timerTexts == null) timerTexts = new List<TMP_Text>();
+
+        // collect from all objects tagged "gameTimer"
+        var roots = GameObject.FindGameObjectsWithTag(timerTag);
+        foreach (var go in roots)
+        {
+            // true => include inactive children (important when canvases are disabled initially)
+            var txt = go.GetComponentInChildren<TMPro.TMP_Text>(true);
+            if (txt != null && !timerTexts.Contains(txt))
+                timerTexts.Add(txt);
+        }
+
+        // stop retrying once we have at least one valid target
+        if (timerTexts.Count > 0 && timerTexts.TrueForAll(t => t != null))
+            CancelInvoke(nameof(TryBindTimerTexts));
     }
 
     private void UpdateTimerDisplay(double timeRemaining)
     {
-        if (timeRemaining <= 0) ReturnToLobby();
-        var ts = TimeSpan.FromSeconds(timeRemaining);
-
-        foreach(var text in timerTexts)
+        var ts = TimeSpan.FromSeconds(Math.Max(0, timeRemaining));
+        foreach (var text in timerTexts)
             text.text = $"{(int)ts.TotalMinutes:00}:{ts.Seconds:00}";
     }
 
     [Server] private void ReturnToLobby()
     {
-        if(NetworkServer.active)
-        {
-            var roomMgr = (NetworkRoomManager)NetworkManager.singleton;
-            NetworkManager.singleton.ServerChangeScene(roomMgr.RoomScene);
-        }
+        var roomMgr = (NetworkRoomManager)NetworkManager.singleton;
+        NetworkManager.singleton.ServerChangeScene(roomMgr.RoomScene);
     }
 }

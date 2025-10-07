@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 6755206698558341908}
   m_Layer: 9
   m_Name: DriverCamera
-  m_TagString: Untagged
+  m_TagString: driverCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -557,7 +557,7 @@ GameObject:
   - component: {fileID: 8109185340479982918}
   m_Layer: 9
   m_Name: GunnerCamera
-  m_TagString: Untagged
+  m_TagString: gunnerCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1293,9 +1293,16 @@ MonoBehaviour:
     type: 3}
   reloadTime: 5
   shellSpeed: 10
+  hasBullet: 1
   lives: 3
   currHealth: 0
   respawnTime: 5
+  currentBtry: 50
+  batteryDrainMove: 0.5
+  batteryDrainTurning: 0.3
+  batteryDrainNeutralSteer: 0.2
+  batteryDrainShot: 6
+  moveInputThreshold: 0.05
   contactRadius: 0.25
   contactCapsuleHalfLength: 0.43
   trackSpacing: 1.1
@@ -1313,7 +1320,6 @@ MonoBehaviour:
   bulletStateText: {fileID: 1510279918958740277}
   bulletReloadImage: {fileID: 7173380602458632589}
   reloadTimerImage: {fileID: 1994328926644164528}
-  hasBullet: 1
   spawnPoints: []
   spawnLocation: {fileID: 0}
   minSpawnDistance: 20
@@ -1339,15 +1345,12 @@ MonoBehaviour:
     m_Bits: 7168
   anim: {fileID: 7627067356897337205}
   netAnim: {fileID: 0}
-  animSpeed: 1
   contactRadius: 0.25
   contactCapsuleHalfLength: 0.43
   trackSpacing: 1.1
   trackRayStartHeight: 0.35
   trackRayLength: 0.15
   extraDownForce: 0
-  yawDamping: 0.25
-  stabilizationForce: 500
   groundingForce: 1000
   hardFloorData: {fileID: 11400000, guid: 5dbb39ee34bb13340a154bedda3a5374, type: 2}
   carpetData: {fileID: 11400000, guid: 6e2fae0fdde0f5e47981cda13270ac4c, type: 2}
@@ -1355,7 +1358,6 @@ MonoBehaviour:
   currData: {fileID: 0}
   slipDead: 0.4
   minVelocityMagnitude: 0.001
-  contactSmoothing: 0.8
 --- !u!114 &6524632739264611629
 MonoBehaviour:
   m_ObjectHideFlags: 0

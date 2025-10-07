@@ -9,12 +9,25 @@ public class CrewSeat : NetworkBehaviour
 {
     public int roleKey;
     public SeatType seatType;
-    public TankBrain tank;
+
+    [SyncVar(hook = nameof(OnTankChanged))] private GameObject tankObject;
+    public TankBrain tank => tankObject ? tankObject.GetComponent<TankBrain>() : null;
     [SyncVar] public bool taken;
 
     public override void OnStartServer()
     {
         if (tank != null) tank.Server_RegisterSeat(this); // assign seat to tank
-        else Debug.LogError($"{name} has no TankBrain reference!");
+    }
+
+    [Server]
+    public void Server_AssignTank(TankBrain t)
+    {
+        if (!t) return;
+        tankObject = t.gameObject; // SyncVar replication to clients
+        t.Server_RegisterSeat(this); // keeps TankBrain’s driver/gunner pointers updated
+    }
+    private void OnTankChanged(GameObject _, GameObject __)
+    {
+        // no-op; seat controllers poll in FixedUpdate and will now see seat.tank on clients
     }
 }
