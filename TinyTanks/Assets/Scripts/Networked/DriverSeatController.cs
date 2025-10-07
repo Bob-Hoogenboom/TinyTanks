@@ -11,12 +11,18 @@ public class DriverSeatController : NetworkBehaviour
     [SerializeField] private Camera seatCam;
     [SerializeField] private Canvas canvas;
 
+    private void Awake()
+    {
+        if (!seat) seat = GetComponent<CrewSeat>();
+      
+    }
     public override void OnStartLocalPlayer()
     {
-        if (seatCam) seatCam.gameObject.SetActive(true); // Set camera
-        if (canvas) canvas.gameObject.SetActive(true); //Set Canvas
-    }
+        CameraInit();
 
+        if (seatCam) seatCam.gameObject.SetActive(true);
+        if (canvas) canvas.gameObject.SetActive(true);
+    }
     private void FixedUpdate()
     {
         if (!isLocalPlayer) return;
@@ -41,5 +47,19 @@ public class DriverSeatController : NetworkBehaviour
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_SetOffGun(seat);
+    }
+
+    [Client]
+    private void CameraInit()
+    {
+        if (!seat) return;
+        var t = seat.tank;
+        if (!t) return;
+
+        foreach (var cam in t.GetComponentsInChildren<Camera>(true))
+            if (cam.CompareTag("driverCam")) { seatCam = cam; break; }
+
+        foreach (var can in t.GetComponentsInChildren<Canvas>(true))
+            if (can.CompareTag("driverCanvas")) { canvas = can; break; }
     }
 }

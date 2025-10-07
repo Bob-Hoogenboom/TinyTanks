@@ -14,6 +14,7 @@ public class RoleManager : NetworkBehaviour
     public readonly SyncDictionary<int, uint> roleOwners = new SyncDictionary<int, uint>();
     public event Action OnRolesUpdated;
 
+
     private void Awake()
     {
         if(Instance != null && Instance != this) { Destroy(gameObject); return; }

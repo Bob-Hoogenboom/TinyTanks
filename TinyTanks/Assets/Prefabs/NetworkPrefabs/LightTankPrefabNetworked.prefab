@@ -1223,9 +1223,16 @@ MonoBehaviour:
     type: 3}
   reloadTime: 5
   shellSpeed: 10
+  hasBullet: 1
   lives: 3
   currHealth: 0
   respawnTime: 5
+  currentBtry: 50
+  batteryDrainMove: 0.5
+  batteryDrainTurning: 0.3
+  batteryDrainNeutralSteer: 0.2
+  batteryDrainShot: 6
+  moveInputThreshold: 0.05
   contactRadius: 0.18
   contactCapsuleHalfLength: 0.2
   trackSpacing: 0.65
@@ -1243,7 +1250,6 @@ MonoBehaviour:
   bulletStateText: {fileID: 8852445845114200143}
   bulletReloadImage: {fileID: 982722239254385399}
   reloadTimerImage: {fileID: 8467581599527105738}
-  hasBullet: 1
   spawnPoints: []
   spawnLocation: {fileID: 0}
   minSpawnDistance: 20
@@ -1269,15 +1275,12 @@ MonoBehaviour:
     m_Bits: 7168
   anim: {fileID: 1189097710389964332}
   netAnim: {fileID: 1189097710389964332}
-  animSpeed: 1
   contactRadius: 0.18
   contactCapsuleHalfLength: 0.2
   trackSpacing: 0.65
   trackRayStartHeight: 0.3
   trackRayLength: 0.2
   extraDownForce: 0
-  yawDamping: 0.2
-  stabilizationForce: 500
   groundingForce: 1000
   hardFloorData: {fileID: 11400000, guid: 7540ca7a547bae94caf45f47b8d97a5c, type: 2}
   carpetData: {fileID: 11400000, guid: 7bce7831c2101fd4b8fb4f669f61990a, type: 2}
@@ -1285,7 +1288,6 @@ MonoBehaviour:
   currData: {fileID: 0}
   slipDead: 0.4
   minVelocityMagnitude: 0.001
-  contactSmoothing: 0.8
 --- !u!114 &9211153292599580694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1760,7 +1762,7 @@ GameObject:
   - component: {fileID: 1471819297731385734}
   m_Layer: 9
   m_Name: GunnerCamera
-  m_TagString: Untagged
+  m_TagString: gunnerCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3383,7 +3385,7 @@ GameObject:
   - component: {fileID: 9210539347087487716}
   m_Layer: 9
   m_Name: DriverCamera
-  m_TagString: Untagged
+  m_TagString: driverCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3870,6 +3872,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 3923392487894041625, guid: eee26696c6da89043b3aa63ff9667d52,
+        type: 3}
+      propertyPath: barrelTransform
+      value: 
+      objectReference: {fileID: 7678173531244863629}
     - target: {fileID: 4794780082120201265, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_Layer
