@@ -4,30 +4,65 @@ public class TutorialTank : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private TankTrackPhysics tankTrack;
+    [SerializeField] private TankTurretPhysics tankTurret;
+
+    [SerializeField] private bool isDriver;
+
+    private float _leftInput = 0f;
+    private float _rightInput = 0f;
+
 
 
     private void Update()
     {
-        Driving();
+        if (Input.GetKeyDown(KeyCode.Alpha1)) isDriver = !isDriver;
+
+        if (!isDriver)
+        {
+            Aiming();
+        }
+        else
+        {
+            Driving();
+        }
     }
 
+
+    #region Gunner Controls
+    private void Aiming()
+    {
+        // Reset
+        _leftInput = 0f;
+        _rightInput = 0f;
+
+        // --- WASD Keys ---
+        _leftInput = Input.GetAxisRaw("Vertical");
+        _rightInput = Input.GetAxisRaw("Horizontal");
+
+        tankTurret.SetInputs(_leftInput, _rightInput);
+    }
+    #endregion
+
+    #region Runner Controls
     private void Driving()
     {
-        float leftInput = 0f;
-        float rightInput = 0f;
+        // Reset
+        _leftInput = 0f;
+        _rightInput = 0f;
 
-        // --- Left track (W/S keys) ---
+        // --- Left (W/S keys) ---
         if (Input.GetKey(KeyCode.W))
-            leftInput = 1f;
+            _leftInput = 1f;
         else if (Input.GetKey(KeyCode.S))
-            leftInput = -1f;
+            _leftInput = -1f;
 
-        // --- Right track (Up/Down arrows) ---
+        // --- Right (Up/Down arrows) ---
         if (Input.GetKey(KeyCode.UpArrow))
-            rightInput = 1f;
+            _rightInput = 1f;
         else if (Input.GetKey(KeyCode.DownArrow))
-            rightInput = -1f;
+            _rightInput = -1f;
 
-        tankTrack.SetInputs(leftInput, rightInput);
+        tankTrack.SetInputs(_leftInput, _rightInput);
     }
+    #endregion
 }
