@@ -1,4 +1,12 @@
+using Cinemachine;
+using System;
 using UnityEngine;
+
+public enum TankRole
+{
+    TANK_DRIVER,
+    TANK_OBSERVER
+}
 
 public class TutorialTank : MonoBehaviour
 {
@@ -6,25 +14,54 @@ public class TutorialTank : MonoBehaviour
     [SerializeField] private TankTrackPhysics tankTrack;
     [SerializeField] private TankTurretPhysics tankTurret;
 
-    [SerializeField] private bool isDriver;
+    [SerializeField] private CinemachineVirtualCamera driverCam;
+    [SerializeField] private CinemachineVirtualCamera observerCam;
+
+    [Header("State")]
+    [SerializeField] private TankRole currentRole = TankRole.TANK_DRIVER;
+    public static event Action <TankRole> OnUpdateRole;
 
     private float _leftInput = 0f;
     private float _rightInput = 0f;
 
 
+    private void Start()
+    {
+        UpdateRoleState();
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) isDriver = !isDriver;
-
-        if (!isDriver)
+        // --- Switch roles ---
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
+            currentRole = currentRole == TankRole.TANK_DRIVER ? TankRole.TANK_OBSERVER : TankRole.TANK_DRIVER;
+            UpdateRoleState();
+        }
+
+        if (currentRole == TankRole.TANK_OBSERVER)
+        {
+            //Everything Observer related
             Aiming();
         }
         else
         {
+            //everything Driver Related
             Driving();
         }
+    }
+
+    private void UpdateRoleState()
+    {
+        bool isDriver = currentRole == TankRole.TANK_DRIVER;
+
+        // Toggle cameras
+        if (driverCam) driverCam.enabled = isDriver;
+        if (observerCam) observerCam.enabled = !isDriver;
+
+        OnUpdateRole?.Invoke(currentRole);
+
+        Debug.Log($"Switched to role: {currentRole}");
     }
 
 
