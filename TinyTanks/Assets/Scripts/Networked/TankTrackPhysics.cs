@@ -12,7 +12,6 @@ public class TankTrackPhysics : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] private Animator anim;
-    [SerializeField] private Animator netAnim;
     [Tooltip("This is a multiplier. it does the default animator speed and multiplies that by animSpeed. \n(animator.speed * animSpeed)")]
     //[SerializeField] private float animSpeed = 1f;
     private int _leftTrackAnim = Animator.StringToHash("LeftTrack");
@@ -27,8 +26,6 @@ public class TankTrackPhysics : MonoBehaviour
 
     [Header("Tuning")]
     [SerializeField] private float extraDownForce = 0f;
-    //[SerializeField] private float yawDamping = 0.2f;
-    //[SerializeField] private float stabilizationForce = 500f;
     [SerializeField] private float groundingForce = 1000f;
 
     [Header("Movement Variables")]
@@ -43,17 +40,11 @@ public class TankTrackPhysics : MonoBehaviour
     [Tooltip("Minimum velocity magnitude to prevent division by zero")]
     [SerializeField] private float minVelocityMagnitude = 0.01f;
     [Tooltip("Smoothing factor for track contact (0-1, higher = more responsive)")]
-    //[SerializeField] private float contactSmoothing = 0.8f;
 
     private float leftInput;
     private float rightInput;
 
-    private float leftSpeed;
-    private float rightSpeed;
-
     // Track contact state
-    //private float leftContactFactor = 0f;
-    //private float rightContactFactor = 0f;
     private Vector3 lastLeftNormal = Vector3.up;
     private Vector3 lastRightNormal = Vector3.up;
 
@@ -211,12 +202,6 @@ public class TankTrackPhysics : MonoBehaviour
             // Keep some motion at crawl speeds but avoid runaway speed at high velocity
             float velMag = rb.velocity.magnitude;
             anim.speed = Mathf.Clamp(0.5f + velMag * 2f, 0.5f, 3f);
-        }
-        if (netAnim != null)
-        {
-            netAnim.SetFloat(_leftTrackAnim, newL);
-            netAnim.SetFloat(_rightTrackAnim, newR);
-            netAnim.speed = anim != null ? anim.speed : netAnim.speed;
         }
     }
 
