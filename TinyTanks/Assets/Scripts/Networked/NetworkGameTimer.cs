@@ -15,13 +15,14 @@ public class NetworkGameTimer : NetworkBehaviour
     [ClientCallback]
     private void Start()
     {
-        TryBindTimerTexts();                // first attempt (works if things are already active)
+        TryBindTimerTexts();
         InvokeRepeating(nameof(TryBindTimerTexts), 0.25f, 0.25f);
     }
 
-    public override void OnStartServer()
+    [Server]
+    public void Server_Initialize(float durationSeconds)
     {
-        _endTime = NetworkTime.time + gameTime;
+        _endTime = NetworkTime.time + durationSeconds;
     }
 
     private void Update()
@@ -42,7 +43,7 @@ public class NetworkGameTimer : NetworkBehaviour
         foreach (var go in roots)
         {
             // true => include inactive children (important when canvases are disabled initially)
-            var txt = go.GetComponentInChildren<TMPro.TMP_Text>(true);
+            var txt = go.GetComponentInChildren<TMP_Text>(true);
             if (txt != null && !timerTexts.Contains(txt))
                 timerTexts.Add(txt);
         }
@@ -59,7 +60,8 @@ public class NetworkGameTimer : NetworkBehaviour
             text.text = $"{(int)ts.TotalMinutes:00}:{ts.Seconds:00}";
     }
 
-    [Server] private void ReturnToLobby()
+    [Server] 
+    private void ReturnToLobby()
     {
         var roomMgr = (NetworkRoomManager)NetworkManager.singleton;
         NetworkManager.singleton.ServerChangeScene(roomMgr.RoomScene);
