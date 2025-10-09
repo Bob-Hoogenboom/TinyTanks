@@ -2,15 +2,96 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using TMPro;
+using System.Globalization;
 
 public class MyRoomManager : NetworkRoomManager
 {
     readonly Dictionary<int, CrewSeat> seatsByKey = new();
     private readonly Dictionary<int, TankBrain> _teamTank = new();
 
+    [SerializeField] private float gameTime;
+    [SerializeField] private TMP_InputField gameTimeInput;
+
     public override void Awake()
     {
         playerSpawnMethod = PlayerSpawnMethod.Random;
+    }
+
+    public override void OnRoomClientEnter()
+    {
+        base.OnRoomClientEnter();
+        BindRoomUI();
+    }
+
+    public override void OnRoomClientExit()
+    {
+        UnbindRoomUI();
+        base.OnRoomClientExit();
+    }
+
+    private void BindRoomUI()
+    {
+        ResolveGameTimeInput();
+        if (gameTimeInput == null)
+        {
+            Debug.LogWarning("[MyRoomManager] No GameTime InputField found in Room scene.");
+            return;
+        }
+
+        gameTimeInput.interactable = NetworkServer.active;
+        gameTimeInput.text = gameTime.ToString("0.##", CultureInfo.InvariantCulture);
+        gameTimeInput.onEndEdit.AddListener(OnGameTimeInputSubmit);
+    }
+
+    private void UnbindRoomUI()
+    {
+        if (gameTimeInput != null)
+            gameTimeInput.onEndEdit.RemoveListener(OnGameTimeInputSubmit);
+    }
+
+    private void ResolveGameTimeInput()
+    {
+        if (gameTimeInput != null) return;
+
+        var all = FindObjectsOfType<TMP_InputField>(true);
+        if (all.Length > 0)
+            gameTimeInput = all[0];
+    }
+
+    private void OnGameTimeInputSubmit(string text)
+    {
+        if (TryParseFlexibleFloat(text, out var value))
+        {
+            ChangeGameTime(value);
+            if (gameTimeInput)
+                gameTimeInput.text = gameTime.ToString("0.##", CultureInfo.InvariantCulture);
+        }
+        else
+        {
+            Debug.LogWarning($"[MyRoomManager] Invalid game time: '{text}'. Keeping {gameTime}.");
+            if (gameTimeInput)
+                gameTimeInput.text = gameTime.ToString("0.##", CultureInfo.InvariantCulture);
+        }
+    }
+
+    private static bool TryParseFlexibleFloat(string text, out float value)
+    {
+        // Accept both "12.5" and "12,5"
+        text = (text ?? "").Trim();
+
+        // First try current culture
+        if (float.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out value))
+            return true;
+
+        // Then try invariant with '.' after normalizing commas
+        var normalized = text.Replace(',', '.');
+        return float.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+    }
+
+    private void ChangeGameTime(float value)
+    {
+        gameTime = Mathf.Max(0f, value);
     }
 
     public override void OnRoomServerSceneChanged(string sceneName)
@@ -21,6 +102,25 @@ public class MyRoomManager : NetworkRoomManager
             seatsByKey[seats.roleKey] = seats;
 
         _teamTank.Clear();
+
+        var timerGo = GameObject.FindWithTag("networkTimer");
+        if (timerGo != null)
+        {
+            var timer = timerGo.GetComponent<NetworkGameTimer>();
+            if (timer != null)
+            {
+                timer.Server_Initialize(gameTime);
+                Debug.Log($"[MyRoomManager] Initialized game timer with {gameTime} seconds.");
+            }
+            else
+            {
+                Debug.LogWarning("[MyRoomManager] Object tagged 'gameTimer' has no NetworkGameTimer component.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[MyRoomManager] No object tagged 'gameTimer' found in scene.");
+        }
     }
 
     public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
@@ -55,12 +155,10 @@ public class MyRoomManager : NetworkRoomManager
         if (team <= 0) return;
         if (_teamTank.ContainsKey(team)) return;
 
-        // Decide spawn transform (use start positions in scene)
         Transform start = GetStartPosition();
         Vector3 pos = start ? start.position : Vector3.zero;
         Quaternion rot = start ? start.rotation : Quaternion.identity;
 
-        // Resolve prefab via TankSelector (per-team selection)
         if (TankSelector.Instance == null)
         {
             Debug.LogError("[MyRoomManager] No TankSelector present in scene; cannot spawn team tank.");
@@ -75,7 +173,7 @@ public class MyRoomManager : NetworkRoomManager
         }
 
         var go = Instantiate(prefab, pos, rot);
-        NetworkServer.Spawn(go); // no specific client authority; both seats command via their own player objects
+        NetworkServer.Spawn(go);
         var tb = go.GetComponent<TankBrain>();
         if (tb == null)
         {
