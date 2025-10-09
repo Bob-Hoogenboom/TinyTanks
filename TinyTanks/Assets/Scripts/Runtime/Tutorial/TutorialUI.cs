@@ -25,10 +25,15 @@ public class TutorialUI : MonoBehaviour
             driverPanel.SetActive(true);
             observerPanel.SetActive(false);
         }
-        else
+        else if(role == TankRole.TANK_OBSERVER)
         {
             driverPanel.SetActive(false);
             observerPanel.SetActive(true);
+        }
+        else
+        {
+            driverPanel.SetActive(false);
+            observerPanel.SetActive(false);
         }
     }
 }
