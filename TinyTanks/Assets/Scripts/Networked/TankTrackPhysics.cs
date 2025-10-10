@@ -8,11 +8,10 @@ public class TankTrackPhysics : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
     [SerializeField] private LayerMask groundMask = ~0;
-    [SerializeField] private bool isSupposedToHaveServer = true;
+    [SerializeField] private NetworkIdentity identity;
 
     [Header("Animation")]
     [SerializeField] private Animator anim;
-    [SerializeField] private Animator netAnim;  //Not used?
     [Tooltip("This is a multiplier. it does the default animator speed and multiplies that by animSpeed. \n(animator.speed * animSpeed)")]
     //[SerializeField] private float animSpeed = 1f;
     private int _leftTrackAnim = Animator.StringToHash("LeftTrack");
@@ -27,8 +26,6 @@ public class TankTrackPhysics : MonoBehaviour
 
     [Header("Tuning")]
     [SerializeField] private float extraDownForce = 0f;
-    //[SerializeField] private float yawDamping = 0.2f;
-    //[SerializeField] private float stabilizationForce = 500f;
     [SerializeField] private float groundingForce = 1000f;
 
     [Header("Movement Variables")]
@@ -43,14 +40,11 @@ public class TankTrackPhysics : MonoBehaviour
     [Tooltip("Minimum velocity magnitude to prevent division by zero")]
     [SerializeField] private float minVelocityMagnitude = 0.01f;
     [Tooltip("Smoothing factor for track contact (0-1, higher = more responsive)")]
-    //[SerializeField] private float contactSmoothing = 0.8f;
 
     private float leftInput;
     private float rightInput;
 
     // Track contact state
-    //private float leftContactFactor = 0f;
-    //private float rightContactFactor = 0f;
     private Vector3 lastLeftNormal = Vector3.up;
     private Vector3 lastRightNormal = Vector3.up;
 
@@ -64,6 +58,7 @@ public class TankTrackPhysics : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
+        identity = GetComponent<NetworkIdentity>();
 
         // Stability guards
         rb.maxDepenetrationVelocity = 2f;
@@ -85,17 +80,11 @@ public class TankTrackPhysics : MonoBehaviour
     {
         leftInput = left;
         rightInput = right;
-        
-        anim.SetFloat(_leftTrackAnim, leftInput);
-        anim.SetFloat(_rightTrackAnim, rightInput);
     }
 
     private void FixedUpdate()
     {
-        if (isSupposedToHaveServer)
-        {
-            if (!NetworkServer.active) return;
-        }
+        if (!NetworkServer.active) return;
 
         smoothedForward = Vector3.Slerp(smoothedForward, transform.forward, forwardSmoothing).normalized;
         smoothedRight = Vector3.Slerp(smoothedRight, transform.right, forwardSmoothing).normalized;
@@ -149,11 +138,74 @@ public class TankTrackPhysics : MonoBehaviour
         if (rfHit) ApplyTrackForces(rfPt, rfHit ? rfInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
         if (rrHit) ApplyTrackForces(rrPt, rrHit ? rrInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
 
-        var velMag = rb.velocity.magnitude;
-        anim.speed = velMag * 2;
+        // ---- Track animation (no physics changes) ----
+        // Goal: forward when tank moves forward, backward when tank moves backward,
+        // and in pivot/steer cases show each track's own direction.
+        // Also add deadzones + damping to kill jitter.
+
+        float inputDead = 0.15f;         // small input deadzone
+        float velDead = 0.05f;         // ignore tiny forward velocity
+        float zeroBand = 0.25f;         // widen neutral band so it doesn't chatter around 0
+        float smoothPerSec = 12f;        // animator param slew rate (higher = snappier)
+        float step = smoothPerSec * Time.fixedDeltaTime;
+
+        // Tank forward/back sign from actual motion (fallback when inputs are idle)
+        float fwdVel = Vector3.Dot(rb.velocity, transform.forward);
+        float tankDir = Mathf.Abs(fwdVel) < velDead ? 0f : Mathf.Sign(fwdVel);
+
+        // Inputs -> {-1,0,1} with deadzone
+        float lIn = Mathf.Abs(leftInput) < inputDead ? 0f : Mathf.Sign(leftInput);
+        float rIn = Mathf.Abs(rightInput) < inputDead ? 0f : Mathf.Sign(rightInput);
+
+        float leftTarget, rightTarget;
+
+        // Pivot / neutral steer (opposite signs): show each track's commanded direction
+        if (lIn != 0f && rIn != 0f && Mathf.Sign(lIn) != Mathf.Sign(rIn))
+        {
+            leftTarget = lIn;
+            rightTarget = rIn;
+        }
+        // Both tracks driven the same way: show that direction
+        else if (lIn != 0f && rIn != 0f)
+        {
+            leftTarget = rightTarget = Mathf.Sign(lIn);
+        }
+        // Both idle: follow net vehicle movement
+        else if (lIn == 0f && rIn == 0f)
+        {
+            leftTarget = rightTarget = tankDir;
+        }
+        // One idle, one driven: driven side shows its command; idle side follows tank motion
+        else
+        {
+            if (lIn == 0f) { leftTarget = tankDir; rightTarget = rIn; }
+            else { leftTarget = lIn; rightTarget = tankDir; }
+        }
+
+        // Snap to notches {-1,0,1} with a wider neutral to avoid flicker
+        leftTarget = Mathf.Abs(leftTarget) < zeroBand ? 0f : Mathf.Sign(leftTarget);
+        rightTarget = Mathf.Abs(rightTarget) < zeroBand ? 0f : Mathf.Sign(rightTarget);
+
+        // Smooth changes without adding state fields (use Animator's current value)
+        float currL = anim != null ? anim.GetFloat(_leftTrackAnim) : 0f;
+        float currR = anim != null ? anim.GetFloat(_rightTrackAnim) : 0f;
+
+        float newL = Mathf.MoveTowards(currL, leftTarget, step);
+        float newR = Mathf.MoveTowards(currR, rightTarget, step);
+
+        // Apply to local Animator (and NetworkAnimator if you’ve wired it)
+        if (anim != null)
+        {
+            anim.SetFloat(_leftTrackAnim, newL);
+            anim.SetFloat(_rightTrackAnim, newR);
+
+            // Keep some motion at crawl speeds but avoid runaway speed at high velocity
+            float velMag = rb.velocity.magnitude;
+            anim.speed = Mathf.Clamp(0.5f + velMag * 2f, 0.5f, 3f);
+        }
     }
 
-    private void ApplyTrackForces( Vector3 contactPoint, Vector3 contactNormal, float input, float otherInput, float normalForce, bool isLeft)
+    private void ApplyTrackForces(Vector3 contactPoint, Vector3 contactNormal, float input, float otherInput, float normalForce, bool isLeft)
     {
         Vector3 lateral = Vector3.ProjectOnPlane(smoothedRight, contactNormal);
         float latMag = lateral.magnitude;
@@ -266,7 +318,7 @@ public class TankTrackPhysics : MonoBehaviour
         {
             // Oppose the current forward motion at this contact
             float brakeDir = Mathf.Sign(vFwd); //  direction
-                                               
+
             float rawBrake = currData.trackBrakeForce * currData.steerBrakeMultiplier * Mathf.Clamp01(Mathf.Abs(otherInput)); // Scale brake by how hard the other track is trying to move
 
             // Never exceed what the contact can transmit longitudinally
@@ -294,7 +346,7 @@ public class TankTrackPhysics : MonoBehaviour
         {
             totalForce = totalForce * (maxForce / forceMag);
         }
-        
+
         rb.AddForceAtPosition(totalForce, contactPoint, ForceMode.Force);
 
         // Apply lateral damping forces
