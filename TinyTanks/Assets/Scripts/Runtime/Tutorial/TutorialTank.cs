@@ -94,8 +94,8 @@ public class TutorialTank : MonoBehaviour
         _rightInput = 0f;
 
         // --- WASD Keys ---
-        _leftInput = Input.GetAxisRaw("Vertical");
-        _rightInput = Input.GetAxisRaw("Horizontal");
+        _leftInput = Input.GetAxisRaw("Horizontal");
+        _rightInput = Input.GetAxisRaw("Vertical");
 
         tankTurret.SetInputs(_leftInput, _rightInput);
     }
