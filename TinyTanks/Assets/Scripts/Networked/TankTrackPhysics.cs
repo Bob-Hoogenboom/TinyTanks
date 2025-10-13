@@ -10,6 +10,8 @@ public class TankTrackPhysics : MonoBehaviour
     [SerializeField] private LayerMask groundMask = ~0;
     [SerializeField] private NetworkIdentity identity;
 
+    [SerializeField] private bool isSupposedToHaveServer = true;
+
     [Header("Animation")]
     [SerializeField] private Animator anim;
     [Tooltip("This is a multiplier. it does the default animator speed and multiplies that by animSpeed. \n(animator.speed * animSpeed)")]
@@ -88,7 +90,10 @@ public class TankTrackPhysics : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!NetworkServer.active) return;
+        if (isSupposedToHaveServer)
+        {
+            if (!NetworkServer.active) return;
+        }
 
         smoothedForward = Vector3.Slerp(smoothedForward, transform.forward, forwardSmoothing).normalized;
         smoothedRight = Vector3.Slerp(smoothedRight, transform.right, forwardSmoothing).normalized;
