@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class TankTurretPhysics : NetworkBehaviour
+public class TankTurretPhysics : MonoBehaviour
 {
     const float EPS = 1e-4f;
 
@@ -15,6 +15,8 @@ public class TankTurretPhysics : NetworkBehaviour
     [Range(0f, 1f)] public float inputDeadzone = 0.05f;
 
     public enum IdleElectricalMode { CoastOpen, DynamicBrakeShort, HoldZero }
+
+    [SerializeField] private bool isSupposedToHaveServer = true;
 
     [Header("Idle Electrical Mode (on stick release)")]
     public IdleElectricalMode idleModeYaw = IdleElectricalMode.DynamicBrakeShort;
@@ -92,7 +94,10 @@ public class TankTurretPhysics : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (!NetworkServer.active) return;
+        if (isSupposedToHaveServer)
+        {
+            if (!NetworkServer.active) return;
+        }
 
         float dt = Time.fixedDeltaTime;
 
