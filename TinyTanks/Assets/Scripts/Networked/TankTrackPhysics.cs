@@ -81,7 +81,7 @@ public class TankTrackPhysics : MonoBehaviour
         smoothedRight = transform.right;
     }
 
-    public void SetInputs(float left, float right, bool hasBattery)
+    public void SetInputs(float left, float right, bool hasBattery = true)
     {
         leftInput = left;
         rightInput = right;
