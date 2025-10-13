@@ -32,7 +32,9 @@ public class TankBrain : NetworkBehaviour
     [Header("Firing")]
     [SerializeField] private GameObject serverShellPrefab;
     [SyncVar] private double _reloadEndTime;
-    [SerializeField] private float reloadTime = 5f;
+    [SerializeField] private float reloadTime;
+    [SerializeField] private float baseReloadTime = 5f;
+    [SerializeField] private float noBatteryReloadTime = 10f;
     [SerializeField] private float shellSpeed = 10f;
     [SyncVar(hook = nameof(OnIsReloadingChanged))]
     private bool isReloading = false;
@@ -51,6 +53,7 @@ public class TankBrain : NetworkBehaviour
     [SyncVar(hook = nameof(OnBatteryChanged))]
     public float currentBtry = 50f;
     [SerializeField] public float maxBtry { private set; get; } = 100f;
+    [SerializeField] private bool hasBattery;
     [SerializeField] private float batteryDrainMove = 0.5f;
     [SerializeField] private float batteryDrainTurning = 0.3f;
     [SerializeField] private float batteryDrainNeutralSteer = 0.2f;
@@ -76,6 +79,9 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Image bulletReloadImage;
     [SerializeField] private Image reloadTimerImage;
 
+    [Header("UI Battery")]
+    [SerializeField] private TMP_Text[] batteryTexts;
+
     [Header("Spawning")]
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private Transform spawnLocation;
@@ -89,7 +95,8 @@ public class TankBrain : NetworkBehaviour
         if (!turret) turret = GetComponent<TankTurretPhysics>();
         currHealth = maxHealth;
         _isDead = false;
-
+        hasBattery = true;
+        reloadTime = baseReloadTime;
         currentBtry = maxBtry;
     }
 
@@ -125,7 +132,7 @@ public class TankBrain : NetworkBehaviour
     {
         if (!isServer || _rb == null) return;
         if (_isDead) return;
-        if (tracks) tracks.SetInputs(_leftTrack, _rightTrack);
+        if (tracks) tracks.SetInputs(_leftTrack, _rightTrack, hasBattery);
         if (turret) turret.SetInputs(_yaw, _pitch);
 
         Server_ApplyBatteryMovementDrain(Time.fixedDeltaTime);
@@ -199,7 +206,16 @@ public class TankBrain : NetworkBehaviour
     private void Server_ConsumeBattery(float amount)
     {
         if (amount <= 0f) return;
-        currentBtry = Mathf.Max(0f, currentBtry - amount);
+
+        float prev = currentBtry;
+        currentBtry = Mathf.Max(0f, prev - amount);
+
+        if (prev > 0f && currentBtry <= 0f)
+        {
+            hasBattery = false;
+            Debug.Log("Battery depleted -> disabling systems");
+            reloadTime = noBatteryReloadTime;
+        }
     }
 
     [Server]
@@ -214,6 +230,12 @@ public class TankBrain : NetworkBehaviour
         }
 
         currentBtry = newBtry;
+
+        if(currentBtry > 0)
+        {
+            reloadTime = baseReloadTime;
+            hasBattery = true;
+        }    
     }
 
     [Server]
@@ -301,7 +323,8 @@ public class TankBrain : NetworkBehaviour
     [Client]
     private void OnBatteryChanged(float oldVal, float newVal)
     {
-        // update UI
+        foreach(var text in batteryTexts)
+            text.text = $"Battery level: " + (float)Math.Round(newVal, 2) + "%";
     }
 
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)

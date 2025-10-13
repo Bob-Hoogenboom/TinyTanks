@@ -1292,12 +1292,15 @@ MonoBehaviour:
   serverShellPrefab: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
     type: 3}
   reloadTime: 5
+  baseReloadTime: 5
+  noBatteryReloadTime: 10
   shellSpeed: 10
   hasBullet: 1
   lives: 3
   currHealth: 0
   respawnTime: 5
   currentBtry: 50
+  hasBattery: 0
   batteryDrainMove: 0.5
   batteryDrainTurning: 0.3
   batteryDrainNeutralSteer: 0.2
@@ -1322,6 +1325,9 @@ MonoBehaviour:
   - {fileID: 3700840994610123791}
   bulletReloadImage: {fileID: 7173380602458632589}
   reloadTimerImage: {fileID: 1994328926644164528}
+  batteryTexts:
+  - {fileID: 8494071038400347386}
+  - {fileID: 2863795757971131142}
   spawnPoints: []
   spawnLocation: {fileID: 0}
   minSpawnDistance: 20
@@ -2788,6 +2794,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42a37a046e3ec104db7d766801b4dd13, type: 3}
+--- !u!114 &2863795757971131142 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 834722578565264614, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 3182840776472313824}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3254153111119215370 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 72809461529216234, guid: 42a37a046e3ec104db7d766801b4dd13,
@@ -3381,6 +3399,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8494071038400347386 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1408379373281534602, guid: eee26696c6da89043b3aa63ff9667d52,
+    type: 3}
+  m_PrefabInstance: {fileID: 7379870406731619952}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8844012762001967137 stripped
