@@ -1,4 +1,5 @@
 using Cinemachine;
+using Mirror;
 using System;
 using UnityEngine;
 
@@ -15,9 +16,16 @@ public class TutorialTank : MonoBehaviour
     [SerializeField] private TankTrackPhysics tankTrack;
     [SerializeField] private TankTurretPhysics tankTurret;
 
+    [Space]
     [SerializeField] private CinemachineVirtualCamera driverCam;
     [SerializeField] private CinemachineVirtualCamera observerCam;
     [SerializeField] private CinemachineVirtualCamera spectatorCam;
+
+    [Header("Observer")]
+    [SerializeField] private float shellSpeed = 10f;
+    [SerializeField] private Transform shellSpawn;
+    [SerializeField] private GameObject shellPrefab;
+
 
     [Header("State")]
     [SerializeField] private TankRole currentRole = TankRole.TANK_DRIVER;
@@ -64,6 +72,11 @@ public class TutorialTank : MonoBehaviour
         {
             //In Observer state
             Aiming();
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Shoot();
+            }
         }
         else
         {
@@ -86,7 +99,7 @@ public class TutorialTank : MonoBehaviour
     }
 
 
-    #region Gunner Controls
+    #region Observer Controls
     private void Aiming()
     {
         // Reset
@@ -99,9 +112,20 @@ public class TutorialTank : MonoBehaviour
 
         tankTurret.SetInputs(_leftInput, _rightInput);
     }
+
+    private void Shoot()
+    {
+        Quaternion rotation = shellSpawn.rotation;
+        GameObject bulletObj = Instantiate(shellPrefab, shellSpawn.position, rotation);
+        Rigidbody brb = bulletObj.GetComponent<Rigidbody>();
+        Bullet bullet = bulletObj.GetComponent<Bullet>();
+        //bullet.parent = _bulletParent.gameObject; //Why set a parent?
+        brb.AddForce(shellSpawn.forward * shellSpeed, ForceMode.VelocityChange);
+        Destroy(bulletObj, 5f);
+    }
     #endregion
 
-    #region Runner Controls
+    #region Driver Controls
     private void Driving()
     {
         // Reset
