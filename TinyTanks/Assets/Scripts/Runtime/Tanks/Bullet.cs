@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -27,7 +25,7 @@ public class Bullet : MonoBehaviour
     {
         
 
-        if (other.gameObject.layer == 3)
+        if (other.gameObject.layer == 3) // player hit
         {
             Debug.Log(other.gameObject.name);
             if(other.gameObject != parent)
@@ -46,7 +44,7 @@ public class Bullet : MonoBehaviour
                 Destroy(hitAudio.gameObject, 4);
             }         
         }
-        else if(other.gameObject.layer != 3 && other.gameObject.layer != 7)
+        else if(other.gameObject.layer != 3 && other.gameObject.layer != 7) // not player and not vxf?
         {
             var vxf = Instantiate(_enviormentHitVFX, this.transform.position, this.transform.rotation);
             Destroy(vxf, 3);
@@ -65,4 +63,6 @@ public class Bullet : MonoBehaviour
         }
 
     }
+
+
 }
