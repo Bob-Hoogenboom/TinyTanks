@@ -10,7 +10,7 @@ public enum TankRole
     TANK_SPECTATOR
 }
 
-public class TutorialTank : MonoBehaviour
+public class TutorialTank : MonoBehaviour, IDamagable
 {
     [Header("References")]
     [SerializeField] private TankTrackPhysics tankTrack;
@@ -34,6 +34,8 @@ public class TutorialTank : MonoBehaviour
     private float _leftInput = 0f;
     private float _rightInput = 0f;
 
+    private float _hitpoints;
+    public float HitPoints => _hitpoints;
 
     private void Start()
     {
@@ -145,6 +147,12 @@ public class TutorialTank : MonoBehaviour
             _rightInput = -1f;
 
         tankTrack.SetInputs(_leftInput, _rightInput);
+    }
+
+    public void Damage()
+    {
+        Debug.Log("AUWW!");
+
     }
     #endregion
 }
