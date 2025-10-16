@@ -55,6 +55,9 @@ public class TankTrackPhysics : MonoBehaviour
     private Vector3 smoothedRight = Vector3.right;
     private float forwardSmoothing = 0.9f;
 
+    private float noBatteryTrackMultiplier = 0.5f;
+    private bool _hasBattery;
+
     private void Reset()
     {
         rb = GetComponent<Rigidbody>();
@@ -78,10 +81,11 @@ public class TankTrackPhysics : MonoBehaviour
         smoothedRight = transform.right;
     }
 
-    public void SetInputs(float left, float right)
+    public void SetInputs(float left, float right, bool hasBattery = true)
     {
         leftInput = left;
         rightInput = right;
+        _hasBattery = hasBattery;
     }
 
     private void FixedUpdate()
@@ -136,81 +140,17 @@ public class TankTrackPhysics : MonoBehaviour
         Vector3 rrPt = rrHit ? rrInfo.point : rightRearStart - down * (trackRayLength * 0.5f);
 
         // LEFT track forces (front + rear if present)
-        if (lfHit) ApplyTrackForces(lfPt, lfHit ? lfInfo.normal : lastLeftNormal, leftInput, rightInput, leftShare, true);
-        if (lrHit) ApplyTrackForces(lrPt, lrHit ? lrInfo.normal : lastLeftNormal, leftInput, rightInput, leftShare, true);
+        if (lfHit) ApplyTrackForces(lfPt, lfHit ? lfInfo.normal : lastLeftNormal, leftInput, rightInput, leftShare, true, _hasBattery);
+        if (lrHit) ApplyTrackForces(lrPt, lrHit ? lrInfo.normal : lastLeftNormal, leftInput, rightInput, leftShare, true, _hasBattery);
 
         // RIGHT track forces (front + rear if present)
-        if (rfHit) ApplyTrackForces(rfPt, rfHit ? rfInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
-        if (rrHit) ApplyTrackForces(rrPt, rrHit ? rrInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false);
+        if (rfHit) ApplyTrackForces(rfPt, rfHit ? rfInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false, _hasBattery);
+        if (rrHit) ApplyTrackForces(rrPt, rrHit ? rrInfo.normal : lastRightNormal, rightInput, leftInput, rightShare, false, _hasBattery);
 
-        // ---- Track animation (no physics changes) ----
-        // Goal: forward when tank moves forward, backward when tank moves backward,
-        // and in pivot/steer cases show each track's own direction.
-        // Also add deadzones + damping to kill jitter.
-
-        float inputDead = 0.15f;         // small input deadzone
-        float velDead = 0.05f;         // ignore tiny forward velocity
-        float zeroBand = 0.25f;         // widen neutral band so it doesn't chatter around 0
-        float smoothPerSec = 12f;        // animator param slew rate (higher = snappier)
-        float step = smoothPerSec * Time.fixedDeltaTime;
-
-        // Tank forward/back sign from actual motion (fallback when inputs are idle)
-        float fwdVel = Vector3.Dot(rb.velocity, transform.forward);
-        float tankDir = Mathf.Abs(fwdVel) < velDead ? 0f : Mathf.Sign(fwdVel);
-
-        // Inputs -> {-1,0,1} with deadzone
-        float lIn = Mathf.Abs(leftInput) < inputDead ? 0f : Mathf.Sign(leftInput);
-        float rIn = Mathf.Abs(rightInput) < inputDead ? 0f : Mathf.Sign(rightInput);
-
-        float leftTarget, rightTarget;
-
-        // Pivot / neutral steer (opposite signs): show each track's commanded direction
-        if (lIn != 0f && rIn != 0f && Mathf.Sign(lIn) != Mathf.Sign(rIn))
-        {
-            leftTarget = lIn;
-            rightTarget = rIn;
-        }
-        // Both tracks driven the same way: show that direction
-        else if (lIn != 0f && rIn != 0f)
-        {
-            leftTarget = rightTarget = Mathf.Sign(lIn);
-        }
-        // Both idle: follow net vehicle movement
-        else if (lIn == 0f && rIn == 0f)
-        {
-            leftTarget = rightTarget = tankDir;
-        }
-        // One idle, one driven: driven side shows its command; idle side follows tank motion
-        else
-        {
-            if (lIn == 0f) { leftTarget = tankDir; rightTarget = rIn; }
-            else { leftTarget = lIn; rightTarget = tankDir; }
-        }
-
-        // Snap to notches {-1,0,1} with a wider neutral to avoid flicker
-        leftTarget = Mathf.Abs(leftTarget) < zeroBand ? 0f : Mathf.Sign(leftTarget);
-        rightTarget = Mathf.Abs(rightTarget) < zeroBand ? 0f : Mathf.Sign(rightTarget);
-
-        // Smooth changes without adding state fields (use Animator's current value)
-        float currL = anim != null ? anim.GetFloat(_leftTrackAnim) : 0f;
-        float currR = anim != null ? anim.GetFloat(_rightTrackAnim) : 0f;
-
-        float newL = Mathf.MoveTowards(currL, leftTarget, step);
-        float newR = Mathf.MoveTowards(currR, rightTarget, step);
-
-        // Apply to local Animator (and NetworkAnimator if you’ve wired it)
-        if (anim != null)
-        {
-            anim.SetFloat(_leftTrackAnim, newL);
-            anim.SetFloat(_rightTrackAnim, newR);
-
-            // Keep some motion at crawl speeds but avoid runaway speed at high velocity
-            float velMag = rb.velocity.magnitude;
-            anim.speed = Mathf.Clamp(0.5f + velMag * 2f, 0.5f, 3f);
-        }
+        ApplyTrackAnimation();
     }
 
-    private void ApplyTrackForces(Vector3 contactPoint, Vector3 contactNormal, float input, float otherInput, float normalForce, bool isLeft)
+    private void ApplyTrackForces(Vector3 contactPoint, Vector3 contactNormal, float input, float otherInput, float normalForce, bool isLeft, bool hasBattery)
     {
         Vector3 lateral = Vector3.ProjectOnPlane(smoothedRight, contactNormal);
         float latMag = lateral.magnitude;
@@ -257,6 +197,7 @@ public class TankTrackPhysics : MonoBehaviour
 
         float drive = Mathf.Clamp(smoothedInput * engineForceCap, -tractionLong, tractionLong);
 
+        //Lateral force
         Vector3 latF = Vector3.zero;
         if (vSlipMag > slipDead)
         {
@@ -352,6 +293,9 @@ public class TankTrackPhysics : MonoBehaviour
             totalForce = totalForce * (maxForce / forceMag);
         }
 
+        if (hasBattery != true) //if battery is dead, reduce force
+            totalForce *= noBatteryTrackMultiplier;
+
         rb.AddForceAtPosition(totalForce, contactPoint, ForceMode.Force);
 
         // Apply lateral damping forces
@@ -369,6 +313,68 @@ public class TankTrackPhysics : MonoBehaviour
         {
             rb.AddForceAtPosition(contactNormal * (-extraDownForce - groundingForce * Time.fixedDeltaTime), contactPoint, ForceMode.Force);
         }
+    }
+
+    private void ApplyTrackAnimation()
+    {
+        float inputDead = 0.15f;         // small input deadzone
+        float velDead = 0.05f;         // ignore tiny forward velocity
+        float zeroBand = 0.25f;         // widen neutral band so it doesn't chatter around 0
+        float smoothPerSec = 12f;        // animator param slew rate (higher = snappier)
+        float step = smoothPerSec * Time.fixedDeltaTime;
+
+        // Tank forward/back sign from actual motion (fallback when inputs are idle)
+        float fwdVel = Vector3.Dot(rb.velocity, transform.forward);
+        float tankDir = Mathf.Abs(fwdVel) < velDead ? 0f : Mathf.Sign(fwdVel);
+
+        // Inputs -> {-1,0,1} with deadzone
+        float lIn = Mathf.Abs(leftInput) < inputDead ? 0f : Mathf.Sign(leftInput);
+        float rIn = Mathf.Abs(rightInput) < inputDead ? 0f : Mathf.Sign(rightInput);
+
+        float leftTarget, rightTarget;
+
+        // Pivot / neutral steer (opposite signs): show each track's commanded direction
+        if (lIn != 0f && rIn != 0f && Mathf.Sign(lIn) != Mathf.Sign(rIn))
+        {
+            leftTarget = lIn;
+            rightTarget = rIn;
+        }
+        // Both tracks driven the same way: show that direction
+        else if (lIn != 0f && rIn != 0f)
+        {
+            leftTarget = rightTarget = Mathf.Sign(lIn);
+        }
+        // Both idle: follow net vehicle movement
+        else if (lIn == 0f && rIn == 0f)
+        {
+            leftTarget = rightTarget = tankDir;
+        }
+        // One idle, one driven: driven side shows its command; idle side follows tank motion
+        else
+        {
+            if (lIn == 0f) { leftTarget = tankDir; rightTarget = rIn; }
+            else { leftTarget = lIn; rightTarget = tankDir; }
+        }
+
+        // Snap to notches {-1,0,1} with a wider neutral to avoid flicker
+        leftTarget = Mathf.Abs(leftTarget) < zeroBand ? 0f : Mathf.Sign(leftTarget);
+        rightTarget = Mathf.Abs(rightTarget) < zeroBand ? 0f : Mathf.Sign(rightTarget);
+
+        // Smooth changes without adding state fields (use Animator's current value)
+        float currL = anim != null ? anim.GetFloat(_leftTrackAnim) : 0f;
+        float currR = anim != null ? anim.GetFloat(_rightTrackAnim) : 0f;
+
+        float newL = Mathf.MoveTowards(currL, leftTarget, step);
+        float newR = Mathf.MoveTowards(currR, rightTarget, step);
+
+        if (anim == null) return;
+
+        anim.SetFloat(_leftTrackAnim, newL);
+        anim.SetFloat(_rightTrackAnim, newR);
+
+        // Keep some motion at crawl speeds but avoid runaway speed at high velocity
+        float velMag = rb.velocity.magnitude;
+        anim.speed = Mathf.Clamp(0.5f + velMag * 2f, 0.5f, 3f);
     }
 
     private void CheckTrackSurface(RaycastHit hitInfo)
