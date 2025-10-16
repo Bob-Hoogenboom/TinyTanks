@@ -1,5 +1,4 @@
 using Cinemachine;
-using Mirror;
 using System;
 using UnityEngine;
 
@@ -21,11 +20,14 @@ public class TutorialTank : MonoBehaviour, IDamagable
     [SerializeField] private CinemachineVirtualCamera observerCam;
     [SerializeField] private CinemachineVirtualCamera spectatorCam;
 
+    [Header("Settings")]
+    [SerializeField] private float hitpoints = 3f;
+    public float HitPoints => hitpoints;
+
     [Header("Observer")]
     [SerializeField] private float shellSpeed = 10f;
     [SerializeField] private Transform shellSpawn;
     [SerializeField] private GameObject shellPrefab;
-
 
     [Header("State")]
     [SerializeField] private TankRole currentRole = TankRole.TANK_DRIVER;
@@ -34,8 +36,6 @@ public class TutorialTank : MonoBehaviour, IDamagable
     private float _leftInput = 0f;
     private float _rightInput = 0f;
 
-    private float _hitpoints;
-    public float HitPoints => _hitpoints;
 
     private void Start()
     {
@@ -149,10 +149,11 @@ public class TutorialTank : MonoBehaviour, IDamagable
         tankTrack.SetInputs(_leftInput, _rightInput);
     }
 
-    public void Damage()
+    public void Damage(float damage)
     {
         Debug.Log("AUWW!");
-
+        hitpoints -= damage;
+        //do some damage effect here
     }
     #endregion
 }
