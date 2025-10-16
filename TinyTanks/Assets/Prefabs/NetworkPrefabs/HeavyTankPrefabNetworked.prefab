@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 8595096246642026929}
   - component: {fileID: 2885096761928668274}
   - component: {fileID: 6755206698558341908}
+  - component: {fileID: 6384142559971998421}
   m_Layer: 9
   m_Name: DriverCamera
   m_TagString: driverCam
@@ -256,6 +257,14 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!81 &6384142559971998421
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008626757542273697}
+  m_Enabled: 1
 --- !u!1 &1135936659148176330
 GameObject:
   m_ObjectHideFlags: 0
