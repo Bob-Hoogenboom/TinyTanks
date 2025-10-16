@@ -1321,8 +1321,8 @@ MonoBehaviour:
   - {fileID: 3254153111119215370}
   reloadGroup: {fileID: 1690052596747769705}
   bulletStateTexts:
-  - {fileID: 1510279918958740277}
-  - {fileID: 3700840994610123791}
+  - {fileID: 0}
+  - {fileID: 0}
   bulletReloadImage: {fileID: 7173380602458632589}
   reloadTimerImage: {fileID: 1994328926644164528}
   batteryTexts:
@@ -1352,6 +1352,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 7168
   identity: {fileID: 4193881932598728279}
+  isSupposedToHaveServer: 1
   anim: {fileID: 7627067356897337205}
   contactRadius: 0.25
   contactCapsuleHalfLength: 0.43
@@ -1378,12 +1379,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851d45d65b8e55145a8f9f1a21baf432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
   yawPivot: {fileID: 4350366963123908190}
   pitchPivot: {fileID: 9098264802421584220}
   inputDeadzone: 0.05
+  isSupposedToHaveServer: 1
   idleModeYaw: 1
   idleModePitch: 1
   yawSettings: {fileID: 11400000, guid: 1efd6c009c4f86345a9c51ffc612141c, type: 2}
@@ -2818,18 +2817,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3700840994610123791 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2267491581788564463, guid: 42a37a046e3ec104db7d766801b4dd13,
-    type: 3}
-  m_PrefabInstance: {fileID: 3182840776472313824}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!225 &5576064128720513239 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 7010292738594543415, guid: 42a37a046e3ec104db7d766801b4dd13,
@@ -3027,7 +3014,7 @@ PrefabInstance:
     - target: {fileID: 1895708012193612146, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2071988629620841301, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
@@ -3151,6 +3138,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5933617521158145350, guid: eee26696c6da89043b3aa63ff9667d52,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -354
       objectReference: {fileID: 0}
     - target: {fileID: 5938965578871934987, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
@@ -3347,18 +3339,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eee26696c6da89043b3aa63ff9667d52, type: 3}
---- !u!114 &1510279918958740277 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8259327514096622917, guid: eee26696c6da89043b3aa63ff9667d52,
-    type: 3}
-  m_PrefabInstance: {fileID: 7379870406731619952}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!225 &1690052596747769705 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 8151186472935311641, guid: eee26696c6da89043b3aa63ff9667d52,
