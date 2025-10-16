@@ -1025,8 +1025,8 @@ MonoBehaviour:
   - {fileID: 4483614427681821395}
   reloadGroup: {fileID: 3951866441885434388}
   bulletStateTexts:
-  - {fileID: 3843272401665119816}
-  - {fileID: 940940687276152709}
+  - {fileID: 0}
+  - {fileID: 0}
   bulletReloadImage: {fileID: 4769149073595278576}
   reloadTimerImage: {fileID: 4183522863310406349}
   batteryTexts:
@@ -1035,6 +1035,8 @@ MonoBehaviour:
   spawnPoints: []
   spawnLocation: {fileID: 0}
   minSpawnDistance: 20
+  smokeVFX: {fileID: 3258551338417457710, guid: 2880db6858a8e81479ece32424a72b20,
+    type: 3}
   gizmoDrawTrackCasts: 1
   gizmoOnlyWhenSelected: 1
   gizmoDrawNormals: 1
@@ -1537,33 +1539,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &940940687276152709 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1811761984569701095, guid: b586fb6fdfd76b24e8b79d5f651f7ec4,
-    type: 3}
-  m_PrefabInstance: {fileID: 1453061227400652130}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1868110690848196748 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 992643196180114926, guid: b586fb6fdfd76b24e8b79d5f651f7ec4,
-    type: 3}
-  m_PrefabInstance: {fileID: 1453061227400652130}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3843272401665119816 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2412878953750737706, guid: b586fb6fdfd76b24e8b79d5f651f7ec4,
     type: 3}
   m_PrefabInstance: {fileID: 1453061227400652130}
   m_PrefabAsset: {fileID: 0}

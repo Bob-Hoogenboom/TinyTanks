@@ -87,6 +87,9 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Transform spawnLocation;
     [SerializeField] private float minSpawnDistance = 20;
 
+    [Header("VFX")]
+    [SerializeField] private GameObject smokeVFX;
+
     public override void OnStartServer()
     {
         _rb = GetComponent<Rigidbody>();
@@ -147,11 +150,20 @@ public class TankBrain : NetworkBehaviour
         _pitch = Mathf.Clamp(pitchDelta, -1f, 1f);
     }
 
+    [Client]
+    public void SpawnSmokeVFX()
+    {
+        var _barrelSmoke = Instantiate(smokeVFX, muzzle.transform.position, muzzle.transform.rotation);
+        Destroy(_barrelSmoke, 3);
+    }
+
     [Server]
     public void Server_SetOffGun(CrewSeat from)
     {
         if (from != driver) return;
         if (!hasBullet) return;
+
+        SpawnSmokeVFX();
 
         var velocity = turretPitchPivot.transform.forward * shellSpeed;
         GameObject serverShellClone = Instantiate(serverShellPrefab, muzzle.transform.position, turretPitchPivot.transform.rotation);
@@ -189,15 +201,20 @@ public class TankBrain : NetworkBehaviour
     {
         float aL = Mathf.Abs(_leftTrack);
         float aR = Mathf.Abs(_rightTrack);
+
         bool moving = (aL > moveInputThreshold) || (aR > moveInputThreshold);
         if (!moving) return;
 
-        float drain = batteryDrainMove;
-        float turnFactor = Mathf.Clamp01(Mathf.Abs(aL - aR));
-        drain += batteryDrainTurning * turnFactor;
+        float drain = 0;
 
-        bool neutralSteer = (_leftTrack * _rightTrack) < -0.2f;
-        if (neutralSteer) drain += batteryDrainNeutralSteer;
+        if (aR == 0 && aL > 0 || (aR == 0 && aL > 0))
+            drain = batteryDrainTurning;
+        else if(aL == 0 && aR > 0 || (aL == 0 && aR > 0))
+            drain = batteryDrainTurning;
+        else if(aL > 0 && aR > 0 || aL < 0 && aR < 0)
+            drain = batteryDrainMove;
+        else if((_leftTrack * _rightTrack) < -0.2f)
+            drain += batteryDrainNeutralSteer;
 
         Server_ConsumeBattery(drain * dt);
     }
