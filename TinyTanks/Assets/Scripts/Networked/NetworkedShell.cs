@@ -20,9 +20,9 @@ public class NetworkedShell : NetworkBehaviour
     [SerializeField] private GameObject enviormentHitVFX;
 
     [Header("Audio")]
-    public AudioSource bulletWhistle;
-    public AudioSource tankHitAudioSource;
-    public AudioSource enviormentHitAudioSource;
+    [SerializeField] private AudioSource bulletWhistle;
+    [SerializeField] private AudioSource tankHitAudioSource;
+    [SerializeField] private AudioSource enviormentHitAudioSource;
 
     private Rigidbody rb;
 

@@ -1294,6 +1294,7 @@ MonoBehaviour:
   syncInterval: 0
   tracks: {fileID: 4768541386785244533}
   turret: {fileID: 6524632739264611629}
+  impactThreshold: 2
   tankBody: {fileID: 1128666208933501239}
   turretYawPivot: {fileID: 4350366963123908190}
   turretPitchPivot: {fileID: 9098264802421584220}
@@ -1339,9 +1340,17 @@ MonoBehaviour:
   - {fileID: 2863795757971131142}
   spawnPoints: []
   spawnLocation: {fileID: 0}
-  minSpawnDistance: 20
+  minSpawnDistance: 40
   smokeVFX: {fileID: 3258551338417457710, guid: 2880db6858a8e81479ece32424a72b20,
     type: 3}
+  shootingAudio: {fileID: 7148730396052411244}
+  driveIntoEnviormentAudio: {fileID: 4218643126099155634}
+  rotateCapulaAudio: {fileID: 4561605576944843200}
+  startDrivingAudio: {fileID: 1817239986922378986}
+  duringDrivingAudio: {fileID: 2061025343100433159}
+  endinDrivingAudio: {fileID: 5183548490248063132}
+  idleAudio: {fileID: 4924079014967506921}
+  reloadingAudio: {fileID: 3446033813015459213}
   gizmoDrawTrackCasts: 1
   gizmoOnlyWhenSelected: 1
   gizmoDrawNormals: 1
@@ -2615,8 +2624,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 3189010969866415801, guid: 42a37a046e3ec104db7d766801b4dd13,
         type: 3}
       propertyPath: m_sharedMaterial
