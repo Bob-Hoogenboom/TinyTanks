@@ -86,7 +86,9 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Image reloadTimerImage;
 
     [Header("UI Battery")]
-    [SerializeField] private TMP_Text[] batteryTexts;
+    [SerializeField] private Sprite[] batteryImages;
+    [SerializeField] private Image[] currImages;
+    private int _lastSpriteIndex;
 
     [Header("Spawning")]
     [SerializeField] private Transform[] spawnPoints;
@@ -346,7 +348,7 @@ public class TankBrain : NetworkBehaviour
     [Client]
     private void OnIsDrivingChanged(bool _, bool isDriving)
     {
-        if(isDriving == false)
+        if (isDriving == false)
         {
             startDrivingAudio.Stop();
             if (duringDrivingAudio.isPlaying == true)
@@ -356,7 +358,7 @@ public class TankBrain : NetworkBehaviour
             }
             idleAudio.PlayDelayed(1);
         }
-        else if(isDriving == true)
+        else if (isDriving == true)
         {
             idleAudio.Stop();
             startDrivingAudio.Play();
@@ -367,7 +369,7 @@ public class TankBrain : NetworkBehaviour
     [Client]
     private void OnHasBulletChanged(bool _, bool hasBullet)
     {
-        if(!hasBullet)
+        if (!hasBullet)
         {
             var _barrelSmoke = Instantiate(smokeVFX, muzzle.transform.position, muzzle.transform.rotation);
             Destroy(_barrelSmoke, 3);
@@ -397,8 +399,18 @@ public class TankBrain : NetworkBehaviour
     [Client]
     private void OnBatteryChanged(float oldVal, float newVal)
     {
-        foreach (var text in batteryTexts)
-            text.text = $"Battery level: " + (float)Math.Round(newVal, 2) + "%";
+        float clamped = Mathf.Clamp(newVal, 0f, 100f);
+        int index;
+        if (clamped > 80f) index = 0;
+        else if (clamped > 60f) index = 1;
+        else if (clamped > 40f) index = 2;
+        else if (clamped > 20f) index = 3;
+        else if (clamped > 0f) index = 4;
+        else index = 5;
+
+        var sprite = batteryImages[index];
+        foreach (var image in currImages)
+            image.sprite = sprite;
     }
 
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
