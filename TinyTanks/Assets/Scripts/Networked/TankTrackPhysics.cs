@@ -98,20 +98,20 @@ public class TankTrackPhysics : MonoBehaviour
         smoothedForward = Vector3.Slerp(smoothedForward, transform.forward, forwardSmoothing).normalized;
         smoothedRight = Vector3.Slerp(smoothedRight, transform.right, forwardSmoothing).normalized;
 
-        // --- compute track anchor bases (midpoints) ---
+        // compute track anchor bases (midpoints)
         Vector3 leftMid = transform.TransformPoint(new Vector3(-trackSpacing * 0.5f, trackRayStartHeight, 0f));
         Vector3 rightMid = transform.TransformPoint(new Vector3(trackSpacing * 0.5f, trackRayStartHeight, 0f));
         Vector3 fwd = transform.forward;
         Vector3 down = -transform.up;
 
-        // --- define front/rear cast starts for each track ---
+        // define front/rear cast starts for each track
         float anchorHalfLen = contactCapsuleHalfLength; // half the contact length along the track
         Vector3 leftFrontStart = leftMid + fwd * anchorHalfLen;
         Vector3 leftRearStart = leftMid - fwd * anchorHalfLen;
         Vector3 rightFrontStart = rightMid + fwd * anchorHalfLen;
         Vector3 rightRearStart = rightMid - fwd * anchorHalfLen;
 
-        // --- sphere casts straight down at each anchor ---
+        // sphere casts straight down at each anchor
         bool lfHit = Physics.SphereCast(leftFrontStart, contactRadius, down, out RaycastHit lfInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
         bool lrHit = Physics.SphereCast(leftRearStart, contactRadius, down, out RaycastHit lrInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
         bool rfHit = Physics.SphereCast(rightFrontStart, contactRadius, down, out RaycastHit rfInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
@@ -133,7 +133,7 @@ public class TankTrackPhysics : MonoBehaviour
         float leftShare = leftHits > 0 ? normalPerTrack / leftHits : 0f;
         float rightShare = rightHits > 0 ? normalPerTrack / rightHits : 0f;
 
-        // fallbacks if a spherecast misses (keeps behavior graceful when airborne)
+        // fallbacks if a spherecast misses
         Vector3 lfPt = lfHit ? lfInfo.point : leftFrontStart - down * (trackRayLength * 0.5f);
         Vector3 lrPt = lrHit ? lrInfo.point : leftRearStart - down * (trackRayLength * 0.5f);
         Vector3 rfPt = rfHit ? rfInfo.point : rightFrontStart - down * (trackRayLength * 0.5f);

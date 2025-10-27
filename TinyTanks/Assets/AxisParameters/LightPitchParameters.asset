@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a5d1a5235d14a74e8227d35944cf5ee, type: 3}
   m_Name: LightPitchParameters
   m_EditorClassIdentifier: 
-  stallTorque: 400
-  freeSpeedDegPerSec: 35
-  inertia: 60
+  stallTorque: 300
+  freeSpeedDegPerSec: 15
+  inertia: 250
   tauStatic: 48
   tauCoulomb: 32
   stribeckDegPerSec: 4
   bMechanical: 0
-  dynamicBrake: 0
+  dynamicBrake: 300
