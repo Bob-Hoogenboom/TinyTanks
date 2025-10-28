@@ -22,6 +22,11 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private TankTurretPhysics turret;
     private float _yaw;
     private float _pitch;
+    [SerializeField] private float impactThreshold = 5;
+    [SyncVar(hook = nameof(OnIsDrivingChanged))]
+    private bool isDriving = false;
+    [SyncVar(hook = nameof(OnIsRotatingChanged))]
+    private bool isRotating = false;
 
     [Header("Tank Parts")]
     [SerializeField] private GameObject tankBody;
@@ -36,6 +41,7 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private float baseReloadTime = 5f;
     [SerializeField] private float noBatteryReloadTime = 10f;
     [SerializeField] private float shellSpeed = 10f;
+
     [SyncVar(hook = nameof(OnIsReloadingChanged))]
     private bool isReloading = false;
     [SyncVar(hook = nameof(OnHasBulletChanged))]
@@ -80,12 +86,27 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Image reloadTimerImage;
 
     [Header("UI Battery")]
-    [SerializeField] private TMP_Text[] batteryTexts;
+    [SerializeField] private Sprite[] batteryImages;
+    [SerializeField] private Image[] currImages;
+    private int _lastSpriteIndex;
 
     [Header("Spawning")]
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private Transform spawnLocation;
     [SerializeField] private float minSpawnDistance = 20;
+
+    [Header("VFX")]
+    [SerializeField] private GameObject smokeVFX;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource shootingAudio;
+    [SerializeField] private AudioSource driveIntoEnviormentAudio;
+    [SerializeField] private AudioSource rotateCapulaAudio;
+    [SerializeField] private AudioSource startDrivingAudio;
+    [SerializeField] private AudioSource duringDrivingAudio;
+    [SerializeField] private AudioSource endinDrivingAudio;
+    [SerializeField] private AudioSource idleAudio;
+    [SerializeField] private AudioSource reloadingAudio;
 
     public override void OnStartServer()
     {
@@ -98,6 +119,7 @@ public class TankBrain : NetworkBehaviour
         hasBattery = true;
         reloadTime = baseReloadTime;
         currentBtry = maxBtry;
+        idleAudio.Play();
     }
 
     [Server]
@@ -145,6 +167,11 @@ public class TankBrain : NetworkBehaviour
 
         _yaw = Mathf.Clamp(yawDelta, -1f, 1f);
         _pitch = Mathf.Clamp(pitchDelta, -1f, 1f);
+
+        if (_yaw == 0f)
+            isRotating = false;
+        else
+            isRotating = true;
     }
 
     [Server]
@@ -189,15 +216,20 @@ public class TankBrain : NetworkBehaviour
     {
         float aL = Mathf.Abs(_leftTrack);
         float aR = Mathf.Abs(_rightTrack);
+
         bool moving = (aL > moveInputThreshold) || (aR > moveInputThreshold);
         if (!moving) return;
 
-        float drain = batteryDrainMove;
-        float turnFactor = Mathf.Clamp01(Mathf.Abs(aL - aR));
-        drain += batteryDrainTurning * turnFactor;
+        float drain = 0;
 
-        bool neutralSteer = (_leftTrack * _rightTrack) < -0.2f;
-        if (neutralSteer) drain += batteryDrainNeutralSteer;
+        if (aR == 0 && aL > 0 || (aR == 0 && aL > 0))
+            drain = batteryDrainTurning;
+        else if (aL == 0 && aR > 0 || (aL == 0 && aR > 0))
+            drain = batteryDrainTurning;
+        else if (aL > 0 && aR > 0 || aL < 0 && aR < 0)
+            drain = batteryDrainMove;
+        else if ((_leftTrack * _rightTrack) < -0.2f)
+            drain += batteryDrainNeutralSteer;
 
         Server_ConsumeBattery(drain * dt);
     }
@@ -231,11 +263,11 @@ public class TankBrain : NetworkBehaviour
 
         currentBtry = newBtry;
 
-        if(currentBtry > 0)
+        if (currentBtry > 0)
         {
             reloadTime = baseReloadTime;
             hasBattery = true;
-        }    
+        }
     }
 
     [Server]
@@ -244,6 +276,11 @@ public class TankBrain : NetworkBehaviour
         if (from != driver) return;
         this._leftTrack = Mathf.Clamp(_leftTrack, -1f, 1f);
         this._rightTrack = Mathf.Clamp(_rightTrack, -1f, 1f);
+
+        if (this._leftTrack == 0f && this._rightTrack == 0f)
+            isDriving = false;
+        else
+            isDriving = true;
     }
 
     [Server]
@@ -300,11 +337,48 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Client]
+    private void OnIsRotatingChanged(bool _, bool isRotating)
+    {
+        if (isRotating == true)
+            rotateCapulaAudio.Play();
+        else
+            rotateCapulaAudio.Stop();
+    }
+
+    [Client]
+    private void OnIsDrivingChanged(bool _, bool isDriving)
+    {
+        if (isDriving == false)
+        {
+            startDrivingAudio.Stop();
+            if (duringDrivingAudio.isPlaying == true)
+            {
+                duringDrivingAudio.Stop();
+                endinDrivingAudio.Play();
+            }
+            idleAudio.PlayDelayed(1);
+        }
+        else if (isDriving == true)
+        {
+            idleAudio.Stop();
+            startDrivingAudio.Play();
+            duringDrivingAudio.PlayDelayed(1);
+        }
+    }
+
+    [Client]
     private void OnHasBulletChanged(bool _, bool hasBullet)
     {
-        foreach(var text in bulletStateTexts)
+        if (!hasBullet)
+        {
+            var _barrelSmoke = Instantiate(smokeVFX, muzzle.transform.position, muzzle.transform.rotation);
+            Destroy(_barrelSmoke, 3);
+            shootingAudio.Play();
+        }
+
+        foreach (var text in bulletStateTexts)
             if (text) text.text = hasBullet ? "Ready" : "Not Ready";
-        
+
         if (reloadGroup) reloadGroup.alpha = hasBullet ? 0f : 1f;
 
         if (hasBullet)
@@ -318,13 +392,25 @@ public class TankBrain : NetworkBehaviour
     private void OnIsReloadingChanged(bool _, bool reloading)
     {
         // For sound sfx etc.
+        if (reloading == true)
+            reloadingAudio.Play();
     }
 
     [Client]
     private void OnBatteryChanged(float oldVal, float newVal)
     {
-        foreach(var text in batteryTexts)
-            text.text = $"Battery level: " + (float)Math.Round(newVal, 2) + "%";
+        float clamped = Mathf.Clamp(newVal, 0f, 100f);
+        int index;
+        if (clamped > 80f) index = 0;
+        else if (clamped > 60f) index = 1;
+        else if (clamped > 40f) index = 2;
+        else if (clamped > 20f) index = 3;
+        else if (clamped > 0f) index = 4;
+        else index = 5;
+
+        var sprite = batteryImages[index];
+        foreach (var image in currImages)
+            image.sprite = sprite;
     }
 
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
@@ -362,6 +448,14 @@ public class TankBrain : NetworkBehaviour
 
         if (currHealth <= 0)
             Server_TankDeath();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        float impactSpeed = collision.relativeVelocity.magnitude;
+        Debug.Log(impactSpeed);
+        if (impactSpeed > impactThreshold)
+            driveIntoEnviormentAudio.Play();
     }
 
     #region TrackContactGizmos

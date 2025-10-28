@@ -1132,6 +1132,7 @@ MonoBehaviour:
   syncInterval: 0
   tracks: {fileID: 8241758214644652562}
   turret: {fileID: 9211153292599580694}
+  impactThreshold: 1.25
   tankBody: {fileID: 3416396983572618182}
   turretYawPivot: {fileID: 8485076201043624360}
   turretPitchPivot: {fileID: 7678173531244863629}
@@ -1168,16 +1169,33 @@ MonoBehaviour:
   - {fileID: 76987111198402487}
   reloadGroup: {fileID: 8744837004090127379}
   bulletStateTexts:
-  - {fileID: 8852445845114200143}
-  - {fileID: 2262099055507998898}
+  - {fileID: 0}
+  - {fileID: 0}
   bulletReloadImage: {fileID: 982722239254385399}
   reloadTimerImage: {fileID: 8467581599527105738}
-  batteryTexts:
-  - {fileID: 2003718752009592704}
-  - {fileID: 830543923601364923}
+  batteryImages:
+  - {fileID: 21300000, guid: 14d5d4d4e0563df4d91dd2921b5ec7d0, type: 3}
+  - {fileID: 21300000, guid: 0219acfe38a993d4781e3cd29efa5f96, type: 3}
+  - {fileID: 21300000, guid: 9e058d3bd5b059642a59be7132c05d1d, type: 3}
+  - {fileID: 21300000, guid: 4e106e001d362a546a60bb836da3230f, type: 3}
+  - {fileID: 21300000, guid: 9be92b046f9748947a0b4a5969535237, type: 3}
+  - {fileID: 21300000, guid: ab4886a4e9b85b8469f6ddf7aabdfe7a, type: 3}
+  currImages:
+  - {fileID: 2093767266968802130}
+  - {fileID: 956595897461398377}
   spawnPoints: []
   spawnLocation: {fileID: 0}
   minSpawnDistance: 20
+  smokeVFX: {fileID: 3258551338417457710, guid: 2880db6858a8e81479ece32424a72b20,
+    type: 3}
+  shootingAudio: {fileID: 9193218893755672709}
+  driveIntoEnviormentAudio: {fileID: 5592984663439745867}
+  rotateCapulaAudio: {fileID: 1293415043636351165}
+  startDrivingAudio: {fileID: 11842180763763817}
+  duringDrivingAudio: {fileID: 3119961213283336025}
+  endinDrivingAudio: {fileID: 6965599277605960251}
+  idleAudio: {fileID: 5824520260315050160}
+  reloadingAudio: {fileID: 7385303803487722460}
   gizmoDrawTrackCasts: 1
   gizmoOnlyWhenSelected: 1
   gizmoDrawNormals: 1
@@ -2756,6 +2774,7 @@ GameObject:
   - component: {fileID: 3665743853416539382}
   - component: {fileID: 3117147100265161576}
   - component: {fileID: 9210539347087487716}
+  - component: {fileID: 4936092826783990364}
   m_Layer: 9
   m_Name: DriverCamera
   m_TagString: driverCam
@@ -2873,6 +2892,14 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!81 &4936092826783990364
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9025565862123474312}
+  m_Enabled: 1
 --- !u!1001 &5392621048374109
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2965,8 +2992,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 3189010969866415801, guid: 42a37a046e3ec104db7d766801b4dd13,
         type: 3}
       propertyPath: m_sharedMaterial
@@ -3155,28 +3181,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &830543923601364923 stripped
+--- !u!114 &956595897461398377 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 834722578565264614, guid: 42a37a046e3ec104db7d766801b4dd13,
+  m_CorrespondingSourceObject: {fileID: 960861467357706292, guid: 42a37a046e3ec104db7d766801b4dd13,
     type: 3}
   m_PrefabInstance: {fileID: 5392621048374109}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2262099055507998898 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2267491581788564463, guid: 42a37a046e3ec104db7d766801b4dd13,
-    type: 3}
-  m_PrefabInstance: {fileID: 5392621048374109}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &6547230731063160750 stripped
@@ -3493,16 +3507,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2003718752009592704 stripped
+--- !u!114 &2093767266968802130 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1408379373281534602, guid: eee26696c6da89043b3aa63ff9667d52,
+  m_CorrespondingSourceObject: {fileID: 1534527051723763288, guid: eee26696c6da89043b3aa63ff9667d52,
     type: 3}
   m_PrefabInstance: {fileID: 595937523931086090}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &6626794040321194787 stripped
@@ -3535,18 +3549,6 @@ CanvasGroup:
     type: 3}
   m_PrefabInstance: {fileID: 595937523931086090}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8852445845114200143 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8259327514096622917, guid: eee26696c6da89043b3aa63ff9667d52,
-    type: 3}
-  m_PrefabInstance: {fileID: 595937523931086090}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &5351103215499807500
 PrefabInstance:
   m_ObjectHideFlags: 0
