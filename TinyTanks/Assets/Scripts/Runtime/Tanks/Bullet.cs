@@ -2,53 +2,64 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public GameObject parent;
+    [Header("References")]
+    public GameObject parent; // parent only checks if the bullet doesn't hit the tank that shot the bullet, weird but works for now
 
-    [SerializeField] private GameObject _tankHitVFX;
-    [SerializeField] private GameObject _enviormentHitVFX;
-    [SerializeField] private GameObject _smokeVFX;
+    [SerializeField] private GameObject explosionEffect;
+    [SerializeField] private GameObject impactEffect;
+    [SerializeField] private GameObject smokeEffect;
 
     [Header("Audio")]
     public AudioSource _bulletWhistle;
     public AudioSource _tankHitAudioSource;
     public AudioSource _enviormentHitAudioSource;
 
+    [Header("Settings")]
+    [SerializeField] private float damage = 1f;
+
     private void Start()
     {
         _bulletWhistle = GetComponentInChildren<AudioSource>();
 
-        var _barrelSmoke = Instantiate(_smokeVFX, this.transform.position, this.transform.rotation);
+        //TODO Change instantiate and destroy logic to play and stop
+        var _barrelSmoke = Instantiate(smokeEffect, this.transform.position, this.transform.rotation);
         Destroy(_barrelSmoke, 3);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        
-
-        if (other.gameObject.layer == 3) // player hit
+        if (other.gameObject.layer == 9)
         {
-            Debug.Log(other.gameObject.name);
-            if(other.gameObject != parent)
+            if (other.gameObject != parent)
             {
-                if (other.gameObject.GetComponent<Health>())
-                    other.gameObject.GetComponent<Health>().TakeDamage(1);
-                else if (other.gameObject.GetComponentInParent<Health>())
-                    other.gameObject.GetComponentInParent<Health>().TakeDamage(1);
+                //Hit other player**
+                IDamagable iDamage = other.GetComponent<IDamagable>();
+                if (iDamage != null) iDamage.Damage(damage);
 
-                Debug.Log("hit a player");
-                var vxf = Instantiate(_tankHitVFX, this.transform.position, this.transform.rotation);
+                //TODO Change instantiate and destroy logic to play and stop
+                var vxf = Instantiate(explosionEffect, this.transform.position, this.transform.rotation);
                 Destroy(vxf, 3);
-                Destroy(gameObject);
+
+
+                Debug.Log("Andere tank geraakt");
                 _bulletWhistle.Stop();
+
+                //TODO Change instantiate and destroy logic to play and stop
                 var hitAudio = Instantiate(_tankHitAudioSource, this.transform.position, this.transform.rotation);
                 Destroy(hitAudio.gameObject, 4);
+
+                Destroy(gameObject);
             }         
         }
-        else if(other.gameObject.layer != 3 && other.gameObject.layer != 7) // not player and not vxf?
+        else
         {
-            var vxf = Instantiate(_enviormentHitVFX, this.transform.position, this.transform.rotation);
+
+            Debug.Log("Geen andere tank gehit");
+            //TODO Change instantiate and destroy logic to play and stop
+            var vxf = Instantiate(impactEffect, this.transform.position, this.transform.rotation);
             Destroy(vxf, 3);
 
+            //TODO Change instantiate and destroy logic to play and stop
             var hitAudio = Instantiate(_enviormentHitAudioSource, this.transform.position, this.transform.rotation);
             Destroy(hitAudio.gameObject, 4);
 
@@ -59,10 +70,7 @@ public class Bullet : MonoBehaviour
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             _bulletWhistle.Stop();
-            Destroy(this);           
+            Destroy(this);
         }
-
     }
-
-
 }

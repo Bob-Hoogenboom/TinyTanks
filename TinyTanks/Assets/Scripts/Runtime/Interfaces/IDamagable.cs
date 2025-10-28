@@ -4,5 +4,5 @@
 public interface IDamagable
 {
     float HitPoints { get; }
-    void Damage();
+    void Damage(float damage);
 }
