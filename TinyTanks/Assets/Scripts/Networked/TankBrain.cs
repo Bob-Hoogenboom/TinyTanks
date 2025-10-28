@@ -48,8 +48,10 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private bool hasBullet = true;
 
     [Header("Health/Life")]
-    [SyncVar, SerializeField] private int lives = 3;
-    [SyncVar, SerializeField] public int currHealth;
+    [SyncVar(hook = nameof(OnLivesChanged))]
+    [SerializeField] private int lives = 3;
+    [SyncVar(hook = nameof(OnHealthChanged))]
+    [SerializeField] public float currHealth;
     public int maxHealth { get; private set; } = 5;
     [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 5f;
@@ -90,8 +92,12 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Image[] currImages;
     private int _lastSpriteIndex;
 
+    [Header("UI Health")]
+    [SerializeField] private Image[] healthImage;
+    [SerializeField] private TMP_Text[] livesText;
+
     [Header("Spawning")]
-    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private List<Transform> spawnPoints;
     [SerializeField] private Transform spawnLocation;
     [SerializeField] private float minSpawnDistance = 20;
 
@@ -120,6 +126,10 @@ public class TankBrain : NetworkBehaviour
         reloadTime = baseReloadTime;
         currentBtry = maxBtry;
         idleAudio.Play();
+
+        List<NetworkStartPosition> startPoints = FindObjectsOfType<NetworkStartPosition>().ToList();
+        foreach (var point in startPoints)
+            spawnPoints.Add(point.transform);
     }
 
     [Server]
@@ -286,9 +296,10 @@ public class TankBrain : NetworkBehaviour
     [Server]
     private void Server_TankDeath()
     {
-        if (lives <= 0) Server_ReturnToLobby();
+        lives -= 1;
 
-        StarRespawnTimer();
+        if (lives == 0) Server_ReturnToLobby();
+        else StarRespawnTimer();
     }
 
     [Server]
@@ -298,15 +309,20 @@ public class TankBrain : NetworkBehaviour
         players.Remove(this);
 
         var possibleSpawnLocations = new List<Transform>();
-        foreach (var player in players)
+        if (players.Count != 0)
         {
-            var go = player.gameObject;
-            foreach (var location in spawnPoints)
+            foreach (var player in players)
             {
-                if (Vector3.Distance(go.transform.position, location.position) > minSpawnDistance)
-                    possibleSpawnLocations.Add(location);
+                var go = player.gameObject;
+                foreach (var location in spawnPoints)
+                {
+                    if (Vector3.Distance(go.transform.position, location.position) > minSpawnDistance)
+                        possibleSpawnLocations.Add(location);
+                }
             }
         }
+        else
+            possibleSpawnLocations = spawnPoints;
 
         var idx = UnityEngine.Random.Range(0, possibleSpawnLocations.Count);
         spawnLocation = possibleSpawnLocations[idx];
@@ -314,7 +330,6 @@ public class TankBrain : NetworkBehaviour
         _netTrans.RpcTeleport(spawnLocation.position);
 
         currHealth = maxHealth;
-        lives -= 1;
         _isDead = false;
 
         if (driverRespawn != null && gunnerRespawn != null)
@@ -322,8 +337,6 @@ public class TankBrain : NetworkBehaviour
             driverRespawn.alpha = 0;
             gunnerRespawn.alpha = 0;
         }
-
-        Debug.Log(this.name + $" respawned on location: " + spawnLocation);
     }
 
     [Server]
@@ -334,6 +347,21 @@ public class TankBrain : NetworkBehaviour
             var roomMgr = (NetworkRoomManager)NetworkManager.singleton;
             NetworkManager.singleton.ServerChangeScene(roomMgr.RoomScene);
         }
+    }
+
+    [Client]
+    private void OnLivesChanged(int oldVal, int newVal)
+    {
+        foreach (var text in livesText)
+            text.text = $"Lives left: {newVal}";
+    }
+
+    [Client]
+    private void OnHealthChanged(float oldVal, float newVal)
+    {
+        foreach (var image in healthImage)
+            image.fillAmount = newVal / maxHealth;
+
     }
 
     [Client]
@@ -391,7 +419,6 @@ public class TankBrain : NetworkBehaviour
     [Client]
     private void OnIsReloadingChanged(bool _, bool reloading)
     {
-        // For sound sfx etc.
         if (reloading == true)
             reloadingAudio.Play();
     }
@@ -453,7 +480,6 @@ public class TankBrain : NetworkBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         float impactSpeed = collision.relativeVelocity.magnitude;
-        Debug.Log(impactSpeed);
         if (impactSpeed > impactThreshold)
             driveIntoEnviormentAudio.Play();
     }

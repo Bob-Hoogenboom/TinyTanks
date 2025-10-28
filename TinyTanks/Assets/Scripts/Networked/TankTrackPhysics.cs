@@ -14,8 +14,6 @@ public class TankTrackPhysics : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] private Animator anim;
-    [Tooltip("This is a multiplier. it does the default animator speed and multiplies that by animSpeed. \n(animator.speed * animSpeed)")]
-    //[SerializeField] private float animSpeed = 1f;
     private int _leftTrackAnim = Animator.StringToHash("LeftTrack");
     private int _rightTrackAnim = Animator.StringToHash("RightTrack");
 

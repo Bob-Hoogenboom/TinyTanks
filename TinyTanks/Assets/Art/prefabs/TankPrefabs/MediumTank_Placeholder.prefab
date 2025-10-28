@@ -669,7 +669,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5752718601817972511}
   - component: {fileID: 8826904594962194644}
-  - component: {fileID: 8085248423266114839}
   m_Layer: 0
   m_Name: MediumTank_Placeholder
   m_TagString: Untagged
@@ -719,23 +718,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8085248423266114839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4944411131701888421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 1
-  syncMode: 0
-  syncInterval: 0
-  clientAuthority: 0
-  animator: {fileID: 8826904594962194644}
 --- !u!1 &5383950769241251247
 GameObject:
   m_ObjectHideFlags: 0
