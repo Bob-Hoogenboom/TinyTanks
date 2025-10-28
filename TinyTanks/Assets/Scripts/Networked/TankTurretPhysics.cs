@@ -72,9 +72,8 @@ public class TankTurretPhysics : MonoBehaviour
     private bool _yawSleeping = false;
     private float _yawSleepAngleDeg = 0f;
 
-    private float _cmdYaw, _cmdPitch; // [-1..1]
+    private float _cmdYaw, _cmdPitch;
 
-    // Input from your seat controller
     public void SetInputs(float yawAxis, float pitchAxis)
     {
         _cmdYaw = Mathf.Abs(yawAxis) < inputDeadzone ? 0f : Mathf.Clamp(yawAxis, -1f, 1f);
@@ -109,10 +108,8 @@ public class TankTurretPhysics : MonoBehaviour
             float tLimit = YawLimitTorque(angularVelocity);
             float netTau = motor - fric - tLimit;
 
-            // Wake condition: real stick movement or actual torque
             bool wantWake = Mathf.Abs(_cmdYaw) > yawWakeInput || Mathf.Abs(netTau) >= sleepTorque;
 
-            // Sleep condition: tiny speed, tiny torque, and no input
             bool canSleep =
                 Mathf.Abs(_cmdYaw) <= yawWakeInput &&
                 Mathf.Abs(angularVelocity) < Mathf.Deg2Rad * Mathf.Max(0.001f, sleepSpeedDeg) &&
@@ -136,7 +133,7 @@ public class TankTurretPhysics : MonoBehaviour
 
             if (_yawSleeping)
             {
-                // Hold perfectly still at the snapped angle
+                // Hold still at the snapped angle
                 _yawRateDeg = 0f;
                 _yawRelDeg = _yawSleepAngleDeg - _yawStartDeg;
             }
@@ -156,7 +153,7 @@ public class TankTurretPhysics : MonoBehaviour
                     if (_yawRelDeg > right) { _yawRelDeg = right; if (_yawRateDeg > 0f) _yawRateDeg = 0f; }
                 }
 
-                // Gentle snap even when awake near rest to avoid micro dithering
+                // Gentle snap when awake near rest to avoid micro dithering
                 if (Mathf.Abs(_yawRateDeg) < sleepSpeedDeg * 1.5f && Mathf.Abs(_cmdYaw) <= yawWakeInput && yawAngleSnapDeg > 0f)
                 {
                     float worldYawDeg = _yawStartDeg + _yawRelDeg;
