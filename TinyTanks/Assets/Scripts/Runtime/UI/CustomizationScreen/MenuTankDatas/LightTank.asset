@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47d8cea291ea1f44f9762911edd16497, type: 3}
+  m_Name: LightTank
+  m_EditorClassIdentifier: 
+  tankName: LightTank
+  bodyOptions:
+  - {fileID: 942779956892851442, guid: 916fd0b2d0816bc42959227e0937ba16, type: 3}
+  cupolaOptions:
+  - {fileID: 910642626755790005, guid: a2455fa5354acff43af05a334710a92b, type: 3}
+  availableMaterials:
+  - {fileID: 2100000, guid: 6d35aa69c4fe2524e9c5b8f922982b6d, type: 2}
+  - {fileID: 2100000, guid: 5efd211a494e0ff4ebd16a77c36e18c4, type: 2}
+  - {fileID: 2100000, guid: d62a8390222d5704dbbb1db60e516820, type: 2}
+  - {fileID: 2100000, guid: 7530841d299e309469ec6958b26bd89f, type: 2}
+  - {fileID: 2100000, guid: 7cd52adf300193740ba1dd505ed83e99, type: 2}
+  - {fileID: 2100000, guid: 129295efa1f4ad84bb51da5f656bbdbe, type: 2}

@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[SelectionBase]//Diverts the selection to this object
+[SelectionBase]
 public class Springy : MonoBehaviour
 {
     public Transform springTarget;
@@ -40,5 +38,16 @@ public class Springy : MonoBehaviour
 
         //Aim the visible geo at the spring target
         GeoParent.transform.LookAt(springObj.position, new Vector3(0, 0, 1));
+    }
+
+    private void OnDestroy()
+    {
+        //exit playmode gave a weird error with Destroying the runtime OBJ
+        if (!Application.isPlaying) return;
+
+        if (springObj != null)
+        {
+            Destroy(springObj.gameObject);
+        }
     }
 }
