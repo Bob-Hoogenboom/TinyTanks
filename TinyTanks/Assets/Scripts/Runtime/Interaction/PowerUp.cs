@@ -49,8 +49,9 @@ public class PowerUp : NetworkBehaviour
     [Server]
     private IEnumerator CoolDown()
     {
-        SetPickupActive(false);
         RpcSetPickupActive(false);
+        SetPickupActive(false);
+        
 
         yield return new WaitForSeconds(coolDownTimer);
 
@@ -68,7 +69,6 @@ public class PowerUp : NetworkBehaviour
     [ClientRpc]
     private void RpcSetPickupActive(bool active)
     {
-        if (col) col.enabled = active;
         if (visual) visual.SetActive(active);
     }
 }

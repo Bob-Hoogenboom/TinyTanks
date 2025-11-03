@@ -330,6 +330,7 @@ public class TankBrain : NetworkBehaviour
         _netTrans.RpcTeleport(spawnLocation.position);
 
         currHealth = maxHealth;
+        currentBtry = maxBtry;
         _isDead = false;
 
         if (driverRespawn != null && gunnerRespawn != null)
@@ -440,6 +441,18 @@ public class TankBrain : NetworkBehaviour
             image.sprite = sprite;
     }
 
+    [Client]
+    private void StarRespawnTimer()
+    {
+        _isDead = true;
+        if (driverRespawn != null && gunnerRespawn != null)
+        {
+            driverRespawn.alpha = 1;
+            gunnerRespawn.alpha = 1;
+        }
+        respawnEndTime = NetworkTime.time + +respawnTime;
+    }
+
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
     {
         if (timeRemaining <= 0) timeRemaining = 0;
@@ -454,17 +467,6 @@ public class TankBrain : NetworkBehaviour
         float progress = 1f - Mathf.Clamp01((float)(timeRemaining / reloadTime));
         bulletReloadImage.fillAmount = progress;
         reloadTimerImage.fillAmount = progress;
-    }
-
-    private void StarRespawnTimer()
-    {
-        _isDead = true;
-        if (driverRespawn != null && gunnerRespawn != null)
-        {
-            driverRespawn.alpha = 1;
-            gunnerRespawn.alpha = 1;
-        }
-        respawnEndTime = NetworkTime.time + +respawnTime;
     }
 
     public void TakeDamge(int dmg)

@@ -6,7 +6,7 @@ using System;
 
 public class GunnerSeatController : NetworkBehaviour
 {
-    [SerializeField] CrewSeat seat;
+    [SerializeField] private CrewSeat seat;
     [SerializeField] private Camera seatCam;
     [SerializeField] private Canvas canvas;
 
@@ -65,7 +65,6 @@ public class GunnerSeatController : NetworkBehaviour
         var t = seat.tank;
         if (!t) return;
 
-        // [EDIT] use GUNNER tags (the previous version searched driver tags)
         foreach (var cam in t.GetComponentsInChildren<Camera>(true))
             if (cam.CompareTag("gunnerCam")) { seatCam = cam; break; }
 
