@@ -2554,6 +2554,7 @@ GameObject:
   - component: {fileID: 5570512878799569600}
   - component: {fileID: 8103136164235546127}
   - component: {fileID: 1863113491357866522}
+  - component: {fileID: 6547365395384501742}
   m_Layer: 9
   m_Name: Cupola_mesh
   m_TagString: Untagged
@@ -2652,6 +2653,40 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.39862978, y: 0.2511481, z: 0.37066197}
   m_Center: {x: -0.000051125884, y: 0.122403145, z: -0.012189388}
+--- !u!114 &6547365395384501742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8186826496019106854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 8485076201043624360}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 1
+  useFixedUpdate: 1
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &8393609754517512970
 GameObject:
   m_ObjectHideFlags: 0

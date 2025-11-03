@@ -7,7 +7,7 @@ using System.Linq;
 
 public class DriverSeatController : NetworkBehaviour
 {
-    [SerializeField] CrewSeat seat;
+    [SerializeField] private CrewSeat seat;
     [SerializeField] private Camera seatCam;
     [SerializeField] private Canvas canvas;
 
