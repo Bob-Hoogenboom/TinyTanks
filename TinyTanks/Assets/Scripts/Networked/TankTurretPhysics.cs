@@ -246,7 +246,7 @@ public class TankTurretPhysics : MonoBehaviour
         return dry + visc;
     }
 
-    float YawLimitTorque(float angularVelocity)
+    private float YawLimitTorque(float angularVelocity)
     {
         if (yawHalfRange <= 0f) return 0f;
         float soft = Mathf.Max(0.1f, yawSoftZone);
@@ -266,7 +266,7 @@ public class TankTurretPhysics : MonoBehaviour
         return tau;
     }
 
-    float PitchLimitTorque(float angularVelocity)
+    private float PitchLimitTorque(float angularVelocity)
     {
         float soft = Mathf.Max(0.1f, pitchSoftZone);
         float tau = 0f;
