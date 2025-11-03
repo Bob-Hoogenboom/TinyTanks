@@ -1085,6 +1085,7 @@ GameObject:
   - component: {fileID: -343587757533211459}
   - component: {fileID: 5286927959053453512}
   - component: {fileID: 8241758214644652562}
+  - component: {fileID: -3437104486174965180}
   - component: {fileID: 9211153292599580694}
   - component: {fileID: 293358931188755715}
   - component: {fileID: 796225033882754524}
@@ -1257,8 +1258,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 7168
-  identity: {fileID: 9080319658624944878}
+  identity: {fileID: 0}
   isSupposedToHaveServer: 1
+  trackReplicator: {fileID: -3437104486174965180}
   anim: {fileID: 1189097710389964332}
   contactRadius: 0.18
   contactCapsuleHalfLength: 0.2
@@ -1273,6 +1275,22 @@ MonoBehaviour:
   currData: {fileID: 0}
   slipDead: 0.4
   minVelocityMagnitude: 0.001
+--- !u!114 &-3437104486174965180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2905205193779898258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5035ba9c68af26f46862fb3407506158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  anim: {fileID: 0}
 --- !u!114 &9211153292599580694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1637,7 +1655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0
   clientAuthority: 0

@@ -908,6 +908,7 @@ GameObject:
   - component: {fileID: -7946513706763832386}
   - component: {fileID: 7777668788783414760}
   - component: {fileID: -5794259894426918823}
+  - component: {fileID: -8513759947074147452}
   - component: {fileID: 6851069754155643458}
   - component: {fileID: 632921156375708358}
   - component: {fileID: 2582193386719044021}
@@ -1079,8 +1080,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 7168
-  identity: {fileID: 2582193386719044021}
+  identity: {fileID: 0}
   isSupposedToHaveServer: 1
+  trackReplicator: {fileID: -8513759947074147452}
   anim: {fileID: 2171151274642361834}
   contactRadius: 0.22
   contactCapsuleHalfLength: 0.35
@@ -1095,6 +1097,22 @@ MonoBehaviour:
   currData: {fileID: 0}
   slipDead: 0.4
   minVelocityMagnitude: 0.01
+--- !u!114 &-8513759947074147452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8605099804884612094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5035ba9c68af26f46862fb3407506158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  anim: {fileID: 0}
 --- !u!114 &6851069754155643458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1617,6 +1635,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 8d606dec25373484eb19f28a3b5a219b, type: 2}
+    - target: {fileID: 7274746972820191729, guid: 8823c84c348df324b9b0bce5ece399c9,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 401c132ea1365b246bed18f5711d239b, type: 2}
     - target: {fileID: 7417683652678270502, guid: 8823c84c348df324b9b0bce5ece399c9,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1714,11 +1737,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0
   clientAuthority: 0
-  animator: {fileID: 0}
+  animator: {fileID: 2171151274642361834}
 --- !u!95 &2171151274642361834 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7274746972820191729, guid: 8823c84c348df324b9b0bce5ece399c9,
