@@ -987,6 +987,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  tankData: {fileID: 11400000, guid: fb0f7dc981bf6af45a6927b3f3dd4257, type: 2}
   tracks: {fileID: -5794259894426918823}
   turret: {fileID: 6851069754155643458}
   impactThreshold: 1.5
@@ -996,7 +997,6 @@ MonoBehaviour:
   muzzle: {fileID: 6901168756112154940}
   serverShellPrefab: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
     type: 3}
-  reloadTime: 5
   baseReloadTime: 5
   noBatteryReloadTime: 10
   shellSpeed: 10
@@ -1642,6 +1642,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8747872963641129443, guid: 8823c84c348df324b9b0bce5ece399c9,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 36f89516ea3d89f46a2585b729837e19, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

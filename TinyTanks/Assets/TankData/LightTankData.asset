@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfb3e6d41af830e48a45307ce8139b2f, type: 3}
+  m_Name: LightTankData
+  m_EditorClassIdentifier: 
+  damage: 2
+  maxHealth: 6
+  baseReloadTime: 4
+  noBatteryReloadTime: 8
+  shellSpeed: 10
+  batteryDrainMove: 0.5
+  batteryDrainTurning: 0.3
+  batteryDrainNeutralSteer: 0.2
+  batteryDrainShot: 3
+  moveInputThreshold: 0.05

@@ -23,7 +23,7 @@ public class DriverSeatController : NetworkBehaviour
         if (seatCam) seatCam.gameObject.SetActive(true);
         if (canvas) canvas.gameObject.SetActive(true);
     }
-    private void FixedUpdate()
+    private void Update()
     {
         if (!isLocalPlayer) return;
 
