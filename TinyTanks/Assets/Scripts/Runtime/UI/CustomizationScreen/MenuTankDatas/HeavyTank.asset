@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47d8cea291ea1f44f9762911edd16497, type: 3}
+  m_Name: HeavyTank
+  m_EditorClassIdentifier: 
+  tankName: HeavyTank
+  bodyOptions:
+  - {fileID: 332641635110405011, guid: d95fed18be5f2c04fb7760a7d7c8185e, type: 3}
+  cupolaOptions:
+  - {fileID: 6412747542308581930, guid: 7d2cc73ca2d67504e827d3510c09d1d7, type: 3}
+  availableMaterials:
+  - name: Blue
+    material: {fileID: 2100000, guid: ffe575106df86574ebff95190aa57dac, type: 2}
+    color: {r: 0.24313727, g: 0.54509807, b: 0.8313726, a: 1}
+  - name: DesertDigital
+    material: {fileID: 2100000, guid: b5b8b6d8760280d47b1f6962b099d809, type: 2}
+    color: {r: 0.6862745, g: 0.62352943, b: 0.54509807, a: 1}
+  - name: GreenCamo
+    material: {fileID: 2100000, guid: 92513a8f7dd94644aad2a92ece3162aa, type: 2}
+    color: {r: 0.16862746, g: 0.32941177, b: 0.10196079, a: 1}
+  - name: Red
+    material: {fileID: 2100000, guid: 64d971b64bcc6cd49b1c5cfd0b441dde, type: 2}
+    color: {r: 0.5686275, g: 0, b: 0, a: 1}

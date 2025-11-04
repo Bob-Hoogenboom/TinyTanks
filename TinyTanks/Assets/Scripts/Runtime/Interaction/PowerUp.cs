@@ -9,6 +9,8 @@ using Mirror;
 /// </summary>
 public class PowerUp : NetworkBehaviour
 {
+    const int POWERUP_LAYER = 13;
+
     [Header("Variables")]
 
     [Tooltip("Add the Power-Up Effect you wish this object to give the TankBrain Object")]
@@ -23,6 +25,10 @@ public class PowerUp : NetworkBehaviour
     [Tooltip("Add a power-up effect or sound to this event to play when its grabbed")]
     [SerializeField] private UnityEvent onGrabPowerUp;
 
+    private void Awake()
+    {
+        gameObject.layer = POWERUP_LAYER;
+    }
 
     private void OnTriggerEnter(Collider other)
     {

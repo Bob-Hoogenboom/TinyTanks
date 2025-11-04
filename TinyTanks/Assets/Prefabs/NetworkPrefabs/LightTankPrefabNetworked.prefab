@@ -1165,6 +1165,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  tankData: {fileID: 11400000, guid: 89efefa4f792acd4cbcbc57590057a59, type: 2}
   tracks: {fileID: 8241758214644652562}
   turret: {fileID: 9211153292599580694}
   impactThreshold: 1.25
@@ -1174,7 +1175,6 @@ MonoBehaviour:
   muzzle: {fileID: 5035525454890280112}
   serverShellPrefab: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
     type: 3}
-  reloadTime: 5
   baseReloadTime: 5
   noBatteryReloadTime: 10
   shellSpeed: 10
