@@ -4,6 +4,7 @@ using UnityEngine;
 using Mirror;
 using TMPro;
 using System.Globalization;
+using UnityEngine.UI;
 
 public class MyRoomManager : NetworkRoomManager
 {
@@ -12,6 +13,7 @@ public class MyRoomManager : NetworkRoomManager
 
     [SerializeField] private float gameTime;
     [SerializeField] private TMP_InputField gameTimeInput;
+    [SerializeField] private SetMatchTimer matchTimer;
 
     public override void Awake()
     {
@@ -39,54 +41,35 @@ public class MyRoomManager : NetworkRoomManager
             return;
         }
 
-        gameTimeInput.interactable = NetworkServer.active;
-        gameTimeInput.text = gameTime.ToString("0.##", CultureInfo.InvariantCulture);
-        gameTimeInput.onEndEdit.AddListener(OnGameTimeInputSubmit);
+
+        gameTimeInput.onValueChanged.AddListener(OnTimerUpdate);
     }
 
     private void UnbindRoomUI()
     {
         if (gameTimeInput != null)
-            gameTimeInput.onEndEdit.RemoveListener(OnGameTimeInputSubmit);
+            gameTimeInput.onValueChanged.RemoveListener(OnTimerUpdate);
     }
 
     private void ResolveGameTimeInput()
     {
         if (gameTimeInput != null) return;
 
-        var all = FindObjectsOfType<TMP_InputField>(true);
-        if (all.Length > 0)
-            gameTimeInput = all[0];
-    }
+        //get match timer input
+        matchTimer = FindObjectOfType<SetMatchTimer>(true);
 
-    private void OnGameTimeInputSubmit(string text)
-    {
-        if (TryParseFlexibleFloat(text, out var value))
+        //update match time to the match timer input default
+        if (matchTimer != null)
         {
-            ChangeGameTime(value);
-            if (gameTimeInput)
-                gameTimeInput.text = gameTime.ToString("0.##", CultureInfo.InvariantCulture);
-        }
-        else
-        {
-            Debug.LogWarning($"[MyRoomManager] Invalid game time: '{text}'. Keeping {gameTime}.");
-            if (gameTimeInput)
-                gameTimeInput.text = gameTime.ToString("0.##", CultureInfo.InvariantCulture);
+            gameTime = matchTimer.selectedTime;
         }
     }
 
-    private static bool TryParseFlexibleFloat(string text, out float value)
+    //Needs a string parameter but i dont have to use it so...
+    private void OnTimerUpdate(string text)
     {
-        // Accept both "12.5" and "12,5"
-        text = (text ?? "").Trim();
-
-        // First try current culture
-        if (float.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out value))
-            return true;
-
-        // Then try invariant with '.' after normalizing commas
-        var normalized = text.Replace(',', '.');
-        return float.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+        ChangeGameTime(matchTimer.selectedTime);
+        gameTime = matchTimer.selectedTime;
     }
 
     private void ChangeGameTime(float value)
