@@ -21,7 +21,8 @@ public class GunnerSeatController : NetworkBehaviour
         if (seatCam) seatCam.gameObject.SetActive(true);
         if (canvas) canvas.gameObject.SetActive(true);
     }
-    private void FixedUpdate()
+
+    private void Update()
     {
         if (!isLocalPlayer) return;
 
@@ -29,7 +30,6 @@ public class GunnerSeatController : NetworkBehaviour
         float yaw = Input.GetAxisRaw("Horizontal");
 
         CmdGunnerInput(yaw, pitch);
-
         if (Input.GetKeyDown(KeyCode.R))
             CmdGunnerReload();
 

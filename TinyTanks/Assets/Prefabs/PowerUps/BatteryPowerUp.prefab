@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3091390117628424484}
   - component: {fileID: 3151328614989277060}
   - component: {fileID: 2008961527043030289}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Battery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 3522937754757234972}
   - component: {fileID: 2433120736892543736}
   - component: {fileID: 3465636428404035278}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BatteryPowerUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +174,7 @@ MonoBehaviour:
   effect: {fileID: 11400000, guid: d277db8eeb7ed5a4aa54ac37d17b892d, type: 2}
   coolDownTimer: 20
   col: {fileID: 3522937754757234972}
-  visual: {fileID: 0}
+  visual: {fileID: 3853015457064988822}
   onGrabPowerUp:
     m_PersistentCalls:
       m_Calls: []
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 7140433695570189861}
   - component: {fileID: 7335852934673148730}
   - component: {fileID: 6605789250667796213}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}

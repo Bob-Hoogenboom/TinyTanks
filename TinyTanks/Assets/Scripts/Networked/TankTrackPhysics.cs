@@ -29,10 +29,10 @@ public class TankTrackPhysics : MonoBehaviour
     [SerializeField] private float groundingForce = 1000f;
 
     [Header("Movement Variables")]
-    [SerializeField] private TankData hardFloorData;
-    [SerializeField] private TankData carpetData;
-    [SerializeField] private TankData wetFloorData;
-    [SerializeField] private TankData currData;
+    [SerializeField] private TrackSurfaceParams hardFloorData;
+    [SerializeField] private TrackSurfaceParams carpetData;
+    [SerializeField] private TrackSurfaceParams wetFloorData;
+    [SerializeField] private TrackSurfaceParams currData;
 
     [Header("Lateral Model")]
     [Tooltip("Dead-zone for side slip (m/s).")]
