@@ -18,7 +18,7 @@ public class TankBrain : NetworkBehaviour
     private Rigidbody _rb;
     private NetworkTransformReliable _netTrans;
 
-    [SerializeField] private TankData tankData;
+    public TankData tankData;
 
     [Header("Physics based movement")]
     [SerializeField] private TankTrackPhysics tracks;

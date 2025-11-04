@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Tank/Track Surface Variables")]
+[CreateAssetMenu(menuName = "Tank/Track Surface Params")]
 public class TrackSurfaceParams : ScriptableObject
 {
     [Header("Engine")]

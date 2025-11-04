@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b997a18bd9fc4048a73be870f552cd5, type: 3}
-  m_Name: HeavyTankCarpet
+  m_Name: MediumRamp
   m_EditorClassIdentifier: 
-  enginePowerHP: 340
-  maxForcePerTrack: 200000
-  muLong: 1
-  muLat: 2
-  rollingResistance: 0.04
-  speedDrag: 360
-  contactHalfLength: 1
-  linearLatDrag: 8000
-  quadLatDrag: 6500
-  lateralStiffness: 75000
-  trackBrakeForce: 200000
+  enginePowerHP: 250
+  maxForcePerTrack: 600000
+  muLong: 2.5
+  muLat: 2.5
+  rollingResistance: 0.2
+  speedDrag: 1200
+  contactHalfLength: 1.5
+  linearLatDrag: 12000
+  quadLatDrag: 10000
+  lateralStiffness: 100000
+  trackBrakeForce: 600000
   brakeDeadzone: 0.15
   steerBrakeMultiplier: 1
   neutralSteerTorqueBoost: 1

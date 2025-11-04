@@ -84,7 +84,7 @@ public class NetworkedShell : NetworkBehaviour
                 Destroy(hitAudio.gameObject, 4);
 
                 var tankBrain = other.gameObject.GetComponentInParent<TankBrain>();
-                tankBrain.TakeDamge(damage);
+                tankBrain.TakeDamge(parent.damage);
                 Server_DeleteSelfNow();
             }
         }

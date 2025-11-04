@@ -1303,19 +1303,12 @@ MonoBehaviour:
   muzzle: {fileID: 6111390505664026786}
   serverShellPrefab: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
     type: 3}
-  baseReloadTime: 5
-  noBatteryReloadTime: 10
-  shellSpeed: 10
   hasBullet: 1
   lives: 3
   currHealth: 0
   respawnTime: 5
   currentBtry: 50
   hasBattery: 0
-  batteryDrainMove: 0.5
-  batteryDrainTurning: 0.3
-  batteryDrainNeutralSteer: 0.2
-  batteryDrainShot: 6
   moveInputThreshold: 0.05
   contactRadius: 0.25
   contactCapsuleHalfLength: 0.43
@@ -1324,7 +1317,7 @@ MonoBehaviour:
   trackRayLength: 0.15
   groundMask:
     serializedVersion: 2
-    m_Bits: 7168
+    m_Bits: 23552
   driverRespawn: {fileID: 0}
   gunnerRespawn: {fileID: 0}
   respawnTexts:
@@ -1384,7 +1377,7 @@ MonoBehaviour:
   rb: {fileID: 4230098516145450446}
   groundMask:
     serializedVersion: 2
-    m_Bits: 7168
+    m_Bits: 23552
   identity: {fileID: 0}
   isSupposedToHaveServer: 1
   anim: {fileID: 4172860821965508566}
@@ -1398,6 +1391,7 @@ MonoBehaviour:
   hardFloorData: {fileID: 11400000, guid: 5dbb39ee34bb13340a154bedda3a5374, type: 2}
   carpetData: {fileID: 11400000, guid: 6e2fae0fdde0f5e47981cda13270ac4c, type: 2}
   wetFloorData: {fileID: 11400000, guid: 184abfa6ca421104ab381a75030c55ef, type: 2}
+  rampData: {fileID: 11400000, guid: c3814fee7a8871d4f84f7be6fe8dbb85, type: 2}
   currData: {fileID: 0}
   slipDead: 0.4
   minVelocityMagnitude: 0.001
