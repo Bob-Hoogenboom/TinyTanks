@@ -11,5 +11,5 @@ public class MenuTankData : ScriptableObject
     public List<GameObject> cupolaOptions;
 
     [Header("Materials")]
-    public List<Material> availableMaterials;
+    public List<TankMaterial> availableMaterials;
 }

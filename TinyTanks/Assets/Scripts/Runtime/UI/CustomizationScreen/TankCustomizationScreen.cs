@@ -74,7 +74,7 @@ public class TankCustomizationScreen : MonoBehaviour
         currentCupola = Instantiate(_currentTankData.cupolaOptions[cupolaIndex], cupolaPreviewParent);
 
         // Apply material
-        ApplyMaterialToTank(_currentTankData.availableMaterials[materialIndex]);
+        ApplyMaterialToTank(_currentTankData.availableMaterials[materialIndex].material);
     }
 
     private void ApplyMaterialToTank(Material mat)
@@ -110,9 +110,12 @@ public class TankCustomizationScreen : MonoBehaviour
 
 
             // Optional: visualize material color on button if it has an Image
-            Image img = newButton.GetComponent<Image>();
-            if (img && _currentTankData.availableMaterials[index].HasProperty("_Color"))
+            Image img = newButton.GetComponentsInChildren<Image>()[1];
+            if (img)
+            {
                 img.color = _currentTankData.availableMaterials[index].color;
+                Debug.Log("Ja heeft ie");
+            }
         }
     }
 }
