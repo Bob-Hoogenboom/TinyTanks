@@ -9,11 +9,16 @@ using System.Collections.Generic;
 [DefaultExecutionOrder(-100)]
 public class TankBrain : NetworkBehaviour
 {
+    [HideInInspector]
+    public int damage { get; private set; }
+
     [SyncVar] private CrewSeat driver;
     [SyncVar] private CrewSeat gunner;
 
     private Rigidbody _rb;
     private NetworkTransformReliable _netTrans;
+
+    public TankData tankData;
 
     [Header("Physics based movement")]
     [SerializeField] private TankTrackPhysics tracks;
@@ -37,10 +42,7 @@ public class TankBrain : NetworkBehaviour
     [Header("Firing")]
     [SerializeField] private GameObject serverShellPrefab;
     [SyncVar] private double _reloadEndTime;
-    [SerializeField] private float reloadTime;
-    [SerializeField] private float baseReloadTime = 5f;
-    [SerializeField] private float noBatteryReloadTime = 10f;
-    [SerializeField] private float shellSpeed = 10f;
+    [SyncVar] private float currReloadTime;
 
     [SyncVar(hook = nameof(OnIsReloadingChanged))]
     private bool isReloading = false;
@@ -52,7 +54,6 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private int lives = 3;
     [SyncVar(hook = nameof(OnHealthChanged))]
     [SerializeField] public float currHealth;
-    public int maxHealth { get; private set; } = 5;
     [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 5f;
     private bool _isDead;
@@ -60,12 +61,7 @@ public class TankBrain : NetworkBehaviour
     [Header("Battery")]
     [SyncVar(hook = nameof(OnBatteryChanged))]
     public float currentBtry = 50f;
-    [SerializeField] public float maxBtry { private set; get; } = 100f;
     [SerializeField] private bool hasBattery;
-    [SerializeField] private float batteryDrainMove = 0.5f;
-    [SerializeField] private float batteryDrainTurning = 0.3f;
-    [SerializeField] private float batteryDrainNeutralSteer = 0.2f;
-    [SerializeField] private float batteryDrainShot = 6f;
     [SerializeField] private float moveInputThreshold = 0.05f;
 
     [Header("RayCast")]
@@ -120,11 +116,12 @@ public class TankBrain : NetworkBehaviour
         _netTrans = GetComponent<NetworkTransformReliable>();
         if (!tracks) tracks = GetComponent<TankTrackPhysics>();
         if (!turret) turret = GetComponent<TankTurretPhysics>();
-        currHealth = maxHealth;
+        currHealth = tankData.maxHealth;
         _isDead = false;
         hasBattery = true;
-        reloadTime = baseReloadTime;
-        currentBtry = maxBtry;
+        currReloadTime = tankData.baseReloadTime;
+        currentBtry = tankData.maxBtry;
+        damage = tankData.damage;
         idleAudio.Play();
 
         List<NetworkStartPosition> startPoints = FindObjectsOfType<NetworkStartPosition>().ToList();
@@ -190,7 +187,7 @@ public class TankBrain : NetworkBehaviour
         if (from != driver) return;
         if (!hasBullet) return;
 
-        var velocity = turretPitchPivot.transform.forward * shellSpeed;
+        var velocity = turretPitchPivot.transform.forward * tankData.shellSpeed;
         GameObject serverShellClone = Instantiate(serverShellPrefab, muzzle.transform.position, turretPitchPivot.transform.rotation);
         Rigidbody serverShellRB = serverShellClone.GetComponent<Rigidbody>();
         serverShellRB.velocity = velocity;
@@ -200,7 +197,7 @@ public class TankBrain : NetworkBehaviour
         NetworkServer.Spawn(serverShellClone);
 
         hasBullet = false;
-        Server_ConsumeBattery(batteryDrainShot);
+        Server_ConsumeBattery(tankData.batteryDrainShot);
     }
 
     [Server]
@@ -211,7 +208,7 @@ public class TankBrain : NetworkBehaviour
         if (isReloading) return;
 
         isReloading = true;
-        _reloadEndTime = NetworkTime.time + reloadTime;
+        _reloadEndTime = NetworkTime.time + currReloadTime;
     }
 
     [Server]
@@ -233,13 +230,13 @@ public class TankBrain : NetworkBehaviour
         float drain = 0;
 
         if (aR == 0 && aL > 0 || (aR == 0 && aL > 0))
-            drain = batteryDrainTurning;
+            drain = tankData.batteryDrainTurning;
         else if (aL == 0 && aR > 0 || (aL == 0 && aR > 0))
-            drain = batteryDrainTurning;
+            drain = tankData.batteryDrainTurning;
         else if (aL > 0 && aR > 0 || aL < 0 && aR < 0)
-            drain = batteryDrainMove;
+            drain = tankData.batteryDrainMove;
         else if ((_leftTrack * _rightTrack) < -0.2f)
-            drain += batteryDrainNeutralSteer;
+            drain += tankData.batteryDrainNeutralSteer;
 
         Server_ConsumeBattery(drain * dt);
     }
@@ -256,7 +253,7 @@ public class TankBrain : NetworkBehaviour
         {
             hasBattery = false;
             Debug.Log("Battery depleted -> disabling systems");
-            reloadTime = noBatteryReloadTime;
+            currReloadTime = tankData.noBatteryReloadTime;
         }
     }
 
@@ -266,16 +263,16 @@ public class TankBrain : NetworkBehaviour
         Debug.Log("Applied battery Effect");
         float newBtry = currentBtry + amount;
 
-        if (newBtry > maxBtry)
+        if (newBtry > tankData.maxBtry)
         {
-            newBtry = maxBtry;
+            newBtry = tankData.maxBtry;
         }
 
         currentBtry = newBtry;
 
         if (currentBtry > 0)
         {
-            reloadTime = baseReloadTime;
+            currReloadTime = tankData.baseReloadTime;
             hasBattery = true;
         }
     }
@@ -329,8 +326,8 @@ public class TankBrain : NetworkBehaviour
 
         _netTrans.RpcTeleport(spawnLocation.position);
 
-        currHealth = maxHealth;
-        currentBtry = maxBtry;
+        currHealth = tankData.maxHealth;
+        currentBtry = tankData.maxBtry;
         _isDead = false;
 
         if (driverRespawn != null && gunnerRespawn != null)
@@ -361,7 +358,7 @@ public class TankBrain : NetworkBehaviour
     private void OnHealthChanged(float oldVal, float newVal)
     {
         foreach (var image in healthImage)
-            image.fillAmount = newVal / maxHealth;
+            image.fillAmount = newVal / tankData.maxHealth;
 
     }
 
@@ -464,7 +461,8 @@ public class TankBrain : NetworkBehaviour
 
     private void UpdateReloadDisplay(double timeRemaining)
     {
-        float progress = 1f - Mathf.Clamp01((float)(timeRemaining / reloadTime));
+        float progress = 1f - Mathf.Clamp01((float)(timeRemaining / currReloadTime));
+        Debug.Log(progress);
         bulletReloadImage.fillAmount = progress;
         reloadTimerImage.fillAmount = progress;
     }

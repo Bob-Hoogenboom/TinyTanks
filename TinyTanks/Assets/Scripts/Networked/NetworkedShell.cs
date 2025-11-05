@@ -7,6 +7,7 @@ public class NetworkedShell : NetworkBehaviour
 {
 
     const int TANK_LAYER = 9;
+    const int POWERUP_LAYER = 13;
 
     [Header("Behaviour")]
     [SyncVar] public TankBrain parent;
@@ -83,11 +84,11 @@ public class NetworkedShell : NetworkBehaviour
                 Destroy(hitAudio.gameObject, 4);
 
                 var tankBrain = other.gameObject.GetComponentInParent<TankBrain>();
-                tankBrain.TakeDamge(damage);
+                tankBrain.TakeDamge(parent.damage);
                 Server_DeleteSelfNow();
             }
         }
-        else
+        else if(other.gameObject.layer != POWERUP_LAYER)
         {
             var vxf = Instantiate(enviormentHitVFX, this.transform.position, this.transform.rotation);
             Destroy(vxf, 3);

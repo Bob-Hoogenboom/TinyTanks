@@ -6,6 +6,11 @@ using Mirror;
 [DefaultExecutionOrder(+100)]
 public class TankTrackPhysics : MonoBehaviour
 {
+    const int HARDFLOOR_DATA = 10;
+    const int CARPET_DATA = 11;
+    const int WETFLOOR_DATA = 12;
+    const int RAMP_DATA = 14;
+
     [SerializeField] private Rigidbody rb;
     [SerializeField] private LayerMask groundMask = ~0;
     [SerializeField] private NetworkIdentity identity;
@@ -29,10 +34,11 @@ public class TankTrackPhysics : MonoBehaviour
     [SerializeField] private float groundingForce = 1000f;
 
     [Header("Movement Variables")]
-    [SerializeField] private TankData hardFloorData;
-    [SerializeField] private TankData carpetData;
-    [SerializeField] private TankData wetFloorData;
-    [SerializeField] private TankData currData;
+    [SerializeField] private TrackSurfaceParams hardFloorData;
+    [SerializeField] private TrackSurfaceParams carpetData;
+    [SerializeField] private TrackSurfaceParams wetFloorData;
+    [SerializeField] private TrackSurfaceParams rampData;
+    [SerializeField] private TrackSurfaceParams currData;
 
     [Header("Lateral Model")]
     [Tooltip("Dead-zone for side slip (m/s).")]
@@ -382,9 +388,10 @@ public class TankTrackPhysics : MonoBehaviour
 
         switch (layer)
         {
-            case 10: currData = hardFloorData; break;
-            case 11: currData = carpetData; break;
-            case 12: currData = wetFloorData; break;
+            case HARDFLOOR_DATA: currData = hardFloorData; break;
+            case CARPET_DATA: currData = carpetData; break;
+            case WETFLOOR_DATA: currData = wetFloorData; break;
+            case RAMP_DATA: currData = rampData; break;
             default: currData = hardFloorData; break;
         }
     }
