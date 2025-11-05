@@ -6,8 +6,8 @@ using TMPro;
 
 public class RoleUIController : MonoBehaviour
 {
-    [SerializeField] private Button[] roleButtons;   // size 4
-    [SerializeField] private TMP_Text[] roleLabels;  // size 4
+    [SerializeField] private RoleButton[] roleButtons;   // size 4
+    [SerializeField] private TextMesh[] roleLabels;  // size 4
 
     private RoleManager bound;
 
@@ -75,7 +75,7 @@ public class RoleUIController : MonoBehaviour
             if (btnText != null) btnText.text = mine ? "Release" : "Claim";
 
             if (roleLabels != null && i < roleLabels.Length && roleLabels[i] != null)
-                roleLabels[i].text = $"Role {i + 1}: {(free ? "(free)" : owner)}";
+                roleLabels[i].text = $"Role {i + 1}: \n{(free ? "(free)" : owner)}";
         }
     }
 }
