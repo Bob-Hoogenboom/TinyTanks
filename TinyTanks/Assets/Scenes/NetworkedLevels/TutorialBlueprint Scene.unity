@@ -701,6 +701,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1039827684}
     m_Modifications:
+    - target: {fileID: 5175068025986540757, guid: 0d8819bb1ce04da4e9823baf06ebd225,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 7340716756690081126, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -709,17 +714,17 @@ PrefabInstance:
     - target: {fileID: 8472495909578141193, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.70204246
+      value: -0.702
       objectReference: {fileID: 0}
     - target: {fileID: 8472495909578141193, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00007848494
+      value: -0.031
       objectReference: {fileID: 0}
     - target: {fileID: 8472495909578141193, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.054945
+      value: -4.057
       objectReference: {fileID: 0}
     - target: {fileID: 8472495909578141193, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
@@ -760,6 +765,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WT_Ramp01_Prop
+      objectReference: {fileID: 0}
+    - target: {fileID: 9142178117013124275, guid: 0d8819bb1ce04da4e9823baf06ebd225,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1924,8 +1934,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1940977606}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &160605819
@@ -2542,10 +2551,25 @@ PrefabInstance:
         to fit through this gap. \n\nKeep this in mind when trying out the different
         tanks!"
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6723,14 +6747,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: BatteryTrigger (5)
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6772474750838792599, guid: da6e5649cd7e9924abd2671da52982d2, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1377483637845448815, guid: da6e5649cd7e9924abd2671da52982d2,
-        type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 959030488}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da6e5649cd7e9924abd2671da52982d2, type: 3}
 --- !u!4 &606759522 stripped
@@ -8720,6 +8739,27 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1458819195156865617, guid: 2007c833dce10af4c8526d7e493b6305,
+        type: 3}
+      propertyPath: shellSpawn
+      value: 
+      objectReference: {fileID: 1500657842}
+    - target: {fileID: 1458819195156865617, guid: 2007c833dce10af4c8526d7e493b6305,
+        type: 3}
+      propertyPath: maxDistance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1458819195156865617, guid: 2007c833dce10af4c8526d7e493b6305,
+        type: 3}
+      propertyPath: shootOffset.z
+      value: 0.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 1458819195156865617, guid: 2007c833dce10af4c8526d7e493b6305,
+        type: 3}
+      propertyPath: hitIndicatorPrefab
+      value: 
+      objectReference: {fileID: 920327244010073230, guid: 8d5ae303195ccdc44b0bca4c7d71d1a8,
+        type: 3}
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8770,44 +8810,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4403947531546064416, guid: 2007c833dce10af4c8526d7e493b6305,
+    - target: {fileID: 3291959829644627464, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.8141361
+      propertyPath: m_LocalPosition.y
+      value: 0.108
       objectReference: {fileID: 0}
-    - target: {fileID: 4403947531546064416, guid: 2007c833dce10af4c8526d7e493b6305,
+    - target: {fileID: 5234115178526320217, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.5806742
-      objectReference: {fileID: 0}
-    - target: {fileID: 4403947531546064416, guid: 2007c833dce10af4c8526d7e493b6305,
+      propertyPath: rampData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e1853875ccc5454f91499dab02a9877,
+        type: 2}
+    - target: {fileID: 5234115178526320217, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.0000022143327
-      objectReference: {fileID: 0}
-    - target: {fileID: 4403947531546064416, guid: 2007c833dce10af4c8526d7e493b6305,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.0000015793502
+      propertyPath: groundMask.m_Bits
+      value: 23552
       objectReference: {fileID: 0}
     - target: {fileID: 8486631689857829202, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_Name
       value: TestTank_(Medium)
       objectReference: {fileID: 0}
-    - target: {fileID: 8486631689857829202, guid: 2007c833dce10af4c8526d7e493b6305,
-        type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8486631689857829202, guid: 2007c833dce10af4c8526d7e493b6305,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 8180212269537568126, guid: 2007c833dce10af4c8526d7e493b6305, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2007c833dce10af4c8526d7e493b6305, type: 3}
@@ -8925,10 +8950,25 @@ PrefabInstance:
         the other tanks after you have finished the tutorial.\n\nWhen you are ready,
         head to the next point so we can do some shooting!"
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9876,10 +9916,25 @@ PrefabInstance:
         we have taken out these stationary targets, we will move on to something
         more challenging."
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10013,110 +10068,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 820115879}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &959030487
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 606759522}
-    m_Modifications:
-    - target: {fileID: 832043487357536270, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: bc52696673e5fbc45872ee5cb2730e6c, type: 2}
-    - target: {fileID: 1192608739789646299, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_Name
-      value: AABattery_Prop (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -14.46
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.406
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.99163324
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.12908758
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 14.834
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1192608739789646299, guid: ba6dc765b088c63439b2083f8872acb8,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 959030490}
-  m_SourcePrefab: {fileID: 100100000, guid: ba6dc765b088c63439b2083f8872acb8, type: 3}
---- !u!4 &959030488 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
-    type: 3}
-  m_PrefabInstance: {fileID: 959030487}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &959030489 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1192608739789646299, guid: ba6dc765b088c63439b2083f8872acb8,
-    type: 3}
-  m_PrefabInstance: {fileID: 959030487}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &959030490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 959030489}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8548444c92a577c428d275f008666df3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: 35
-  floatAmplitude: 0.2
-  floatFrequency: 0.2
 --- !u!1001 &968014631
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10187,10 +10138,25 @@ PrefabInstance:
         will most likely not be stationairy all the time.\n\nSo let's take out some
         moving targets next,  Huzzah!"
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10475,10 +10441,25 @@ PrefabInstance:
       propertyPath: message
       value: Extra slippery
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11123,6 +11104,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1940977606}
   - {fileID: 481463329}
   - {fileID: 324701433}
   - {fileID: 1741323163}
@@ -11499,6 +11481,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1039827684}
     m_Modifications:
+    - target: {fileID: 5175068025986540757, guid: 0d8819bb1ce04da4e9823baf06ebd225,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 7340716756690081126, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -11507,17 +11494,17 @@ PrefabInstance:
     - target: {fileID: 8472495909578141193, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.12790036
+      value: 0.085
       objectReference: {fileID: 0}
     - target: {fileID: 8472495909578141193, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.000073758354
+      value: -0.029
       objectReference: {fileID: 0}
     - target: {fileID: 8472495909578141193, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.0093446
+      value: -4.01
       objectReference: {fileID: 0}
     - target: {fileID: 8472495909578141193, guid: 0d8819bb1ce04da4e9823baf06ebd225,
         type: 3}
@@ -11559,6 +11546,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WT_Ramp01_Prop (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 9142178117013124275, guid: 0d8819bb1ce04da4e9823baf06ebd225,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11575,7 +11567,7 @@ PrefabInstance:
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 27.515999
+      value: 27.508
       objectReference: {fileID: 0}
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
@@ -11585,7 +11577,7 @@ PrefabInstance:
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.368
+      value: 1.361
       objectReference: {fileID: 0}
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
@@ -11637,10 +11629,25 @@ PrefabInstance:
         because you will stand out! \n\nTry driving over this ramp and I'll see you
         on the other side."
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12667,10 +12674,25 @@ PrefabInstance:
       value: When you are driving around, the floor will be made of different materials,
         this will have an effect on the grip of your tracks!
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14143,10 +14165,25 @@ PrefabInstance:
         to recharge your tank can be found throughout the level, try to find them
         before you battery gets depleted.'
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15842,16 +15879,37 @@ PrefabInstance:
       propertyPath: message
       value: Regular most common floor
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5dff51da41e8474980de5173f8b8723, type: 3}
+--- !u!4 &1500657842 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3291959829644627464, guid: 2007c833dce10af4c8526d7e493b6305,
+    type: 3}
+  m_PrefabInstance: {fileID: 820115879}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1500749073 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1377483637845448815, guid: da6e5649cd7e9924abd2671da52982d2,
@@ -16653,10 +16711,25 @@ PrefabInstance:
       propertyPath: message
       value: Extra grippy
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17417,10 +17490,25 @@ PrefabInstance:
       value: That was some great shooting, I think you're ready for some real fights.
         Head toward that light to end the tutorial
       objectReference: {fileID: 0}
+    - target: {fileID: 5262733661499909651, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7626406579272806511, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21523,7 +21611,7 @@ GameObject:
   - component: {fileID: 2068498934}
   - component: {fileID: 2068498933}
   - component: {fileID: 2068498932}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Ramp (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22590,8 +22678,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: BatteryTrigger
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6772474750838792599, guid: da6e5649cd7e9924abd2671da52982d2, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -22602,12 +22689,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 155222876}
+    m_TransformParent: {fileID: 1085292196}
     m_Modifications:
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.76
+      value: 22.95
       objectReference: {fileID: 0}
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
@@ -22617,7 +22704,7 @@ PrefabInstance:
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.36
+      value: -14.93
       objectReference: {fileID: 0}
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
@@ -22627,17 +22714,17 @@ PrefabInstance:
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2898812859617475046, guid: a5dff51da41e8474980de5173f8b8723,
         type: 3}
@@ -22673,6 +22760,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TutorialTrigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287634498788487317, guid: a5dff51da41e8474980de5173f8b8723,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: 2366885335767811618}
   - component: {fileID: 8397707948634792596}
   - component: {fileID: 219117540570060011}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,6 +236,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Screw_mesh
+      objectReference: {fileID: 0}
+    - target: {fileID: 7577486597461291593, guid: 45cfa9b99bfffb647b0a5edb181528db,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

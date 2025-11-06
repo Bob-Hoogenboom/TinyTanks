@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1377483637845448815}
   - component: {fileID: 5868132405963693734}
   - component: {fileID: 6772474750838792599}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BatteryTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 2807916962399267761}
   - component: {fileID: 661929577547964530}
   - component: {fileID: 266409023791308284}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,6 +170,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AABattery_Prop
+      objectReference: {fileID: 0}
+    - target: {fileID: 1192608739789646299, guid: ba6dc765b088c63439b2083f8872acb8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2001621302015718241, guid: ba6dc765b088c63439b2083f8872acb8,
         type: 3}

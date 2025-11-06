@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))] // Use Collider if 3D
 public class TutorialTrigger : MonoBehaviour
 {
-    [TextArea(1,1)]
+    [TextArea(1, 1)] 
     [SerializeField] private string title;
     [TextArea(3,10)] 
     [SerializeField] private string message;

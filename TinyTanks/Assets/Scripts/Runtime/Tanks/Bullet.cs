@@ -20,21 +20,19 @@ public class Bullet : MonoBehaviour
     private void Start()
     {
         _bulletWhistle = GetComponentInChildren<AudioSource>();
-
-        //TODO Change instantiate and destroy logic to play and stop
-        var _barrelSmoke = Instantiate(smokeEffect, this.transform.position, this.transform.rotation);
-        Destroy(_barrelSmoke, 3);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 9)
         {
-            if (other.gameObject != parent)
+            if (other.transform.root != parent)
             {
                 //Hit other player**
                 IDamagable iDamage = other.GetComponent<IDamagable>();
                 if (iDamage != null) iDamage.Damage(damage);
+
+                Debug.Log("Player!: " + other.transform.root);
 
                 //TODO Change instantiate and destroy logic to play and stop
                 var vxf = Instantiate(explosionEffect, this.transform.position, this.transform.rotation);
@@ -53,6 +51,7 @@ public class Bullet : MonoBehaviour
         }
         else
         {
+            if (other.gameObject.layer == 2) return;
 
             Debug.Log("Geen andere tank gehit");
             //TODO Change instantiate and destroy logic to play and stop
@@ -70,6 +69,9 @@ public class Bullet : MonoBehaviour
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             _bulletWhistle.Stop();
+
+            Debug.Log("Nothing: " + other.name);
+            
             Destroy(this);
         }
     }
