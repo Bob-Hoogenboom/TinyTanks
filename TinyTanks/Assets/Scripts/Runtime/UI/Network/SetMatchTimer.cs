@@ -10,10 +10,10 @@ public class SetMatchTimer : MonoBehaviour
     public TMP_InputField timeInput; // Single field for both presets + custom
 
     [Header("Preset Times (in seconds)")]
-    private readonly int[] presetTimes = { 180, 300, 600, 900 }; // 3, 5, 10, 15 minutes
-    private int currentIndex = 1; // Default = 5 minutes (index 1)
+    private readonly int[] _presetTimes = { 180, 300, 600, 900 }; // 3, 5, 10, 15 minutes
+    private int _currentIndex = 1; // Default = 5 minutes (index 1)
 
-    private bool isCustom = false;
+    private bool _isCustom = false;
     public float selectedTime { get; private set; } // in seconds
 
     private void Start()
@@ -27,26 +27,26 @@ public class SetMatchTimer : MonoBehaviour
 
     private void PreviousTime()
     {
-        currentIndex--;
-        if (currentIndex < 0)
-            currentIndex = 4; // wrap to "Custom"
+        _currentIndex--;
+        if (_currentIndex < 0)
+            _currentIndex = 4; // wrap to "Custom"
         UpdateDisplay();
     }
 
     private void NextTime()
     {
-        currentIndex++;
-        if (currentIndex > 4)
-            currentIndex = 0; // wrap to start
+        _currentIndex++;
+        if (_currentIndex > 4)
+            _currentIndex = 0; // wrap to start
         UpdateDisplay();
     }
 
     private void UpdateDisplay()
     {
-        if (currentIndex < 4)
+        if (_currentIndex < 4)
         {
-            isCustom = false;
-            selectedTime = presetTimes[currentIndex];
+            _isCustom = false;
+            selectedTime = _presetTimes[_currentIndex];
             Debug.Log(selectedTime);
             timeInput.text = FormatTime(selectedTime);
             Debug.Log(timeInput.text);
@@ -55,7 +55,7 @@ public class SetMatchTimer : MonoBehaviour
         }
         else
         {
-            isCustom = true;
+            _isCustom = true;
             timeInput.interactable = true; // enable manual input
             timeInput.text = ""; // blank until player types
         }
@@ -65,7 +65,7 @@ public class SetMatchTimer : MonoBehaviour
 
     private void OnCustomTimeChanged(string input)
     {
-        if (!isCustom) return; // ignore typing when on preset
+        if (!_isCustom) return; // ignore typing when on preset
 
         if (TryParseTime(input, out float seconds))
         {

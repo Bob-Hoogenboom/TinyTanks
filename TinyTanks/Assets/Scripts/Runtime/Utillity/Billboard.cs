@@ -5,32 +5,32 @@ namespace Utility
     [ExecuteAlways]
     public class Billboard : MonoBehaviour
     {
-        [SerializeField] private Camera cam;
-
         [Header("Editor Mode")]
         [SerializeField] private bool updateInEditMode = false;
 
+        private Camera _cam;
+
         private void Start()
         {
-            if (Application.isPlaying) cam = Camera.main;
+            if (Application.isPlaying) _cam = Camera.main;
         }
 
         private void LateUpdate()
         {
             if (!Application.isPlaying && !updateInEditMode) return;
 
-            if (cam == null)
+            if (_cam == null)
             {
                 // In edit mode, Camera.main doesn’t always exist — find any scene camera
                 if (Camera.main != null)
-                    cam = Camera.main;
+                    _cam = Camera.main;
                 else if (SceneViewCamera() != null)
-                    cam = SceneViewCamera();
+                    _cam = SceneViewCamera();
                 else
                     return;
             }
 
-            transform.LookAt(cam.transform);
+            transform.LookAt(_cam.transform);
         }
 
         // Try to get Scene View camera when in edit mode

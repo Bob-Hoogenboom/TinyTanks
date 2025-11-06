@@ -9,7 +9,7 @@ public class RoleUIController : MonoBehaviour
     [SerializeField] private RoleButton[] roleButtons;   // size 4
     [SerializeField] private TextMesh[] roleLabels;  // size 4
 
-    private RoleManager bound;
+    private RoleManager _bound;
 
     private void OnEnable()
     {
@@ -33,17 +33,17 @@ public class RoleUIController : MonoBehaviour
     private void TryBind(RoleManager mgr)
     {
         if (mgr == null) return;
-        bound = mgr;
-        bound.OnRolesUpdated += Refresh;
+        _bound = mgr;
+        _bound.OnRolesUpdated += Refresh;
         // Force an initial draw (OnChange won't fire for existing contents)
         Refresh();
     }
     private void Unbind()
     {
-        if (bound != null)
+        if (_bound != null)
         {
-            bound.OnRolesUpdated -= Refresh;
-            bound = null;
+            _bound.OnRolesUpdated -= Refresh;
+            _bound = null;
         }
     }
 
@@ -62,13 +62,13 @@ public class RoleUIController : MonoBehaviour
 
     private void Refresh()
     {
-        if (bound == null) return;
+        if (_bound == null) return;
 
         for (int i = 0; i < roleButtons.Length; i++)
         {
-            bool free = bound.IsRoleFree(i);
-            bool mine = bound.IsRoleMine(i);
-            string owner = bound.GetOwnerName(i);
+            bool free = _bound.IsRoleFree(i);
+            bool mine = _bound.IsRoleMine(i);
+            string owner = _bound.GetOwnerName(i);
 
             roleButtons[i].interactable = free || mine;
             var btnText = roleButtons[i].GetComponentInChildren<TMP_Text>();
