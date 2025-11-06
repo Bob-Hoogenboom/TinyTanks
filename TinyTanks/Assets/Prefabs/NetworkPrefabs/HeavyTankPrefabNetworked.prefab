@@ -2048,7 +2048,7 @@ PrefabInstance:
     - target: {fileID: 1895708012193612146, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2071988629620841301, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
@@ -2178,7 +2178,7 @@ PrefabInstance:
     - target: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
@@ -2188,27 +2188,27 @@ PrefabInstance:
     - target: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.000000037748947
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000004371139
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -1.7112913e-15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 45.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 54
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
@@ -2255,6 +2255,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 8490250943285416618, guid: eee26696c6da89043b3aa63ff9667d52,
+        type: 3}
+      propertyPath: barrelTransform
+      value: 
+      objectReference: {fileID: 888042457583644244}
     - target: {fileID: 8815744447291223594, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_Layer
