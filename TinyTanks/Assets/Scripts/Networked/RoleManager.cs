@@ -143,6 +143,6 @@ public class RoleManager : NetworkBehaviour
     {
         if (!roleOwners.TryGetValue(roleIndex, out uint owner) || owner == 0) return "(free)";
         // Look up the owner NetworkIdentity; may be missing briefly during joins. :contentReference[oaicite:2]{index=2}
-        return Mirror.NetworkClient.spawned.TryGetValue(owner, out var ni) ? ni.name : "(resolving...)";
+        return Mirror.NetworkClient.spawned.TryGetValue(owner, out var ni) ? /*ni.name*/ "Player" : "(resolving...)";
     }
 }
