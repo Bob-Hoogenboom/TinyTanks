@@ -1,6 +1,7 @@
 using Cinemachine;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum TankRole
 {
@@ -29,9 +30,16 @@ public class TutorialTank : MonoBehaviour, IDamagable
     [SerializeField] private Transform shellSpawn;
     [SerializeField] private GameObject shellPrefab;
 
+    [SerializeField] private float maxDistance = 100f;
+    [SerializeField] private GameObject hitIndicatorPrefab;
+    private GameObject _hitIndicatorInstance;
+
     [Header("State")]
     [SerializeField] private TankRole currentRole = TankRole.TANK_DRIVER;
     public static event Action <TankRole> OnUpdateRole;
+
+    [Header("Effects and Actions")]
+    public UnityEvent onShoot;
 
     private float _leftInput = 0f;
     private float _rightInput = 0f;
@@ -39,6 +47,12 @@ public class TutorialTank : MonoBehaviour, IDamagable
 
     private void Start()
     {
+        if (hitIndicatorPrefab != null)
+        {
+            // Create one instance to reuse (so we’re not constantly instantiating)
+            _hitIndicatorInstance = Instantiate(hitIndicatorPrefab);
+            _hitIndicatorInstance.SetActive(false);
+        }
         UpdateRoleState();
     }
 
@@ -74,6 +88,7 @@ public class TutorialTank : MonoBehaviour, IDamagable
         {
             //In Observer state
             Aiming();
+            AimIndicator();
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -84,6 +99,7 @@ public class TutorialTank : MonoBehaviour, IDamagable
         {
             //In Driver and Spectator State
             Driving();
+            _hitIndicatorInstance.SetActive(false);
         }
     }
 
@@ -120,10 +136,41 @@ public class TutorialTank : MonoBehaviour, IDamagable
         Quaternion rotation = shellSpawn.rotation;
         GameObject bulletObj = Instantiate(shellPrefab, shellSpawn.position, rotation);
         Rigidbody brb = bulletObj.GetComponent<Rigidbody>();
+
         Bullet bullet = bulletObj.GetComponent<Bullet>();
-        //bullet.parent = _bulletParent.gameObject; //Why set a parent?
+        bullet.parent = gameObject; //Set parent to check if you dont hit yourself and count a point if your bullet hits something
+
         brb.AddForce(shellSpawn.forward * shellSpeed, ForceMode.VelocityChange);
         Destroy(bulletObj, 5f);
+
+        onShoot.Invoke();
+    }
+
+    private void AimIndicator()
+    {
+        Ray ray = new Ray(shellSpawn.position, shellSpawn.forward);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
+        {
+            if (_hitIndicatorInstance != null)
+            {
+                _hitIndicatorInstance.SetActive(true);
+                _hitIndicatorInstance.transform.position = hit.point;
+                _hitIndicatorInstance.transform.rotation = Quaternion.identity; // optional: align with hit.normal
+            }
+            else
+            {
+                // Debug sphere if no prefab is assigned
+                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+                Debug.DrawLine(hit.point, hit.point + hit.normal * 0.3f, Color.yellow);
+            }
+        }
+        else
+        {
+            if (_hitIndicatorInstance != null)
+                _hitIndicatorInstance.SetActive(false);
+        }
+
     }
     #endregion
 
@@ -149,11 +196,12 @@ public class TutorialTank : MonoBehaviour, IDamagable
         tankTrack.SetInputs(_leftInput, _rightInput);
     }
 
+    #endregion
+
     public void Damage(float damage)
     {
         Debug.Log("AUWW!");
         hitpoints -= damage;
         //do some damage effect here
     }
-    #endregion
 }
