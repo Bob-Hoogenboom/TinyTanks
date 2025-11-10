@@ -14,15 +14,15 @@ public class BarrelAngleDisplayTMP : MonoBehaviour
     public float minPitch = -10f;
     public float maxPitch = 10f;
 
-    private Vector2 baseAnchor;
-    private float baseY;
+    private Vector2 _baseAnchor;
+    private float _baseY;
 
     private void Awake()
     {
         if(reticle != null)
         {
-            baseAnchor = reticle.anchoredPosition;
-            baseY = baseAnchor.y;
+            _baseAnchor = reticle.anchoredPosition;
+            _baseY = _baseAnchor.y;
         }
     }
 
@@ -42,11 +42,11 @@ public class BarrelAngleDisplayTMP : MonoBehaviour
         {
             float clamped = Mathf.Clamp(pitch, minPitch, maxPitch);
             float dir = -1f;
-            float targetY = baseY + dir * clamped * pixelsPerDegree;
+            float targetY = _baseY + dir * clamped * pixelsPerDegree;
 
-            Vector2 pos = baseAnchor;
+            Vector2 pos = _baseAnchor;
             pos.y = targetY;
-            pos.x = baseAnchor.x;
+            pos.x = _baseAnchor.x;
 
             reticle.anchoredPosition = pos;
         }
