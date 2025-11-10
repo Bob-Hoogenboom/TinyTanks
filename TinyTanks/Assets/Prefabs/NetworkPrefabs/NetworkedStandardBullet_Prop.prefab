@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1273131803844214113}
   - component: {fileID: 8839403108195990478}
   - component: {fileID: -5675497144142597041}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NetworkedStandardBullet_Prop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,6 +233,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bullet_audio
       objectReference: {fileID: 0}
+    - target: {fileID: 1065504656848196673, guid: 33ff43e2de90d0748833f18278ac3531,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2827030453218167174, guid: 33ff43e2de90d0748833f18278ac3531,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -308,10 +313,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6955452298965383634}
     m_Modifications:
+    - target: {fileID: 849228054941603556, guid: bc4baf23fc15efb48846be372d07783b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2771049729441235571, guid: bc4baf23fc15efb48846be372d07783b,
         type: 3}
       propertyPath: m_Name
       value: Bullet Trail
+      objectReference: {fileID: 0}
+    - target: {fileID: 2771049729441235571, guid: bc4baf23fc15efb48846be372d07783b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6152987602544228073, guid: bc4baf23fc15efb48846be372d07783b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8553236520805801397, guid: bc4baf23fc15efb48846be372d07783b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8638033701189328612, guid: bc4baf23fc15efb48846be372d07783b,
         type: 3}

@@ -1182,6 +1182,8 @@ MonoBehaviour:
   currentBtry: 50
   hasBattery: 0
   moveInputThreshold: 0.05
+  hasMines: 0
+  mine: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
   contactRadius: 0.18
   contactCapsuleHalfLength: 0.2
   trackSpacing: 0.65
@@ -1211,6 +1213,8 @@ MonoBehaviour:
   currImages:
   - {fileID: 2093767266968802130}
   - {fileID: 956595897461398377}
+  mineUI: {fileID: 7378152497901258024}
+  mineTxt: {fileID: 652668750858429485}
   healthImage:
   - {fileID: 431305802051081624}
   - {fileID: 6033296392722489523}
@@ -3594,6 +3598,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &652668750858429485 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 93322974036678951, guid: eee26696c6da89043b3aa63ff9667d52,
+    type: 3}
+  m_PrefabInstance: {fileID: 595937523931086090}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &982722239254385399 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 425140113310134269, guid: eee26696c6da89043b3aa63ff9667d52,
@@ -3645,6 +3661,12 @@ MonoBehaviour:
 --- !u!224 &6626794040321194787 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
+    type: 3}
+  m_PrefabInstance: {fileID: 595937523931086090}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &7378152497901258024 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 7935699465244784674, guid: eee26696c6da89043b3aa63ff9667d52,
     type: 3}
   m_PrefabInstance: {fileID: 595937523931086090}
   m_PrefabAsset: {fileID: 0}
