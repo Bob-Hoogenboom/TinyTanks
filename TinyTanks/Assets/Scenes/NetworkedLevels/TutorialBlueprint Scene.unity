@@ -6476,6 +6476,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 3051195081982612440, guid: a04825c76d6426647ac2d88a9d2ca0ed,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3674044200906345295, guid: a04825c76d6426647ac2d88a9d2ca0ed,
         type: 3}
       propertyPath: m_fontAsset
@@ -6492,6 +6497,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 4239464595951943836, guid: a04825c76d6426647ac2d88a9d2ca0ed,
+        type: 3}
+      propertyPath: barrelTransform
+      value: 
+      objectReference: {fileID: 956598603}
     - target: {fileID: 4283756219810499794, guid: a04825c76d6426647ac2d88a9d2ca0ed,
         type: 3}
       propertyPath: m_Name
@@ -6501,6 +6511,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283756219810499794, guid: a04825c76d6426647ac2d88a9d2ca0ed,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4438845213819703155, guid: a04825c76d6426647ac2d88a9d2ca0ed,
         type: 3}
@@ -6535,6 +6550,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6132801669124907953, guid: a04825c76d6426647ac2d88a9d2ca0ed,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6959541593062915162, guid: a04825c76d6426647ac2d88a9d2ca0ed,
         type: 3}
@@ -8746,8 +8766,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1400813442176392256, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1400813442176392256, guid: 2007c833dce10af4c8526d7e493b6305,
+        type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 1
+      value: 0.09879494
       objectReference: {fileID: 0}
     - target: {fileID: 1458819195156865617, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
