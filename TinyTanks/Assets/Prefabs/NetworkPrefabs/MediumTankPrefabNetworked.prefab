@@ -1004,6 +1004,8 @@ MonoBehaviour:
   currentBtry: 50
   hasBattery: 0
   moveInputThreshold: 0.05
+  hasMines: 0
+  mine: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
   contactRadius: 0.22
   contactCapsuleHalfLength: 0.35
   trackSpacing: 0.9
@@ -1033,6 +1035,8 @@ MonoBehaviour:
   currImages:
   - {fileID: 8866342757030311539}
   - {fileID: 881202975338486235}
+  mineUI: {fileID: 27421156553449481}
+  mineTxt: {fileID: 8001668640196264204}
   healthImage:
   - {fileID: 7203881064663871673}
   - {fileID: 5964657698217107969}
@@ -1677,6 +1681,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8431779184609225854}
   m_SourcePrefab: {fileID: 100100000, guid: 8823c84c348df324b9b0bce5ece399c9, type: 3}
+--- !u!225 &27421156553449481 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 8841980199945409554, guid: 8823c84c348df324b9b0bce5ece399c9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8850819292145021979}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &881202975338486235 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8570002848541781440, guid: 8823c84c348df324b9b0bce5ece399c9,
@@ -1962,6 +1972,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8001668640196264204 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1576205424060953879, guid: 8823c84c348df324b9b0bce5ece399c9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8850819292145021979}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8866342757030311539 stripped

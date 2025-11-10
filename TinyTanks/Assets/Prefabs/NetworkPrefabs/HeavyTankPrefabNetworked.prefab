@@ -1004,6 +1004,8 @@ MonoBehaviour:
   currentBtry: 50
   hasBattery: 0
   moveInputThreshold: 0.05
+  hasMines: 0
+  mine: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
   contactRadius: 0.25
   contactCapsuleHalfLength: 0.43
   trackSpacing: 1.1
@@ -1033,6 +1035,8 @@ MonoBehaviour:
   currImages:
   - {fileID: 1033921066456155622}
   - {fileID: 6027014982620474778}
+  mineUI: {fileID: 8445306052756198300}
+  mineTxt: {fileID: 1898558898445988505}
   healthImage:
   - {fileID: 1633673963969987372}
   - {fileID: 961610661620225600}
@@ -1361,6 +1365,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3974788857490611268}
     m_Modifications:
+    - target: {fileID: 127494264326886636, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8533177478944793253, guid: ad4463405ba347041990f570bd9c4442,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1485,6 +1494,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1898558898445988505 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1927989237305953465, guid: ad4463405ba347041990f570bd9c4442,
+    type: 3}
+  m_PrefabInstance: {fileID: 42958732176555552}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2230657495491134531 stripped
@@ -1663,6 +1684,12 @@ MonoBehaviour:
   rotationSensitivity: 0.01
   positionPrecision: 0.01
   scalePrecision: 0.01
+--- !u!225 &8445306052756198300 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 8478975870136954300, guid: ad4463405ba347041990f570bd9c4442,
+    type: 3}
+  m_PrefabInstance: {fileID: 42958732176555552}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8571318801813757061 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8533177478944793253, guid: ad4463405ba347041990f570bd9c4442,
