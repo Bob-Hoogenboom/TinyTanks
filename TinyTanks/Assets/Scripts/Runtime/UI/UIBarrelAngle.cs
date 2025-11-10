@@ -3,8 +3,28 @@ using TMPro;
 
 public class BarrelAngleDisplayTMP : MonoBehaviour
 {
-    public Transform barrelTransform;        // Assign the barrel Transform here
-    public TextMeshProUGUI angleText;        // Assign the TMP Text element here
+
+    [Header("Scene refs")]
+    [SerializeField] private Transform barrelTransform;        // Assign the barrel Transform here
+    [SerializeField] private TextMeshProUGUI angleText;        // Assign the TMP Text element here
+    [SerializeField] private RectTransform reticle;
+
+    [Header("Mapping")]
+    public float pixelsPerDegree = 8;
+    public float minPitch = -10f;
+    public float maxPitch = 10f;
+
+    private Vector2 _baseAnchor;
+    private float _baseY;
+
+    private void Awake()
+    {
+        if(reticle != null)
+        {
+            _baseAnchor = reticle.anchoredPosition;
+            _baseY = _baseAnchor.y;
+        }
+    }
 
     void Update()
     {
@@ -12,10 +32,25 @@ public class BarrelAngleDisplayTMP : MonoBehaviour
         float pitch = barrelTransform.eulerAngles.x;
 
         // Convert from 0–360 to -180–180 range for easier interpretation
-        if (pitch > 180f)
-            pitch -= 360f;
+        if (pitch > 180f) pitch -= 360f;
 
         // Display the pitch as a rounded integer with degree symbol
-        angleText.text = Mathf.RoundToInt(pitch) + "°";
+        if(angleText != null)
+        angleText.text = (Mathf.RoundToInt(pitch) * -1) + "°";
+
+        if(reticle != null)
+        {
+            float clamped = Mathf.Clamp(pitch, minPitch, maxPitch);
+            float dir = -1f;
+            float targetY = _baseY + dir * clamped * pixelsPerDegree;
+
+            Vector2 pos = _baseAnchor;
+            pos.y = targetY;
+            pos.x = _baseAnchor.x;
+
+            reticle.anchoredPosition = pos;
+        }
     }
+
+
 }
