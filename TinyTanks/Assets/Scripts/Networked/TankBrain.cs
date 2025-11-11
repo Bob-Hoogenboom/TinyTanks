@@ -187,8 +187,8 @@ public class TankBrain : NetworkBehaviour
 
     private void LateUpdate()
     {
-        UpdateRightTrackColours();
-        UpdateLeftTrackColour();
+        UpdateTrackColours(tracks.leftTrackGrounded);
+        UpdateTrackColours(tracks.rightTrackGrounded);
     }
 
     [ServerCallback]
@@ -564,10 +564,10 @@ public class TankBrain : NetworkBehaviour
         reloadTimerImage.fillAmount = progress;
     }
 
-    private void UpdateRightTrackColours()
+    private void UpdateTrackColours(bool grounded)
     {
 
-        if (!tracks.rightTrackGrounded)
+        if (!grounded)
             rightTrackImage.color = Color.red;
         else if (tracks.rightInput > 0)
             rightTrackImage.color = blue;
@@ -575,18 +575,6 @@ public class TankBrain : NetworkBehaviour
             rightTrackImage.color = orange;
         else
             rightTrackImage.color = Color.grey;
-    }
-
-    private void UpdateLeftTrackColour()
-    {
-        if (!tracks.leftTrackGrounded)
-            leftTrackImage.color = Color.red;
-        else if (tracks.leftInput > 0)
-            leftTrackImage.color = blue;
-        else if (tracks.leftInput < 0)
-            leftTrackImage.color = orange;
-        else
-            leftTrackImage.color = Color.grey;
     }
 
     public void TakeDamge(int dmg)
