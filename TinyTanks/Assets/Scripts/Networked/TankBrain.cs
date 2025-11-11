@@ -91,7 +91,6 @@ public class TankBrain : NetworkBehaviour
 
     [Header("UI Bullet")]
     [SerializeField] private CanvasGroup reloadGroup;
-    [SerializeField] private TMP_Text[] bulletStateTexts;
     [SerializeField] private Image bulletReloadImage;
     [SerializeField] private Image reloadTimerImage;
 
@@ -107,6 +106,12 @@ public class TankBrain : NetworkBehaviour
     [Header("UI Health")]
     [SerializeField] private Image[] healthImage;
     [SerializeField] private TMP_Text[] livesText;
+
+    [Header("UI Tracks")]
+    [SerializeField] private Image leftTrackImage;
+    [SerializeField] private Image rightTrackImage;
+    [SerializeField] private Color orange;
+    [SerializeField] private Color blue;
 
     [Header("Spawning")]
     [SerializeField] private List<Transform> spawnPoints;
@@ -178,6 +183,12 @@ public class TankBrain : NetworkBehaviour
             if (cooldownRemaining <= 0)
                 Server_FinishMineCooldown();
         }
+    }
+
+    private void LateUpdate()
+    {
+        UpdateRightTrackColours();
+        UpdateLeftTrackColour();
     }
 
     [ServerCallback]
@@ -464,9 +475,6 @@ public class TankBrain : NetworkBehaviour
             shootingAudio.Play();
         }
 
-        foreach (var text in bulletStateTexts)
-            if (text) text.text = hasBullet ? "Ready" : "Not Ready";
-
         if (reloadGroup) reloadGroup.alpha = hasBullet ? 0f : 1f;
 
         if (hasBullet)
@@ -554,6 +562,31 @@ public class TankBrain : NetworkBehaviour
         Debug.Log(progress);
         bulletReloadImage.fillAmount = progress;
         reloadTimerImage.fillAmount = progress;
+    }
+
+    private void UpdateRightTrackColours()
+    {
+
+        if (!tracks.rightTrackGrounded)
+            rightTrackImage.color = Color.red;
+        else if (tracks.rightInput > 0)
+            rightTrackImage.color = blue;
+        else if (tracks.rightInput < 0)
+            rightTrackImage.color = orange;
+        else
+            rightTrackImage.color = Color.grey;
+    }
+
+    private void UpdateLeftTrackColour()
+    {
+        if (!tracks.leftTrackGrounded)
+            leftTrackImage.color = Color.red;
+        else if (tracks.leftInput > 0)
+            leftTrackImage.color = blue;
+        else if (tracks.leftInput < 0)
+            leftTrackImage.color = orange;
+        else
+            leftTrackImage.color = Color.grey;
     }
 
     public void TakeDamge(int dmg)
