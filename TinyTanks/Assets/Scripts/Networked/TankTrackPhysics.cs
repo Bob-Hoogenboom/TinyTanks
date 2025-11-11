@@ -47,8 +47,11 @@ public class TankTrackPhysics : MonoBehaviour
     [SerializeField] private float minVelocityMagnitude = 0.01f;
     [Tooltip("Smoothing factor for track contact (0-1, higher = more responsive)")]
 
-    private float leftInput;
-    private float rightInput;
+    public float leftInput { get; private set; }
+    public float rightInput { get; private set; }
+
+    public bool leftTrackGrounded { get; private set; }
+    public bool rightTrackGrounded { get; private set; }
 
     // Track contact state
     private Vector3 lastLeftNormal = Vector3.up;
@@ -120,6 +123,16 @@ public class TankTrackPhysics : MonoBehaviour
         bool lrHit = Physics.SphereCast(leftRearStart, contactRadius, down, out RaycastHit lrInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
         bool rfHit = Physics.SphereCast(rightFrontStart, contactRadius, down, out RaycastHit rfInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
         bool rrHit = Physics.SphereCast(rightRearStart, contactRadius, down, out RaycastHit rrInfo, trackRayLength, groundMask, QueryTriggerInteraction.Ignore);
+
+        if (lfHit && lrHit)
+            leftTrackGrounded = true;
+        else
+            leftTrackGrounded = false;
+
+        if (rfHit && rrHit)
+            rightTrackGrounded = true;
+        else
+            rightTrackGrounded = false;
 
         // update surface type + smoothed normals
         if (lfHit) { CheckTrackSurface(lfInfo); lastLeftNormal = Vector3.Slerp(lastLeftNormal, lfInfo.normal, 0.5f).normalized; }

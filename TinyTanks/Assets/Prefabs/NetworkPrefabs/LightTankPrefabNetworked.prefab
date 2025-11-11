@@ -1182,7 +1182,9 @@ MonoBehaviour:
   currentBtry: 50
   hasBattery: 0
   moveInputThreshold: 0.05
+  mineOnCooldown: 0
   hasMines: 0
+  mineCooldownTime: 4
   mine: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
   contactRadius: 0.18
   contactCapsuleHalfLength: 0.2
@@ -1198,9 +1200,6 @@ MonoBehaviour:
   - {fileID: 1482702092240759643}
   - {fileID: 76987111198402487}
   reloadGroup: {fileID: 8744837004090127379}
-  bulletStateTexts:
-  - {fileID: 0}
-  - {fileID: 0}
   bulletReloadImage: {fileID: 982722239254385399}
   reloadTimerImage: {fileID: 8467581599527105738}
   batteryImages:
@@ -1221,6 +1220,10 @@ MonoBehaviour:
   livesText:
   - {fileID: 4513485006014525689}
   - {fileID: 7558663049234826706}
+  leftTrackImage: {fileID: 8383020782092768785}
+  rightTrackImage: {fileID: 7213388448031860837}
+  orange: {r: 0.9254902, g: 0.52156866, b: 0.24313726, a: 1}
+  blue: {r: 0.27450982, g: 0.7058824, b: 0.9137255, a: 1}
   spawnPoints: []
   spawnLocation: {fileID: 0}
   minSpawnDistance: 20
@@ -3291,6 +3294,18 @@ CanvasGroup:
     type: 3}
   m_PrefabInstance: {fileID: 5392621048374109}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7213388448031860837 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7208066300154170168, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 5392621048374109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7558663049234826706 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7563491497052235407, guid: 42a37a046e3ec104db7d766801b4dd13,
@@ -3301,6 +3316,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8383020782092768785 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8378191137057568076, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 5392621048374109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &595937523931086090
