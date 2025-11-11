@@ -183,12 +183,15 @@ public class TankBrain : NetworkBehaviour
             if (cooldownRemaining <= 0)
                 Server_FinishMineCooldown();
         }
+<<<<<<< HEAD
     }
 
     private void LateUpdate()
     {
         UpdateRightTrackColours();
         UpdateLeftTrackColour();
+=======
+>>>>>>> 09cabe6fa9769700c594be80df2ae37223b7b65f
     }
 
     [ServerCallback]
