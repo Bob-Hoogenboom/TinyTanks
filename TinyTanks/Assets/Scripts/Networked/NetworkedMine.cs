@@ -17,20 +17,13 @@ public class NetworkedMine : NetworkBehaviour
 
     [Header("VFX")]
     [SerializeField] private ParticleSystem particleEffect;
-<<<<<<< HEAD
     [SerializeField] private GameObject mineVisual;
-=======
->>>>>>> 09cabe6fa9769700c594be80df2ae37223b7b65f
 
     [Header("Light")]
     [SerializeField] private Light armingBlinker;
     [SerializeField] private float cycleOn = 0.5f;
     [SerializeField] private float cycleOff = 4f;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 09cabe6fa9769700c594be80df2ae37223b7b65f
     [Header("SFX")]
     [SerializeField] private AudioSource tankHitAudioSource;
 
@@ -92,12 +85,8 @@ public class NetworkedMine : NetworkBehaviour
 
             particleEffect.Play();
             tankHitAudioSource.Play();
-
-<<<<<<< HEAD
             mineVisual.SetActive(false);
 
-=======
->>>>>>> 09cabe6fa9769700c594be80df2ae37223b7b65f
             var tankBrain = other.gameObject.GetComponentInParent<TankBrain>();
             tankBrain.TakeDamge(damage);
 
@@ -110,11 +99,7 @@ public class NetworkedMine : NetworkBehaviour
             particleEffect.Play();
             tankHitAudioSource.Play();
 
-<<<<<<< HEAD
             mineVisual.SetActive(false);
-
-=======
->>>>>>> 09cabe6fa9769700c594be80df2ae37223b7b65f
             Server_DeleteSelfIn(despawnTime);
         }
     }
