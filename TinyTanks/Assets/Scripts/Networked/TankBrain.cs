@@ -64,6 +64,18 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private bool hasBattery;
     [SerializeField] private float moveInputThreshold = 0.05f;
 
+    [Header("Mines")]
+    [SyncVar(hook = nameof(OnMinesChanged))]
+    private int _mineAmount = 0;   
+    [SyncVar(hook = nameof(OnMineCooldownChanged))]
+    [SerializeField] private bool mineOnCooldown;
+
+    [SyncVar] private double _mineCooldownEndTime;
+    [SerializeField] private bool hasMines;
+    [SerializeField] private float mineCooldownTime = 4f;
+    [SerializeField] private GameObject mine;
+    private int _maxMineAmount = 3;
+
     [Header("RayCast")]
     [SerializeField] float contactRadius = 0.22f;
     [SerializeField] float contactCapsuleHalfLength = 0.45f;
@@ -87,6 +99,10 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Sprite[] batteryImages;
     [SerializeField] private Image[] currImages;
     private int _lastSpriteIndex;
+
+    [Header("UI Mine")]
+    [SerializeField] private CanvasGroup mineUI;
+    [SerializeField] private TMP_Text mineTxt;
 
     [Header("UI Health")]
     [SerializeField] private Image[] healthImage;
@@ -154,6 +170,14 @@ public class TankBrain : NetworkBehaviour
             if (reloadRemaining <= 0)
                 Server_FinishReload();
         }
+
+        if (mineOnCooldown)
+        {
+            double cooldownRemaining = _mineCooldownEndTime - NetworkTime.time;
+
+            if (cooldownRemaining <= 0)
+                Server_FinishMineCooldown();
+        }
     }
 
     [ServerCallback]
@@ -184,7 +208,7 @@ public class TankBrain : NetworkBehaviour
     [Server]
     public void Server_SetOffGun(CrewSeat from)
     {
-        if (from != gunner) return; //revert to driver when done testing
+        if (from != driver) return; //revert to driver when done testing
         if (!hasBullet) return;
 
         var velocity = turretPitchPivot.transform.forward * tankData.shellSpeed;
@@ -209,6 +233,28 @@ public class TankBrain : NetworkBehaviour
 
         isReloading = true;
         _reloadEndTime = NetworkTime.time + currReloadTime;
+    }
+
+    [Server]
+    public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
+    {
+        if (from != driver) return;
+        this._leftTrack = Mathf.Clamp(_leftTrack, -1f, 1f);
+        this._rightTrack = Mathf.Clamp(_rightTrack, -1f, 1f);
+
+        if (this._leftTrack == 0f && this._rightTrack == 0f)
+            isDriving = false;
+        else
+            isDriving = true;
+    }
+
+    [Server]
+    private void Server_TankDeath()
+    {
+        lives -= 1;
+
+        if (lives == 0) Server_ReturnToLobby();
+        else StarRespawnTimer();
     }
 
     [Server]
@@ -278,25 +324,37 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
-    public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
+    public void Server_RechargeMines()
     {
-        if (from != driver) return;
-        this._leftTrack = Mathf.Clamp(_leftTrack, -1f, 1f);
-        this._rightTrack = Mathf.Clamp(_rightTrack, -1f, 1f);
-
-        if (this._leftTrack == 0f && this._rightTrack == 0f)
-            isDriving = false;
-        else
-            isDriving = true;
+        Debug.Log("Applied mine Effect");
+        hasMines = true;
+        mineUI.alpha = 1;
+        _mineAmount = _maxMineAmount;
     }
 
     [Server]
-    private void Server_TankDeath()
+    public void Server_PlaceMine(CrewSeat from)
     {
-        lives -= 1;
+        if (from != gunner) return; //Make sure this is gunner when live
+        if (!hasMines) return;
+        if (mineOnCooldown) return;
 
-        if (lives == 0) Server_ReturnToLobby();
-        else StarRespawnTimer();
+        _mineAmount -= 1;
+
+        if (_mineAmount <= 0)
+            hasMines = false;
+
+        GameObject mineGO = Instantiate(mine, transform.position, transform.rotation);
+        NetworkServer.Spawn(mineGO);
+
+        mineOnCooldown = true;
+        _mineCooldownEndTime = NetworkTime.time + mineCooldownTime;
+    }
+
+    [Server]
+    public void Server_FinishMineCooldown()
+    {
+        mineOnCooldown = false;
     }
 
     [Server]
@@ -328,6 +386,10 @@ public class TankBrain : NetworkBehaviour
 
         currHealth = tankData.maxHealth;
         currentBtry = tankData.maxBtry;
+        if (_mineAmount > 0)
+            _mineAmount = 0;
+        driver.enabled = true;
+        gunner.enabled = true;
         _isDead = false;
 
         if (driverRespawn != null && gunnerRespawn != null)
@@ -439,9 +501,36 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Client]
+    private void OnMinesChanged(int oldVal, int newVal)
+    {
+        if (newVal == 0)
+            mineUI.alpha = 1;
+
+        mineTxt.text = $"Mines left: {newVal}";
+    }
+
+    [Client]
+    private void OnMineCooldownChanged(bool _, bool onCooldown)
+    {
+        if (onCooldown == true)
+        {
+            // change UI to on cooldown
+        }
+        else if (onCooldown == false)
+        {
+            //change UI to off cooldown
+        }
+    }
+
+    [Client]
     private void StarRespawnTimer()
     {
         _isDead = true;
+        _leftTrack = 0;
+        _rightTrack = 0;
+        driver.enabled = false;
+        gunner.enabled = false;
+
         if (driverRespawn != null && gunnerRespawn != null)
         {
             driverRespawn.alpha = 1;

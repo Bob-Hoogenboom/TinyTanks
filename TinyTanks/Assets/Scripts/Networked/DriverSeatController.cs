@@ -33,6 +33,9 @@ public class DriverSeatController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             CmdDriverShooting();
+
+        if (Input.GetKeyDown(KeyCode.M))
+            CmdDriverPlaceMine();
     }
 
     [Command]
@@ -47,6 +50,13 @@ public class DriverSeatController : NetworkBehaviour
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_SetOffGun(seat);
+    }
+
+    [Command]
+    private void CmdDriverPlaceMine()
+    {
+        if (!seat || !seat.tank) return;
+        seat.tank.Server_PlaceMine(seat);
     }
 
     [Client]

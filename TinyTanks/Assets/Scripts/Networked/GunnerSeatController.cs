@@ -35,6 +35,9 @@ public class GunnerSeatController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             CmdGunnerShooting();
+
+        if (Input.GetKeyDown(KeyCode.M))
+            CmdGunnerPlaceMine();
     }
 
     [Command]
@@ -56,6 +59,13 @@ public class GunnerSeatController : NetworkBehaviour
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_SetOffGun(seat);
+    }
+
+    [Command]
+    private void CmdGunnerPlaceMine()
+    {
+        if (!seat || !seat.tank) return;
+        seat.tank.Server_PlaceMine(seat);
     }
 
     [Client]
