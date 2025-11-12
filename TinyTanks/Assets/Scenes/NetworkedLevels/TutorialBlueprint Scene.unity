@@ -8768,7 +8768,7 @@ PrefabInstance:
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.74
+      value: -6.42
       objectReference: {fileID: 0}
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
@@ -8778,12 +8778,12 @@ PrefabInstance:
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.32
+      value: 14.91
       objectReference: {fileID: 0}
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.2045816
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
@@ -8793,7 +8793,7 @@ PrefabInstance:
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.97884953
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
@@ -8808,7 +8808,7 @@ PrefabInstance:
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 156.39
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 2756614643787851834, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
@@ -8823,17 +8823,17 @@ PrefabInstance:
     - target: {fileID: 4403947531546064416, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.38268343
+      value: 0.3826833
       objectReference: {fileID: 0}
     - target: {fileID: 4403947531546064416, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000053796967
+      value: 0.000000007834474
       objectReference: {fileID: 0}
     - target: {fileID: 4403947531546064416, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000022552115
+      value: -0.0000000052617857
       objectReference: {fileID: 0}
     - target: {fileID: 8486631689857829202, guid: 2007c833dce10af4c8526d7e493b6305,
         type: 3}
@@ -8848,6 +8848,10 @@ PrefabInstance:
         type: 3}
       insertIndex: 5
       addedObject: {fileID: 820115886}
+    - targetCorrespondingSourceObject: {fileID: 8486631689857829202, guid: 2007c833dce10af4c8526d7e493b6305,
+        type: 3}
+      insertIndex: 6
+      addedObject: {fileID: 820115892}
   m_SourcePrefab: {fileID: 100100000, guid: 2007c833dce10af4c8526d7e493b6305, type: 3}
 --- !u!4 &820115880 stripped
 Transform:
@@ -8868,9 +8872,103 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spline: {fileID: 2044440427}
+  tracer: {fileID: 820115892}
   snapDistance: 1
   dollySpeed: 1
+  currentSpeed: 0
   loopSpline: 0
+--- !u!114 &820115892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639834404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 868482a8001bf104dbe8c2415d018860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateMethod: 0
+  _spline: {fileID: 2044440427}
+  _autoUpdate: 1
+  _rotationModifier:
+    blend: 1
+    useClippedPercent: 0
+    keys: []
+  _offsetModifier:
+    blend: 1
+    useClippedPercent: 0
+    keys: []
+  _colorModifier:
+    blend: 1
+    useClippedPercent: 0
+    keys: []
+  _sizeModifier:
+    blend: 1
+    useClippedPercent: 0
+    keys: []
+  _clipFromSample:
+    position: {x: -7.49642, y: 0, z: 11.385238}
+    up: {x: 0, y: 1, z: 0}
+    forward: {x: 0.14634715, y: 0, z: -0.9892333}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    size: 1
+    percent: 0
+  _clipToSample:
+    position: {x: -37.485683, y: 0.000017672777, z: 2.0439515}
+    up: {x: 0, y: 1, z: 0}
+    forward: {x: 0.92386377, y: 0.13876401, z: 0.35667962}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    size: 1
+    percent: 1
+  _loopSamples: 0
+  _clipFrom: 0
+  _clipTo: 1
+  animClipFrom: 0
+  animClipTo: 1
+  multithreaded: 0
+  buildOnAwake: 1
+  buildOnEnable: 0
+  applyDirectionRotation: 1
+  useTriggers: 0
+  triggerGroup: 0
+  _direction: 1
+  _dontLerpDirection: 0
+  _physicsMode: 0
+  _motion:
+    _hasOffset: 0
+    _hasRotationOffset: 0
+    _offset: {x: 0, y: 0}
+    _rotationOffset: {x: 0, y: 0, z: 0}
+    _baseScale: {x: 1, y: 1, z: 1}
+    _2dMode: 0
+    velocityHandleMode: 0
+    applyPositionX: 1
+    applyPositionY: 1
+    applyPositionZ: 1
+    applyPosition2D: 1
+    retainLocalPosition: 0
+    direction: 1
+    applyRotationX: 1
+    applyRotationY: 1
+    applyRotationZ: 1
+    applyRotation2D: 1
+    retainLocalRotation: 0
+    applyScaleX: 0
+    applyScaleY: 0
+    applyScaleZ: 0
+    targetUser: {fileID: 820115892}
+  targetRigidbody: {fileID: 0}
+  targetRigidbody2D: {fileID: 0}
+  targetTransform: {fileID: 820115880}
+  _result:
+    position: {x: 0, y: 0, z: 0}
+    up: {x: 0, y: 0, z: 0}
+    forward: {x: 0, y: 0, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+    size: 0
+    percent: 0
 --- !u!1 &820138724
 GameObject:
   m_ObjectHideFlags: 0
@@ -14029,8 +14127,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344767063}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.014092223, y: 0.9830864, z: -0.08600895, w: 0.16107477}
-  m_LocalPosition: {x: -7.7000885, y: 1.1114109, z: 14.727923}
+  m_LocalRotation: {x: -0.0038016832, y: 0.9952466, z: -0.087072834, w: -0.04345342}
+  m_LocalPosition: {x: -6.2200522, y: 1.1114109, z: 15.267793}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20968,9 +21066,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   editorDrawPivot: 1
   editorPathColor: {r: 1, g: 0, b: 0.87524605, a: 1}
-  editorAlwaysDraw: 0
+  editorAlwaysDraw: 1
   editorDrawThickness: 0
-  editorBillboardThickness: 1
+  editorBillboardThickness: 0
   isNewlyCreated: 0
   editorUpdateMode: 0
   multithreaded: 0
@@ -20981,15 +21079,111 @@ MonoBehaviour:
     name: Trigger Group 1
     color: {r: 1, g: 1, b: 1, a: 1}
     triggers:
-    - name: Trigger 1
+    - name: TimedStopDolly
       type: 1
       workOnce: 1
-      position: 0.01170183066278696
+      position: 0.009999999776482582
       enabled: 1
-      color: {r: 0.78, g: 0.4725882, b: 0, a: 1}
+      color: {r: 1, g: 0.12800477, b: 0, a: 1}
       onCross:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 2044440428}
+            m_TargetAssemblyTypeName: SpeedTriggerData, Assembly-CSharp
+            m_MethodName: TimedStopDolly
+            m_Mode: 4
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 1
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - name: InputStopDolly
+      type: 1
+      workOnce: 0
+      position: 0.019999999552965164
+      enabled: 1
+      color: {r: 1, g: 0, b: 0, a: 1}
+      onCross:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2044440428}
+            m_TargetAssemblyTypeName: SpeedTriggerData, Assembly-CSharp
+            m_MethodName: InputStopDolly
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - name: SlowDolly
+      type: 1
+      workOnce: 0
+      position: 0.029999999329447746
+      enabled: 1
+      color: {r: 1, g: 0.56093, b: 0, a: 1}
+      onCross:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2044440428}
+            m_TargetAssemblyTypeName: SpeedTriggerData, Assembly-CSharp
+            m_MethodName: SlowDolly
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - name: NormalDolly
+      type: 1
+      workOnce: 0
+      position: 0.03999999910593033
+      enabled: 1
+      color: {r: 0.11573291, g: 1, b: 0, a: 1}
+      onCross:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2044440428}
+            m_TargetAssemblyTypeName: SpeedTriggerData, Assembly-CSharp
+            m_MethodName: NormalDolly
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - name: FastDolly
+      type: 1
+      workOnce: 0
+      position: 0.05000000074505806
+      enabled: 1
+      color: {r: 0, g: 0.4154725, b: 1, a: 1}
+      onCross:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2044440428}
+            m_TargetAssemblyTypeName: SpeedTriggerData, Assembly-CSharp
+            m_MethodName: FastDolly
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
   _spline:
     points:
     - _type: 0
@@ -21106,7 +21300,8 @@ MonoBehaviour:
   _optimizeAngleThreshold: 0.5
   _space: 0
   _sampleMode: 0
-  _subscribers: []
+  _subscribers:
+  - {fileID: 820115892}
   _rawSamples:
   - position: {x: -7.49642, y: 0, z: 11.385238}
     up: {x: 0, y: 1, z: 0}
@@ -21772,11 +21967,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2044440424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c981665a14835f4396fc3056016d33f, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b1861639793f944484dad207f97faa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 1
-  speedValue: 3
+  splineDolly: {fileID: 820115886}
 --- !u!1001 &2045030540
 PrefabInstance:
   m_ObjectHideFlags: 0
