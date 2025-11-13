@@ -1475,7 +1475,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8149226378798676213}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5806742, y: 0.0000022143327, z: -0.0000015793502, w: 0.8141361}
+  m_LocalRotation: {x: 0.3826833, y: 0.000000007834474, z: -0.0000000052617857, w: 0.9238796}
   m_LocalPosition: {x: 0, y: 5, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1619,6 +1619,7 @@ GameObject:
   - component: {fileID: 1458819195156865617}
   - component: {fileID: 5234115178526320217}
   - component: {fileID: 1978418724055884365}
+  - component: {fileID: 6126858626980464460}
   - component: {fileID: 6216986692404352648}
   m_Layer: 9
   m_Name: PLYR_Tutorial
@@ -1686,10 +1687,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankTrack: {fileID: 5234115178526320217}
   tankTurret: {fileID: 1978418724055884365}
+  tankDolly: {fileID: 6126858626980464460}
   driverCam: {fileID: 7742100625543957941}
   observerCam: {fileID: 5536664073199433282}
   spectatorCam: {fileID: 3236815006865957217}
-  hitpoints: 3
   shellSpeed: 10
   shellSpawn: {fileID: 3291959829644627464}
   shellPrefab: {fileID: 3732487249527810964, guid: 9a871bd9082c5a14d8ae6b52fc712d7d,
@@ -1713,6 +1714,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  observerModeActive: 0
+  hitpoints: 3
 --- !u!114 &5234115178526320217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1781,6 +1784,39 @@ MonoBehaviour:
   sleepTorque: 0.25
   yawWakeInput: 0.02
   yawAngleSnapDeg: 0.005
+--- !u!114 &6126858626980464460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8486631689857829202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acc821566c496ad45bf1e57216f23d1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spline: {fileID: 0}
+  loopSpline: 0
+  isNPC: 0
+  snapDistance: 1
+  dollySpeed: 1
+  currentSpeed: 0
+  onTrackEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!64 &6216986692404352648
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -1,40 +1,52 @@
 using UnityEngine;
 using Dreamteck.Splines;
 using System.Collections;
+using UnityEngine.Events;
 
+/// <summary>
+/// put this component on an object thats able to ride a spline
+/// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class SplineDolly : MonoBehaviour
 {
+    [Header("Refernces")]
     public SplineComputer spline;
-    public SplineTracer tracer;
-    public float snapDistance = 3f;
+
+    private Rigidbody _rb;
+    private SplineSample _sample = new SplineSample();
+
+    [Header("Variables")]
+    public bool loopSpline = false;
+    public bool isNPC = false;
+    public float snapDistance = 1f;
 
     public float dollySpeed = 1f;
     [HideInInspector] public float currentSpeed;
 
-    public bool loopSpline = false;
+    public bool isOnSpline { get; private set; } = false;
+    public bool isPaused { get; private set; } = false;
 
-    private Rigidbody _rb;
-    private SplineSample _sample = new SplineSample();
-    private bool _isOnSpline = false;
     private double _splinePercent = 0.0;
 
-    private bool _isPaused = false;         // Flag for pause
+    [Header("Effects and Actions")]
+    public UnityEvent onTrackEnd;
+
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        tracer.spline = spline;
 
         currentSpeed = dollySpeed;
     }
 
     private void Update()
     {
-        if (!_isOnSpline)
+        if (!isOnSpline)
         {
             if (Input.GetKeyDown(KeyCode.Space))
+            {
                 TrySnapToSpline();
+            }
         }
         else
         {
@@ -50,7 +62,7 @@ public class SplineDolly : MonoBehaviour
         float dist = Vector3.Distance(transform.position, _sample.position);
         if (dist < snapDistance)
         {
-            _isOnSpline = true;
+            isOnSpline = true;
             _rb.isKinematic = true;
             _splinePercent = _sample.percent;
             transform.position = _sample.position;
@@ -75,56 +87,61 @@ public class SplineDolly : MonoBehaviour
             _splinePercent = Mathf.Clamp01((float)_splinePercent);
         }
 
-        // Tell the spline computer to check triggers between old and new percent
-        spline.CheckTriggers(oldPercent, _splinePercent, tracer);
+        //This checks triggers without the use of a splineFollower/splineUser
+        if (!isNPC)
+        {
+            spline.CheckTriggers(oldPercent, _splinePercent);
+        }
 
-        // Evaluate and apply position/rotation
+        //Evaluate and apply position/rotation
         spline.Evaluate(_splinePercent, ref _sample);
         transform.position = _sample.position;
         transform.rotation = Quaternion.LookRotation(_sample.forward);
 
         if (!loopSpline && _splinePercent >= 1.0)
+        {
             DetachFromSpline();
+        }
     }
 
     private void DetachFromSpline()
     {
-        _isOnSpline = false;
+        isOnSpline = false;
         _rb.isKinematic = false;
         _rb.velocity = transform.forward * currentSpeed * 0.5f;
-    }
 
-    // ----------- Pause / Resume Methods -----------
+        onTrackEnd.Invoke();
+    }
 
     // Pause immediately for a fixed duration, then resume
     public void PauseForSeconds(float duration)
     {
-        if (!_isPaused)
+        if (!isPaused)
             StartCoroutine(PauseCoroutine(duration));
     }
 
     private IEnumerator PauseCoroutine(float duration)
     {
-        _isPaused = true;
+        isPaused = true;
         float pausedSpeed = currentSpeed;
         currentSpeed = 0f;
 
         yield return new WaitForSeconds(duration);
 
         currentSpeed = pausedSpeed;
-        _isPaused = false;
+        isPaused = false;
     }
 
     // Pause until player presses Space to continue
     public void PauseUntilInput(KeyCode key = KeyCode.Space)
     {
-        if (!_isPaused)
+        if (!isPaused)
             StartCoroutine(PauseUntilInputCoroutine(key));
     }
 
     private IEnumerator PauseUntilInputCoroutine(KeyCode key)
     {
-        _isPaused = true;
+        isPaused = true;
         float pausedSpeed = currentSpeed;
         currentSpeed = 0f;
 
@@ -135,7 +152,7 @@ public class SplineDolly : MonoBehaviour
         }
 
         currentSpeed = pausedSpeed;
-        _isPaused = false;
+        isPaused = false;
     }
 
     private void OnDrawGizmosSelected()
