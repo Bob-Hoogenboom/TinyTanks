@@ -15,15 +15,12 @@ public class TutorialTank : MonoBehaviour, IDamagable
     [Header("References")]
     [SerializeField] private TankTrackPhysics tankTrack;
     [SerializeField] private TankTurretPhysics tankTurret;
+    [SerializeField] private SplineDolly tankDolly;
 
     [Space]
     [SerializeField] private CinemachineVirtualCamera driverCam;
     [SerializeField] private CinemachineVirtualCamera observerCam;
     [SerializeField] private CinemachineVirtualCamera spectatorCam;
-
-    [Header("Settings")]
-    [SerializeField] private float hitpoints = 3f;
-    public float HitPoints => hitpoints;
 
     [Header("Observer")]
     [SerializeField] private float shellSpeed = 10f;
@@ -35,12 +32,17 @@ public class TutorialTank : MonoBehaviour, IDamagable
     private GameObject _hitIndicatorInstance;
 
     [Header("State")]
-    [SerializeField] private TankRole currentRole = TankRole.TANK_DRIVER;
+    public TankRole currentRole = TankRole.TANK_DRIVER;
     public static event Action <TankRole> OnUpdateRole;
 
     [Header("Effects and Actions")]
     public UnityEvent onShoot;
 
+    [Header("Settings")]
+    public bool observerModeActive = false;
+    [SerializeField] private float hitpoints = 3f;
+    public float HitPoints => hitpoints;
+     
     private float _leftInput = 0f;
     private float _rightInput = 0f;
 
@@ -61,15 +63,19 @@ public class TutorialTank : MonoBehaviour, IDamagable
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (currentRole == TankRole.TANK_DRIVER)
+            {
                 currentRole = TankRole.TANK_OBSERVER;
-            else if (currentRole == TankRole.TANK_OBSERVER)
+            }
+            else if (currentRole == TankRole.TANK_OBSERVER && !tankDolly.isOnSpline)
+            {
                 currentRole = TankRole.TANK_DRIVER;
+            }
 
             UpdateRoleState();
         }
 
-        // --- Toggle Overview Mode (map camera) ---
-        if (Input.GetKeyDown(KeyCode.M))
+        // --- Toggle Overview Mode (Spectator camera) ---
+        if (Input.GetKeyDown(KeyCode.M) && observerModeActive)
         {
             if (currentRole == TankRole.TANK_SPECTATOR)
             {
