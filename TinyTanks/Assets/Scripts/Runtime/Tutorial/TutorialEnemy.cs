@@ -25,6 +25,8 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
     public UnityEvent onShoot;
 
     private bool _isActive;
+    private float _cupolaRotateSpeed = 10f;
+    private float _barrelRotateSpeed = 10f;
 
     [Header("Path")]
     [SerializeField] private float waitTimeOnWayPoint = 1f;
@@ -91,34 +93,63 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
             }
         }
 
+        if(dist < range * 2.5) playerInRange = false;
+
         return playerInRange;
     }
 
     private void AimAtPlayer()
     {
-        // --- CUPOLA (Yaw only: rotate around Y axis) ---
-        Vector3 cupolaDir = _playerTarget.transform.position - cupola.transform.position;
+        //Offset on the playertarget
+        Vector3 target = _playerTarget.transform.position + (Vector3.up * 0.5f);
+
+        // ---------------- CUPOLA (Yaw only, smoothed) ----------------
+        Vector3 cupolaDir = target - cupola.transform.position;
         cupolaDir.y = 0f; // ignore vertical difference
-        cupola.transform.rotation = Quaternion.LookRotation(cupolaDir, Vector3.up);
+        Quaternion cupolaTargetRot = Quaternion.LookRotation(cupolaDir, Vector3.up);
 
-        // --- BARREL (Pitch only: rotate up/down but keep parent yaw) ---
-        Vector3 barrelDir = _playerTarget.transform.position - barrel.transform.position;
-        barrelDir = barrel.transform.parent.InverseTransformDirection(barrelDir); // convert to local space
-        Quaternion targetRot = Quaternion.LookRotation(barrelDir);
+        // Smooth rotation
+        cupola.transform.rotation = Quaternion.Slerp(
+            cupola.transform.rotation,
+            cupolaTargetRot,
+            Time.deltaTime * _cupolaRotateSpeed
+        );
 
-        // Only pitch (local X)
-        Vector3 e = targetRot.eulerAngles;
-        barrel.transform.localEulerAngles = new Vector3(e.x, 0f, 0f);
 
-        //TODO
-        //timer + Clear Vision
+        // ---------------- BARREL (Pitch only, smoothed) ----------------
+        Vector3 barrelDir = target - barrel.transform.position;
+        barrelDir = barrel.transform.parent.InverseTransformDirection(barrelDir);
 
+        Quaternion barrelTargetRot = Quaternion.LookRotation(barrelDir);
+        Vector3 e = barrelTargetRot.eulerAngles;
+
+        // Only use X rotation (pitch)
+        Quaternion onlyPitch = Quaternion.Euler(e.x, 0f, 0f);
+
+        // Smooth local rotation
+        barrel.transform.localRotation = Quaternion.Slerp(
+            barrel.transform.localRotation,
+            onlyPitch,
+            Time.deltaTime * _barrelRotateSpeed
+        );
+
+        //Timer
         _coolDown += Time.deltaTime;
         if (_coolDown >= 3f)
         {
-            _coolDown = 0f;
+            Vector3 dir = target - muzzle.transform.position;
+            //Clean Shot
+            RaycastHit hit;
 
-            Shoot();
+            Debug.DrawRay(muzzle.transform.position, dir , Color.yellow, 10f);
+            if (Physics.Raycast(muzzle.transform.position, dir, out hit, Mathf.Infinity))
+            {
+                if (hit.transform.gameObject == _playerTarget.transform.gameObject)
+                {
+                    _coolDown = 0f;
+                    Shoot();
+                }
+            }
         }
     }
 
@@ -148,6 +179,9 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, range);
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, (range * 2.5f));
     }
 }
  
