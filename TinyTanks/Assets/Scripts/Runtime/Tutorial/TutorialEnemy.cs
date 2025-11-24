@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -17,7 +18,9 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
     [SerializeField] private GameObject barrel;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform muzzle;
+    [SerializeField] private float bulletSpeed = 10f;
     [SerializeField] private float range;
+    [SerializeField]private float _coolDown = 0f;
     [Space]
     public UnityEvent onShoot;
 
@@ -109,7 +112,29 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
 
         //TODO
         //timer + Clear Vision
-        //Shoot()
+
+        _coolDown += Time.deltaTime;
+        if (_coolDown >= 3f)
+        {
+            _coolDown = 0f;
+
+            Shoot();
+        }
+    }
+
+    private void Shoot()
+    {
+        Quaternion rotation = muzzle.rotation;
+        GameObject bulletObj = Instantiate(bulletPrefab, muzzle.position, rotation);
+        Rigidbody brb = bulletObj.GetComponent<Rigidbody>();
+
+        Bullet bullet = bulletObj.GetComponent<Bullet>();
+        bullet.parent = gameObject; //Set parent to check if you dont hit yourself and count a point if your bullet hits something
+
+        brb.AddForce(muzzle.forward * bulletSpeed, ForceMode.VelocityChange);
+        Destroy(bulletObj, 5f);
+
+        onShoot.Invoke();
     }
 
     public void Damage(float damage)

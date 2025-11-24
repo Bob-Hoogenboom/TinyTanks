@@ -10,10 +10,12 @@ using UnityEngine.Events;
 public class SplineDolly : MonoBehaviour
 {
     [Header("Refernces")]
+    [SerializeField] private GameObject splineIndicator;
     public SplineComputer spline;
 
     private Rigidbody _rb;
     private SplineSample _sample = new SplineSample();
+
 
     [Header("Variables")]
     public bool loopSpline = false;
@@ -32,6 +34,9 @@ public class SplineDolly : MonoBehaviour
     public UnityEvent onTrackEnd;
 
 
+    private float _dist;
+
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
@@ -41,9 +46,13 @@ public class SplineDolly : MonoBehaviour
 
     private void Update()
     {
+        spline.Project(transform.position, ref _sample);
+        _dist = Vector3.Distance(transform.position, _sample.position);
+        bool active = (_dist < snapDistance && _sample.percent < 0.01f);
+
         if (!isOnSpline)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
                 TrySnapToSpline();
             }
@@ -51,23 +60,41 @@ public class SplineDolly : MonoBehaviour
         else
         {
             RideSpline();
+            active = false;
         }
+
+
+        splineIndicator.SetActive(active);
+
     }
 
     private void TrySnapToSpline()
     {
         if (spline == null) return;
 
+        // Re-project position
         spline.Project(transform.position, ref _sample);
+
         float dist = Vector3.Distance(transform.position, _sample.position);
-        if (dist < snapDistance)
+
+        // Check distance
+        if (dist >= snapDistance) return;
+
+        // Check position on spline (near start)
+        if (_sample.percent > 0.01f)   // Allow first 1% of spline
         {
-            isOnSpline = true;
-            _rb.isKinematic = true;
-            _splinePercent = _sample.percent;
-            transform.position = _sample.position;
-            transform.rotation = Quaternion.LookRotation(_sample.forward);
+            Debug.Log("Too far from spline start!");
+            return;
         }
+
+        // Snap onto spline
+        isOnSpline = true;
+        _rb.isKinematic = true;
+        _splinePercent = 0.0;  // FORCE them to start at EXACT start
+        spline.Evaluate(0.0, ref _sample);
+
+        transform.position = _sample.position;
+        transform.rotation = Quaternion.LookRotation(_sample.forward);
     }
 
     private void RideSpline()
@@ -159,5 +186,26 @@ public class SplineDolly : MonoBehaviour
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, snapDistance);
+
+        if (spline == null) return;
+
+        Gizmos.color = Color.green;
+
+        // we sample from 0% to 1%
+        const float minPercent = 0f;
+        const float maxPercent = 0.01f;
+
+        const int steps = 10; // more = smoother
+        SplineSample s = new SplineSample();
+
+        for (int i = 0; i < steps; i++)
+        {
+            float t = Mathf.Lerp(minPercent, maxPercent, i / (float)(steps - 1));
+
+            spline.Evaluate(t, ref s);
+
+            // Draw a small cube
+            Gizmos.DrawSphere(s.position, 0.1f);
+        }
     }
 }
