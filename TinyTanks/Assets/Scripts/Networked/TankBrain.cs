@@ -76,6 +76,12 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private GameObject mine;
     private int _maxMineAmount = 3;
 
+    [Header("Homing Missile")]
+    [SerializeField] private GameObject missileGO;
+    [SyncVar] private bool _isShootingMissile;
+    [SyncVar, SerializeField] private bool _hasMissile = false;
+    private NetworkedMissile _missile;
+
     [Header("RayCast")]
     [SerializeField] float contactRadius = 0.22f;
     [SerializeField] float contactCapsuleHalfLength = 0.45f;
@@ -130,7 +136,7 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private AudioSource endinDrivingAudio;
     [SerializeField] private AudioSource idleAudio;
     [SerializeField] private AudioSource reloadingAudio;
-
+    
     public override void OnStartServer()
     {
         _rb = GetComponent<Rigidbody>();
@@ -187,17 +193,19 @@ public class TankBrain : NetworkBehaviour
 
     private void LateUpdate()
     {
-        UpdateTrackColours(tracks.leftTrackGrounded);
-        UpdateTrackColours(tracks.rightTrackGrounded);
+        UpdateTrackColours();
     }
 
     [ServerCallback]
     private void FixedUpdate()
     {
         if (!isServer || _rb == null) return;
-        if (_isDead) return;
+        if (_isDead) return;        
         if (tracks) tracks.SetInputs(_leftTrack, _rightTrack, hasBattery);
-        if (turret) turret.SetInputs(_yaw, _pitch);
+
+        if (_isShootingMissile == true)
+            _missile.MoveMissile(_yaw, _pitch);
+        else if (turret) turret.SetInputs(_yaw, _pitch);
 
         Server_ApplyBatteryMovementDrain(Time.fixedDeltaTime);
     }
@@ -217,9 +225,31 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
+    public void Server_ShootMissile(CrewSeat from)
+    {
+        _isShootingMissile = true;
+
+        GameObject serverMissileClone = Instantiate(missileGO, muzzle.transform.position, turretPitchPivot.transform.rotation);
+
+        NetworkedMissile nMissile = serverMissileClone.GetComponent<NetworkedMissile>();    
+        nMissile.parent = this;
+        _missile = nMissile;
+        NetworkServer.Spawn(serverMissileClone);
+
+        TurnMissileCamOn(_missile);
+        _hasMissile = false;
+    }
+
+    [Server]
     public void Server_SetOffGun(CrewSeat from)
     {
-        if (from != driver) return; //revert to driver when done testing
+        if (from != gunner) return; //revert to driver when done testing
+        if (_hasMissile)
+        {
+            Server_ShootMissile(from);
+            return;
+        }
+            
         if (!hasBullet) return;
 
         var velocity = turretPitchPivot.transform.forward * tankData.shellSpeed;
@@ -335,9 +365,14 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
+    public void Server_LoadMissile()
+    {
+        _hasMissile = true;
+    }
+
+    [Server]
     public void Server_RechargeMines()
     {
-        Debug.Log("Applied mine Effect");
         hasMines = true;
         mineUI.alpha = 1;
         _mineAmount = _maxMineAmount;
@@ -547,6 +582,12 @@ public class TankBrain : NetworkBehaviour
         respawnEndTime = NetworkTime.time + +respawnTime;
     }
 
+    [Client]
+    private void TurnMissileCamOn(NetworkedMissile missile)
+    {
+        missile.cam.SetActive(true);
+    }
+
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
     {
         if (timeRemaining <= 0) timeRemaining = 0;
@@ -564,10 +605,10 @@ public class TankBrain : NetworkBehaviour
         reloadTimerImage.fillAmount = progress;
     }
 
-    private void UpdateTrackColours(bool grounded)
+    private void UpdateTrackColours()
     {
 
-        if (!grounded)
+        if (!tracks.rightTrackGrounded)
             rightTrackImage.color = Color.red;
         else if (tracks.rightInput > 0)
             rightTrackImage.color = blue;
@@ -575,6 +616,15 @@ public class TankBrain : NetworkBehaviour
             rightTrackImage.color = orange;
         else
             rightTrackImage.color = Color.grey;
+
+        if (!tracks.leftTrackGrounded)
+            leftTrackImage.color = Color.red;
+        else if (tracks.leftInput > 0)
+            leftTrackImage.color = blue;
+        else if (tracks.leftInput < 0)
+            leftTrackImage.color = orange;
+        else
+            leftTrackImage.color = Color.grey;
     }
 
     public void TakeDamge(int dmg)
@@ -587,6 +637,10 @@ public class TankBrain : NetworkBehaviour
             Server_TankDeath();
     }
 
+    public void StopShootingMissile()
+    {
+        _isShootingMissile = false;
+    }
     private void OnCollisionEnter(Collision collision)
     {
         float impactSpeed = collision.relativeVelocity.magnitude;

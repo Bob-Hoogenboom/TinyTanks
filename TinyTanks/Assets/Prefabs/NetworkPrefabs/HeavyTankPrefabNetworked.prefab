@@ -1059,6 +1059,9 @@ MonoBehaviour:
   endinDrivingAudio: {fileID: 5183548490248063132}
   idleAudio: {fileID: 4924079014967506921}
   reloadingAudio: {fileID: 3446033813015459213}
+  missileGO: {fileID: 3732487249527810964, guid: 2151206c25b87d446a8afe41821c0a38,
+    type: 3}
+  missileSpeed: 5
   gizmoDrawTrackCasts: 1
   gizmoOnlyWhenSelected: 1
   gizmoDrawNormals: 1
@@ -1372,6 +1375,56 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 335009936715851645, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 335009936715851645, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3423267300357119071, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 95.331
+      objectReference: {fileID: 0}
+    - target: {fileID: 3423267300357119071, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 130.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3423267300357119071, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.0000086278
+      objectReference: {fileID: 0}
+    - target: {fileID: 3423267300357119071, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.050552
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616509222669172335, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 95.331
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616509222669172335, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 130.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616509222669172335, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.2178
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616509222669172335, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.051115
       objectReference: {fileID: 0}
     - target: {fileID: 8533177478944793253, guid: ad4463405ba347041990f570bd9c4442,
         type: 3}
