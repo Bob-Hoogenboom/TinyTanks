@@ -66,7 +66,7 @@ public class TankBrain : NetworkBehaviour
 
     [Header("Mines")]
     [SyncVar(hook = nameof(OnMinesChanged))]
-    private int _mineAmount = 0;   
+    private int _mineAmount = 0;
     [SyncVar(hook = nameof(OnMineCooldownChanged))]
     [SerializeField] private bool mineOnCooldown;
 
@@ -136,7 +136,7 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private AudioSource endinDrivingAudio;
     [SerializeField] private AudioSource idleAudio;
     [SerializeField] private AudioSource reloadingAudio;
-    
+
     public override void OnStartServer()
     {
         _rb = GetComponent<Rigidbody>();
@@ -200,7 +200,7 @@ public class TankBrain : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!isServer || _rb == null) return;
-        if (_isDead) return;        
+        if (_isDead) return;
         if (tracks) tracks.SetInputs(_leftTrack, _rightTrack, hasBattery);
 
         if (_isShootingMissile == true)
@@ -231,7 +231,7 @@ public class TankBrain : NetworkBehaviour
 
         GameObject serverMissileClone = Instantiate(missileGO, muzzle.transform.position, turretPitchPivot.transform.rotation);
 
-        NetworkedMissile nMissile = serverMissileClone.GetComponent<NetworkedMissile>();    
+        NetworkedMissile nMissile = serverMissileClone.GetComponent<NetworkedMissile>();
         nMissile.parent = this;
         _missile = nMissile;
         NetworkServer.Spawn(serverMissileClone);
@@ -243,13 +243,13 @@ public class TankBrain : NetworkBehaviour
     [Server]
     public void Server_SetOffGun(CrewSeat from)
     {
-        if (from != gunner) return; //revert to driver when done testing
+        if (from != driver) return; //revert to driver when done testing
         if (_hasMissile)
         {
             Server_ShootMissile(from);
             return;
         }
-            
+
         if (!hasBullet) return;
 
         var velocity = turretPitchPivot.transform.forward * tankData.shellSpeed;
@@ -585,6 +585,7 @@ public class TankBrain : NetworkBehaviour
     [Client]
     private void TurnMissileCamOn(NetworkedMissile missile)
     {
+        if (!isClient) return;
         missile.cam.SetActive(true);
     }
 
