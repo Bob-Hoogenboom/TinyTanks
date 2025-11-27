@@ -83,7 +83,7 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private GameObject mine;
     private int _maxMineAmount = 3;
 
-    [Header("Homing Missile")]    
+    [Header("Homing Missile")]
     [SerializeField] private GameObject missileGO;
     [SyncVar] private bool _isShootingMissile;
     [SyncVar, SerializeField] private bool _hasMissile = false;
@@ -201,7 +201,8 @@ public class TankBrain : NetworkBehaviour
 
     private void LateUpdate()
     {
-        UpdateTrackColours();
+        UpdateTrackColour(tracks.leftTrackGrounded, leftTrackImage, tracks.leftInput);
+        UpdateTrackColour(tracks.rightTrackGrounded, rightTrackImage, tracks.rightInput);
     }
 
     [ServerCallback]
@@ -623,27 +624,11 @@ public class TankBrain : NetworkBehaviour
         reloadTimerImage.fillAmount = progress;
     }
 
-    private void UpdateTrackColours()
+    private void UpdateTrackColour(bool grounded, Image sprite, float input) //Masterclass by Allan: how to be a maniac
     {
-
-        if (!tracks.rightTrackGrounded)
-            rightTrackImage.color = Color.red;
-        else if (tracks.rightInput > 0)
-            rightTrackImage.color = blue;
-        else if (tracks.rightInput < 0)
-            rightTrackImage.color = orange;
-        else
-            rightTrackImage.color = Color.grey;
-
-        if (!tracks.leftTrackGrounded)
-            leftTrackImage.color = Color.red;
-        else if (tracks.leftInput > 0)
-            leftTrackImage.color = blue;
-        else if (tracks.leftInput < 0)
-            leftTrackImage.color = orange;
-        else
-            leftTrackImage.color = Color.grey;
+        sprite.color = (!grounded ? Color.red : (input == 0 ?  Color.grey : (input > 0 ? blue : orange))); // dont be this guy, atleast not an if else ~ Allan
     }
+
 
     public void TakeDamge(int dmg)
     {

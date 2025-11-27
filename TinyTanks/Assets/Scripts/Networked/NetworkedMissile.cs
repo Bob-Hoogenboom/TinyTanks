@@ -43,7 +43,10 @@ public class NetworkedMissile : NetworkBehaviour
 
         missileLifeTime -= Time.deltaTime;
         if (missileLifeTime <= 0)
+        {
+            SpawnDeathVFX();
             Server_DeleteSelfNow();
+        }         
     }
 
     public void MoveMissile(float yaw, float pitch)
@@ -60,11 +63,19 @@ public class NetworkedMissile : NetworkBehaviour
     }
 
     [Server]
-    void Server_DeleteSelfNow()
+    private void Server_DeleteSelfNow()
     {
         parent.Server_NotifyMissileDestroyed();
         NetworkServer.Destroy(gameObject);
     }
+
+    private void SpawnDeathVFX()
+    {
+        var vxf = Instantiate(enviormentHitVFX, this.transform.position, this.transform.rotation);
+        vxf.transform.localScale *= 10;
+        Destroy(vxf, 3);
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
