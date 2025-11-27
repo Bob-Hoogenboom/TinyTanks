@@ -5,15 +5,19 @@ using TMPro;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 [DefaultExecutionOrder(-100)]
 public class TankBrain : NetworkBehaviour
 {
+    public UnityEvent OnMissileShoot;
+    public UnityEvent OnMissileDestroy;
+
     [HideInInspector]
     public int damage { get; private set; }
 
-    [SyncVar] private CrewSeat driver;
-    [SyncVar] private CrewSeat gunner;
+    [SyncVar] public CrewSeat driver;
+    [SyncVar] public CrewSeat gunner;
 
     private Rigidbody _rb;
     private NetworkTransformReliable _netTrans;
@@ -35,9 +39,12 @@ public class TankBrain : NetworkBehaviour
 
     [Header("Tank Parts")]
     [SerializeField] private GameObject tankBody;
+    [SerializeField] private Vector3 gunnerCameraOffset;
     [SerializeField] private Transform turretYawPivot; // Y rotation
     [SerializeField] private Transform turretPitchPivot; // X rotation
     [SerializeField] private Transform muzzle; // shell spawn
+    public Transform TurretYawPivot => turretYawPivot;
+    public Vector3 GunnerCameraOffset => gunnerCameraOffset;
 
     [Header("Firing")]
     [SerializeField] private GameObject serverShellPrefab;
@@ -76,11 +83,12 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private GameObject mine;
     private int _maxMineAmount = 3;
 
-    [Header("Homing Missile")]
+    [Header("Homing Missile")]    
     [SerializeField] private GameObject missileGO;
     [SyncVar] private bool _isShootingMissile;
     [SyncVar, SerializeField] private bool _hasMissile = false;
-    private NetworkedMissile _missile;
+    [SyncVar(hook = nameof(OnMissileChanged))]
+    public NetworkedMissile missile;
 
     [Header("RayCast")]
     [SerializeField] float contactRadius = 0.22f;
@@ -204,7 +212,7 @@ public class TankBrain : NetworkBehaviour
         if (tracks) tracks.SetInputs(_leftTrack, _rightTrack, hasBattery);
 
         if (_isShootingMissile == true)
-            _missile.MoveMissile(_yaw, _pitch);
+            missile.MoveMissile(_yaw, _pitch);
         else if (turret) turret.SetInputs(_yaw, _pitch);
 
         Server_ApplyBatteryMovementDrain(Time.fixedDeltaTime);
@@ -233,20 +241,24 @@ public class TankBrain : NetworkBehaviour
 
         NetworkedMissile nMissile = serverMissileClone.GetComponent<NetworkedMissile>();
         nMissile.parent = this;
-        _missile = nMissile;
         NetworkServer.Spawn(serverMissileClone);
-
-        TurnMissileCamOn(_missile);
+        missile = nMissile;
         _hasMissile = false;
+    }
+
+    [Server]
+    public void Server_NotifyMissileDestroyed()
+    {
+        missile = null;
     }
 
     [Server]
     public void Server_SetOffGun(CrewSeat from)
     {
-        if (from != driver) return; //revert to driver when done testing
+        if (from != gunner) return; //revert to driver when done testing
         if (_hasMissile)
         {
-            Server_ShootMissile(from);
+            Server_ShootMissile(gunner);
             return;
         }
 
@@ -582,13 +594,18 @@ public class TankBrain : NetworkBehaviour
         respawnEndTime = NetworkTime.time + +respawnTime;
     }
 
-    [Client]
-    private void TurnMissileCamOn(NetworkedMissile missile)
+    void OnMissileChanged(NetworkedMissile oldMissile, NetworkedMissile newMissile)
     {
-        if (!isClient) return;
-        missile.cam.SetActive(true);
+        if (newMissile != null)
+        {
+            OnMissileShoot?.Invoke();
+        }
+        else
+        {
+            _isShootingMissile = false;
+            OnMissileDestroy?.Invoke();
+        }
     }
-
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
     {
         if (timeRemaining <= 0) timeRemaining = 0;
@@ -638,10 +655,6 @@ public class TankBrain : NetworkBehaviour
             Server_TankDeath();
     }
 
-    public void StopShootingMissile()
-    {
-        _isShootingMissile = false;
-    }
     private void OnCollisionEnter(Collision collision)
     {
         float impactSpeed = collision.relativeVelocity.magnitude;

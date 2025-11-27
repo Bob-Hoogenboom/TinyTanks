@@ -1165,11 +1165,20 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  OnMissileShoot:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMissileDestroy:
+    m_PersistentCalls:
+      m_Calls: []
+  driver: {fileID: 0}
+  gunner: {fileID: 0}
   tankData: {fileID: 11400000, guid: 89efefa4f792acd4cbcbc57590057a59, type: 2}
   tracks: {fileID: 8241758214644652562}
   turret: {fileID: 9211153292599580694}
   impactThreshold: 1.25
   tankBody: {fileID: 3416396983572618182}
+  gunnerCameraOffset: {x: 0, y: 0.29, z: -0.1}
   turretYawPivot: {fileID: 8485076201043624360}
   turretPitchPivot: {fileID: 7678173531244863629}
   muzzle: {fileID: 5035525454890280112}
@@ -1186,6 +1195,10 @@ MonoBehaviour:
   hasMines: 0
   mineCooldownTime: 4
   mine: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
+  missileGO: {fileID: 3732487249527810964, guid: 2151206c25b87d446a8afe41821c0a38,
+    type: 3}
+  _hasMissile: 0
+  missile: {fileID: 0}
   contactRadius: 0.18
   contactCapsuleHalfLength: 0.2
   trackSpacing: 0.65
@@ -1237,9 +1250,6 @@ MonoBehaviour:
   endinDrivingAudio: {fileID: 6965599277605960251}
   idleAudio: {fileID: 5824520260315050160}
   reloadingAudio: {fileID: 7385303803487722460}
-  missileGO: {fileID: 3732487249527810964, guid: 2151206c25b87d446a8afe41821c0a38,
-    type: 3}
-  missileSpeed: 5
   gizmoDrawTrackCasts: 1
   gizmoOnlyWhenSelected: 1
   gizmoDrawNormals: 1
@@ -1455,9 +1465,9 @@ Transform:
   m_GameObject: {fileID: 3293812206401352957}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.002, y: 0.278, z: -0.055}
+  m_LocalPosition: {x: 0, y: 0.29, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8485076201043624360}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -13,7 +13,7 @@ public class NetworkedMissile : NetworkBehaviour
     [SerializeField] private int missileSpeed = 7;
 
     [Header("Camera")]
-    public GameObject cam;
+    public Transform camAnchor;
 
     [Header("VFX")]
     [SerializeField] private GameObject bulletTrail;
@@ -62,7 +62,7 @@ public class NetworkedMissile : NetworkBehaviour
     [Server]
     void Server_DeleteSelfNow()
     {
-        parent.StopShootingMissile();
+        parent.Server_NotifyMissileDestroyed();
         NetworkServer.Destroy(gameObject);
     }
 
