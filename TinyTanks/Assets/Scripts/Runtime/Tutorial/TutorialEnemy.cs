@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -34,6 +33,9 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
 
     private NavMeshAgent _agent;
     private float time = 0f;
+
+    [Space]
+    public UnityEvent onEnemyDefeat;
 
 
     private void Awake()
@@ -172,7 +174,16 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
     {
         Debug.Log("AUWW!");
         hitpoints -= damage;
+        if(hitpoints <= 0)
+        {
+            Death();
+        }
         //do some damage effect here
+    }
+
+    private void Death()
+    {
+        onEnemyDefeat.Invoke();
     }
 
     public void OnDrawGizmosSelected()
