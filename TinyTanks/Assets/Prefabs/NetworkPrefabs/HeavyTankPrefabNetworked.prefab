@@ -987,11 +987,20 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  OnMissileShoot:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMissileDestroy:
+    m_PersistentCalls:
+      m_Calls: []
+  driver: {fileID: 0}
+  gunner: {fileID: 0}
   tankData: {fileID: 11400000, guid: 1726d2ff2e4fde143843fa647ab7fde4, type: 2}
   tracks: {fileID: 4768541386785244533}
   turret: {fileID: 6524632739264611629}
   impactThreshold: 2
   tankBody: {fileID: 9059168380699543103}
+  gunnerCameraOffset: {x: 12, y: 43.9, z: -13.7}
   turretYawPivot: {fileID: 5642704663743803734}
   turretPitchPivot: {fileID: 888042457583644244}
   muzzle: {fileID: 6111390505664026786}
@@ -1008,6 +1017,10 @@ MonoBehaviour:
   hasMines: 0
   mineCooldownTime: 4
   mine: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
+  missileGO: {fileID: 3732487249527810964, guid: 2151206c25b87d446a8afe41821c0a38,
+    type: 3}
+  _hasMissile: 0
+  missile: {fileID: 0}
   contactRadius: 0.25
   contactCapsuleHalfLength: 0.43
   trackSpacing: 1.1
@@ -1372,6 +1385,71 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 335009936715851645, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 335009936715851645, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 865652197539168518, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 865652197539168518, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 865652197539168518, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3423267300357119071, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 95.331
+      objectReference: {fileID: 0}
+    - target: {fileID: 3423267300357119071, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 130.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3423267300357119071, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.0000086278
+      objectReference: {fileID: 0}
+    - target: {fileID: 3423267300357119071, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.050552
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616509222669172335, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 95.331
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616509222669172335, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 130.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616509222669172335, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.2178
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616509222669172335, guid: ad4463405ba347041990f570bd9c4442,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.051115
       objectReference: {fileID: 0}
     - target: {fileID: 8533177478944793253, guid: ad4463405ba347041990f570bd9c4442,
         type: 3}
