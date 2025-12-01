@@ -114,7 +114,6 @@ public class TankCustomizationScreen : MonoBehaviour
             if (img)
             {
                 img.color = _currentTankData.availableMaterials[index].color;
-                Debug.Log("Ja heeft ie");
             }
         }
     }
