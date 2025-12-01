@@ -33,12 +33,14 @@ public class NetworkedMine : NetworkBehaviour
         _endTime = NetworkTime.time + durationSeconds;
     }
 
+    [ServerCallback]
     private void Start()
     {
         Server_Initialze(armingTime);
         StartCoroutine(LightBlinker());
     }
 
+    [ServerCallback]
     void Update()
     {
         if (_isArmed == false)
@@ -59,7 +61,15 @@ public class NetworkedMine : NetworkBehaviour
     public void Server_DeleteSelfIn(float delay)
     {
         if (!isServer) return;
+
         Invoke(nameof(Server_DeleteSelfNow), delay);
+        RpcDestroyOnClient(delay);
+    }
+
+    [ClientRpc]
+    public void RpcDestroyOnClient(float delay)
+    {
+        Destroy(gameObject, delay);
     }
 
     public IEnumerator LightBlinker()
@@ -73,33 +83,37 @@ public class NetworkedMine : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    private void RpcExplode()
+    {
+        if (particleEffect != null) particleEffect.Play();
+        if (tankHitAudioSource != null) tankHitAudioSource.Play();
+        if (mineVisual != null) mineVisual.SetActive(false);
+    }
+
+    [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
         if (!_isArmed) return;
-
-        Debug.Log(other.gameObject.name);
 
         if (other.gameObject.layer == TANK_LAYER)
         {
             _isArmed = false;
 
-            particleEffect.Play();
-            tankHitAudioSource.Play();
-            mineVisual.SetActive(false);
-
             var tankBrain = other.gameObject.GetComponentInParent<TankBrain>();
-            tankBrain.TakeDamge(damage);
+            if (tankBrain != null)
+            {
+                tankBrain.Server_TakeDamage(damage); // new server method, see below
+            }
 
-            Server_DeleteSelfIn(despawnTime);
+            RpcExplode();
+            Server_DeleteSelfIn(despawnTime);       // despawn on server + clients
         }
         else if (other.gameObject.layer == BULLET_LAYER)
         {
             _isArmed = false;
 
-            particleEffect.Play();
-            tankHitAudioSource.Play();
-
-            mineVisual.SetActive(false);
+            RpcExplode();
             Server_DeleteSelfIn(despawnTime);
         }
     }

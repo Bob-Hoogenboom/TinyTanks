@@ -340,15 +340,6 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
-    private void Server_TankDeath()
-    {
-        lives -= 1;
-
-        if (lives == 0) Server_ReturnToLobby();
-        else StarRespawnTimer();
-    }
-
-    [Server]
     public void Server_FinishReload()
     {
         isReloading = false;
@@ -488,21 +479,55 @@ public class TankBrain : NetworkBehaviour
         gunner.enabled = true;
         _isDead = false;
 
-        if (driverRespawn != null && gunnerRespawn != null)
-        {
-            driverRespawn.alpha = 0;
-            gunnerRespawn.alpha = 0;
-        }
+        RpcTankBirth();
     }
 
     [Server]
     private void Server_ReturnToLobby()
     {
+        var nm = NetworkManager.singleton;
+        if (nm == null) return;
+
         if (NetworkServer.active)
         {
-            var roomMgr = (NetworkRoomManager)NetworkManager.singleton;
-            NetworkManager.singleton.ServerChangeScene(roomMgr.RoomScene);
+            nm.StopHost();
         }
+    }
+
+    [Server]
+    public void Server_TakeDamage(int dmg)
+    {
+        if (_isDead) return;
+
+        currHealth -= dmg;
+
+        if (currHealth <= 0)
+        {
+            _isDead = true;
+            lives -= 1;
+
+            if (lives <= 0)
+            {
+                Server_ReturnToLobby();
+            }
+            else
+            {
+                respawnEndTime = NetworkTime.time + respawnTime;
+                RpcTankDeath();
+            }
+        }
+    }
+
+    [ClientRpc]
+    private void RpcTankBirth()
+    {
+        StopRespawnTimer();
+    }
+
+    [ClientRpc]
+    private void RpcTankDeath()
+    {
+        StarRespawnTimer();
     }
 
     [Client]
@@ -618,7 +643,7 @@ public class TankBrain : NetworkBehaviour
 
     private void OnAmmoTypeChanged(ammoTypes oldVal, ammoTypes newVal)
     {
-        if(newVal == ammoTypes.missile)
+        if (newVal == ammoTypes.missile)
         {
             indicatorImage.sprite = missileSprite;
             missileFillDriver.enabled = true;
@@ -647,6 +672,16 @@ public class TankBrain : NetworkBehaviour
             gunnerRespawn.alpha = 1;
         }
         respawnEndTime = NetworkTime.time + +respawnTime;
+    }
+
+    [Client]
+    private void StopRespawnTimer()
+    {
+        if (driverRespawn != null && gunnerRespawn != null)
+        {
+            driverRespawn.alpha = 0;
+            gunnerRespawn.alpha = 0;
+        }
     }
 
     private void OnHasMissileChanged(bool _, bool hasMissile)
@@ -700,17 +735,6 @@ public class TankBrain : NetworkBehaviour
     private void UpdateTrackColour(bool grounded, Image sprite, float input) //Masterclass by Allan: how to be a maniac
     {
         sprite.color = (!grounded ? Color.red : (input == 0 ? Color.grey : (input > 0 ? blue : orange))); // dont be this guy, atleast not an if else ~ Allan
-    }
-
-
-    public void TakeDamge(int dmg)
-    {
-        if (_isDead) return;
-
-        currHealth -= dmg;
-
-        if (currHealth <= 0)
-            Server_TankDeath();
     }
 
     private void OnCollisionEnter(Collision collision)

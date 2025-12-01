@@ -63,7 +63,12 @@ public class NetworkGameTimer : NetworkBehaviour
     [Server] 
     private void ReturnToLobby()
     {
-        var roomMgr = (NetworkRoomManager)NetworkManager.singleton;
-        NetworkManager.singleton.ServerChangeScene(roomMgr.RoomScene);
+        var nm = NetworkManager.singleton;
+        if (nm == null) return;
+
+        if (NetworkServer.active)
+        {
+            nm.StopHost();
+        }
     }
 }
