@@ -987,11 +987,20 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  OnMissileShoot:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMissileDestroy:
+    m_PersistentCalls:
+      m_Calls: []
+  driver: {fileID: 0}
+  gunner: {fileID: 0}
   tankData: {fileID: 11400000, guid: fb0f7dc981bf6af45a6927b3f3dd4257, type: 2}
   tracks: {fileID: -5794259894426918823}
   turret: {fileID: 6851069754155643458}
   impactThreshold: 1.5
   tankBody: {fileID: 1549758936305188352}
+  gunnerCameraOffset: {x: 0.123, y: 0.385, z: 0.031}
   turretYawPivot: {fileID: 5086669368897976528}
   turretPitchPivot: {fileID: 4870008665443639310}
   muzzle: {fileID: 6901168756112154940}
@@ -1008,6 +1017,10 @@ MonoBehaviour:
   hasMines: 0
   mineCooldownTime: 4
   mine: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
+  missileGO: {fileID: 3732487249527810964, guid: 2151206c25b87d446a8afe41821c0a38,
+    type: 3}
+  _hasMissile: 0
+  missile: {fileID: 0}
   contactRadius: 0.22
   contactCapsuleHalfLength: 0.35
   trackSpacing: 0.9

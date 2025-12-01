@@ -9,6 +9,7 @@ public class GunnerSeatController : NetworkBehaviour
     [SerializeField] private CrewSeat seat;
     [SerializeField] private Camera seatCam;
     [SerializeField] private Canvas canvas;
+    [SerializeField] private Vector3 missileCamOffset;
 
     private void Awake()
     {
@@ -20,6 +21,13 @@ public class GunnerSeatController : NetworkBehaviour
 
         if (seatCam) seatCam.gameObject.SetActive(true);
         if (canvas) canvas.gameObject.SetActive(true);
+
+        seat.tank.OnMissileShoot.AddListener(InitializeMissileCam);
+        seat.tank.OnMissileDestroy.AddListener(DeInitializeMissileCam);
+
+        Debug.Log($"Adding missile listeners on {seat.tank.name} " +
+          $"isServer={seat.tank.isServer} isClient={seat.tank.isClient} " +
+          $"isLocalPlayer={seat.tank.isLocalPlayer}");
     }
 
     private void Update()
@@ -66,6 +74,38 @@ public class GunnerSeatController : NetworkBehaviour
     {
         if (!seat || !seat.tank) return;
         seat.tank.Server_PlaceMine(seat);
+    }
+
+    [Client]
+    public void InitializeMissileCam()
+    {
+        if (!seat) return;
+        var t = seat.tank;
+        if (!t) return;
+        var m = t.missile;
+        if (!m)
+        {
+            Debug.LogWarning("InitializeMissileCam: missile not set on client yet");
+            return;
+        }
+
+        Debug.Log("set To MissileCam position");
+
+        seatCam.transform.parent = m.camAnchor.transform;
+        seatCam.transform.localPosition = new Vector3(0, 0, 0);
+    }
+
+    [Client]
+    public void DeInitializeMissileCam()
+    {
+        if (!seat) return;
+        var t = seat.tank;
+        if (!t) return;
+
+        Debug.Log("set MissileCam position");
+        seatCam.transform.parent = t.TurretYawPivot;
+        seatCam.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        seatCam.transform.localPosition = t.GunnerCameraOffset;        
     }
 
     [Client]
