@@ -91,7 +91,7 @@ public class NetworkedMissile : NetworkBehaviour
                 Destroy(hitAudio.gameObject, 4);
 
                 var tankBrain = other.gameObject.GetComponentInParent<TankBrain>();
-                tankBrain.TakeDamge(parent.damage);
+                tankBrain.Server_TakeDamage(parent.damage);
                 Server_DeleteSelfNow();
             }
         }
