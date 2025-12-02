@@ -169,7 +169,8 @@ AudioSource:
   m_GameObject: {fileID: 372892833963591624}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 820890253051705833, guid: 37243188d85656840ad53c101e9f7c9a,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: cd0032902369866409722796035e61b3, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -811,24 +812,40 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.01
+  OnMissileShoot:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMissileDestroy:
+    m_PersistentCalls:
+      m_Calls: []
+  driver: {fileID: 0}
+  gunner: {fileID: 0}
+  tankData: {fileID: 0}
   tracks: {fileID: 8416088550841953184}
   turret: {fileID: 319210562668348669}
+  impactThreshold: 5
   tankBody: {fileID: 490045448937751782}
+  gunnerCameraOffset: {x: 0, y: 0, z: 0}
   turretYawPivot: {fileID: 3335216286506554464}
   turretPitchPivot: {fileID: 5950514435522869286}
   muzzle: {fileID: 2124524459161670718}
   serverShellPrefab: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
     type: 3}
-  clientShellPrefab: {fileID: 3732487249527810964, guid: 19dee6e852902dd47976e45177664d8f,
-    type: 3}
-  shellSpeed: 10
-  fireCooldownTime: 5
-  fireCooldownTimer: 0
+  currSelectedAmmo: 0
+  hasBullet: 1
   lives: 3
   currHealth: 0
-  maxHealth: 5
   respawnTime: 5
-  spawnLocation: {fileID: 0}
+  currentBtry: 50
+  hasBattery: 0
+  moveInputThreshold: 0.05
+  mine: {fileID: 0}
+  hasMines: 0
+  mineCooldownTime: 4
+  mineOnCooldown: 0
+  missileGO: {fileID: 0}
+  _hasMissile: 0
+  missile: {fileID: 0}
   contactRadius: 0.22
   contactCapsuleHalfLength: 0.45
   trackSpacing: 0.9
@@ -842,10 +859,41 @@ MonoBehaviour:
   respawnTexts:
   - {fileID: 8487849517577558630}
   - {fileID: 448577373757514536}
-  gizmoDrawCapsuleCasts: 1
+  reloadGroup: {fileID: 0}
+  bulletReloadImage: {fileID: 0}
+  reloadTimerImage: {fileID: 0}
+  bulletFillDriver: {fileID: 0}
+  batteryImages: []
+  currImages: []
+  mineUI: {fileID: 0}
+  mineFillImage: {fileID: 0}
+  mineTxt: {fileID: 0}
+  indicatorImage: {fileID: 0}
+  missileFillDriver: {fileID: 0}
+  missileSprite: {fileID: 0}
+  bulletSprite: {fileID: 0}
+  healthImage: []
+  livesText: []
+  leftTrackImage: {fileID: 0}
+  rightTrackImage: {fileID: 0}
+  orange: {r: 0, g: 0, b: 0, a: 0}
+  blue: {r: 0, g: 0, b: 0, a: 0}
+  spawnPoints: []
+  spawnLocation: {fileID: 0}
+  minSpawnDistance: 20
+  smokeVFX: {fileID: 0}
+  shootingAudio: {fileID: 0}
+  driveIntoEnviormentAudio: {fileID: 0}
+  rotateCapulaAudio: {fileID: 0}
+  startDrivingAudio: {fileID: 0}
+  duringDrivingAudio: {fileID: 0}
+  endinDrivingAudio: {fileID: 0}
+  idleAudio: {fileID: 0}
+  reloadingAudio: {fileID: 0}
+  gizmoDrawTrackCasts: 1
   gizmoOnlyWhenSelected: 1
-  gizmoDrawHitAndNormal: 1
-  trackAxisIsRight: 0
+  gizmoDrawNormals: 1
+  gizmoLabelPoints: 0
 --- !u!114 &8416088550841953184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,22 +910,23 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 7168
+  identity: {fileID: 0}
+  isSupposedToHaveServer: 1
+  anim: {fileID: 0}
   contactRadius: 0.22
   contactCapsuleHalfLength: 0.45
   trackSpacing: 0.9
   trackRayStartHeight: 0.3
   trackRayLength: 0.35
   extraDownForce: 0
-  yawDamping: 0.25
-  stabilizationForce: 500
   groundingForce: 1000
   hardFloorData: {fileID: 11400000, guid: 17a97928f86f62b49a7d033350f634aa, type: 2}
   carpetData: {fileID: 11400000, guid: 0dacfb941179d54479fda178f1acf43c, type: 2}
   wetFloorData: {fileID: 11400000, guid: affdcabadcc689e4a87e5069419266de, type: 2}
+  rampData: {fileID: 0}
   currData: {fileID: 0}
   slipDead: 0.4
   minVelocityMagnitude: 0.001
-  contactSmoothing: 0.8
 --- !u!114 &319210562668348669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -890,12 +939,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851d45d65b8e55145a8f9f1a21baf432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
   yawPivot: {fileID: 3335216286506554464}
   pitchPivot: {fileID: 5950514435522869286}
   inputDeadzone: 0.05
+  isSupposedToHaveServer: 1
   idleModeYaw: 1
   idleModePitch: 1
   yawSettings: {fileID: 11400000, guid: 341f91b478b68944f92df4bbd0a21979, type: 2}
@@ -1041,7 +1088,8 @@ AudioSource:
   m_GameObject: {fileID: 2452246921925707974}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 820890253051705833, guid: 37243188d85656840ad53c101e9f7c9a,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 4df857be3e07e064caa9f122baf84bc6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.392
@@ -1504,7 +1552,8 @@ AudioSource:
   m_GameObject: {fileID: 4813582639770554208}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 820890253051705833, guid: 37243188d85656840ad53c101e9f7c9a,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 76fbc9340f588c043a89a5b1a16cdc52, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -1843,7 +1892,8 @@ AudioSource:
   m_GameObject: {fileID: 6514684308191179081}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 820890253051705833, guid: 37243188d85656840ad53c101e9f7c9a,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: c98f919d80a33a344a6f15f800aa1db0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.392
@@ -2056,7 +2106,8 @@ AudioSource:
   m_GameObject: {fileID: 7098484149005355704}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 820890253051705833, guid: 37243188d85656840ad53c101e9f7c9a,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 7a3913f06a32ed347b59032f35a1985b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.557
@@ -2328,7 +2379,8 @@ AudioSource:
   m_GameObject: {fileID: 7832157649756468196}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 820890253051705833, guid: 37243188d85656840ad53c101e9f7c9a,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: e45865a3b7c196641b43701b4dbcdc20, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -2456,7 +2508,8 @@ AudioSource:
   m_GameObject: {fileID: 8051544740001813373}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 820890253051705833, guid: 37243188d85656840ad53c101e9f7c9a,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: b28feba60e2a9914988657244076b25e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -2695,7 +2748,8 @@ AudioSource:
   m_GameObject: {fileID: 9033815395453673592}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 820890253051705833, guid: 37243188d85656840ad53c101e9f7c9a,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 8b56051f104c75b4697cc9fb6083bd01, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.392
@@ -3238,6 +3292,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameTimer
       objectReference: {fileID: 0}
+    - target: {fileID: 5912357069439318032, guid: afae3c8d4d7bfdf47a7b026dcd635710,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -9.899994
+      objectReference: {fileID: 0}
+    - target: {fileID: 5912357069439318032, guid: afae3c8d4d7bfdf47a7b026dcd635710,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -5.799999
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8840707572668968620, guid: afae3c8d4d7bfdf47a7b026dcd635710, type: 3}
     m_RemovedGameObjects: []
@@ -3377,6 +3441,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameTimer
+      objectReference: {fileID: 0}
+    - target: {fileID: 5912357069439318032, guid: afae3c8d4d7bfdf47a7b026dcd635710,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -9.899994
+      objectReference: {fileID: 0}
+    - target: {fileID: 5912357069439318032, guid: afae3c8d4d7bfdf47a7b026dcd635710,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -5.799999
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8840707572668968620, guid: afae3c8d4d7bfdf47a7b026dcd635710, type: 3}
