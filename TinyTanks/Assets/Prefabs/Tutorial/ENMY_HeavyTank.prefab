@@ -1026,7 +1026,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd45b22f31b1d842b2e174dfd54e2f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitpoints: 3
+  hitpoints: 1
+  canShoot: 0
   hittable:
     serializedVersion: 2
     m_Bits: 512
@@ -1055,6 +1056,9 @@ MonoBehaviour:
         m_CallState: 2
   waitTimeOnWayPoint: 1
   path: {fileID: 0}
+  onEnemyDefeat:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!195 &2203687534893505543
 NavMeshAgent:
   m_ObjectHideFlags: 0

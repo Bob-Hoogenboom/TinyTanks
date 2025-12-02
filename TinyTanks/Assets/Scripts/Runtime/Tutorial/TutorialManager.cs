@@ -49,7 +49,10 @@ public class TutorialManager : MonoBehaviour
     {
         tutorialText.text = "";
 
-        audioSource.PlayOneShot(soldierGreeting);
+        if (soldierGreeting != null)
+        {
+            audioSource.PlayOneShot(soldierGreeting);
+        }
 
         int letterCount = 0;
         foreach (char letter in message)

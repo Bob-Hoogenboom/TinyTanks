@@ -29,6 +29,7 @@ public class TutorialTank : MonoBehaviour, IDamagable
 
     [SerializeField] private float maxDistance = 100f;
     [SerializeField] private GameObject hitIndicatorPrefab;
+    [SerializeField] private float cooldown = 2f;
     private GameObject _hitIndicatorInstance;
 
     [Header("State")]
@@ -60,6 +61,8 @@ public class TutorialTank : MonoBehaviour, IDamagable
 
     private void Update()
     {
+        cooldown -= Time.deltaTime;
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (currentRole == TankRole.TANK_DRIVER)
@@ -96,7 +99,7 @@ public class TutorialTank : MonoBehaviour, IDamagable
             Aiming();
             AimIndicator();
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && cooldown <= 0f)
             {
                 Shoot();
             }
@@ -148,6 +151,8 @@ public class TutorialTank : MonoBehaviour, IDamagable
 
         brb.AddForce(shellSpawn.forward * shellSpeed, ForceMode.VelocityChange);
         Destroy(bulletObj, 5f);
+
+        cooldown = 2f;
 
         onShoot.Invoke();
     }
