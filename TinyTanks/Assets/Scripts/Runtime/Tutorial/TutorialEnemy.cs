@@ -8,6 +8,8 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
     [SerializeField] private float hitpoints = 3f;
     public float HitPoints => hitpoints;
 
+    public bool canShoot = true;
+
     private TutorialTank _playerTarget;
 
 
@@ -46,7 +48,10 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        _agent.destination = path.GetCurrentWayPoint();
+        if (path.pathType != PathType.IDLE)
+        {
+            _agent.destination = path.GetCurrentWayPoint();
+        }
     }
 
     private void Update()
@@ -54,7 +59,7 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
         if (_isActive)
         {
             AimAtPlayer();
-            if(_agent.remainingDistance <= 0.1f)
+            if(_agent.remainingDistance <= 0.1f && path.pathType != PathType.IDLE)
             {
                 time += Time.deltaTime;
                 if(time >= waitTimeOnWayPoint)
@@ -135,6 +140,8 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
             Time.deltaTime * _barrelRotateSpeed
         );
 
+        if (!canShoot) return;
+
         //Timer
         _coolDown += Time.deltaTime;
         if (_coolDown >= 3f)
@@ -149,7 +156,9 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
                 if (hit.transform.gameObject == _playerTarget.transform.gameObject)
                 {
                     _coolDown = 0f;
-                    Shoot();
+
+                   Shoot();
+                    
                 }
             }
         }
