@@ -1194,7 +1194,7 @@ MonoBehaviour:
   currentBtry: 50
   hasBattery: 0
   moveInputThreshold: 0.05
-  mine: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
+  mine: {fileID: 9055745981646465164, guid: 881e5d2e9d4aa3e4b86358ec3f04fb82, type: 3}
   hasMines: 0
   mineCooldownTime: 4
   mineOnCooldown: 0
@@ -1230,9 +1230,9 @@ MonoBehaviour:
   currImages:
   - {fileID: 2093767266968802130}
   - {fileID: 956595897461398377}
-  mineUI: {fileID: 6743623365050837757}
-  mineFillImage: {fileID: 5271734807771595646}
-  mineTxt: {fileID: 652668750858429485}
+  mineUI: {fileID: 7114351888286421663}
+  mineFillImage: {fileID: 8504377200770415388}
+  mineTxt: {fileID: 3901197155200277583}
   missileImage: {fileID: 3083262970865057086}
   missileFillDriver: {fileID: 2090466548723489210}
   healthImage:
@@ -3376,6 +3376,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3901197155200277583 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3904900890670481170, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 5392621048374109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4924501540729919896 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4919180388236868293, guid: 42a37a046e3ec104db7d766801b4dd13,
@@ -3424,6 +3436,12 @@ CanvasGroup:
     type: 3}
   m_PrefabInstance: {fileID: 5392621048374109}
   m_PrefabAsset: {fileID: 0}
+--- !u!225 &7114351888286421663 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 7109048380613865922, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 5392621048374109}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7213388448031860837 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7208066300154170168, guid: 42a37a046e3ec104db7d766801b4dd13,
@@ -3451,6 +3469,18 @@ MonoBehaviour:
 --- !u!114 &8383020782092768785 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8378191137057568076, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 5392621048374109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8504377200770415388 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8509189270893156417, guid: 42a37a046e3ec104db7d766801b4dd13,
     type: 3}
   m_PrefabInstance: {fileID: 5392621048374109}
   m_PrefabAsset: {fileID: 0}
@@ -3815,18 +3845,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &652668750858429485 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 93322974036678951, guid: eee26696c6da89043b3aa63ff9667d52,
-    type: 3}
-  m_PrefabInstance: {fileID: 595937523931086090}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &982722239254385399 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 425140113310134269, guid: eee26696c6da89043b3aa63ff9667d52,
@@ -3875,27 +3893,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5271734807771595646 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4714640873583099508, guid: eee26696c6da89043b3aa63ff9667d52,
-    type: 3}
-  m_PrefabInstance: {fileID: 595937523931086090}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &6626794040321194787 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
-    type: 3}
-  m_PrefabInstance: {fileID: 595937523931086090}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &6743623365050837757 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 6184317215678781431, guid: eee26696c6da89043b3aa63ff9667d52,
     type: 3}
   m_PrefabInstance: {fileID: 595937523931086090}
   m_PrefabAsset: {fileID: 0}

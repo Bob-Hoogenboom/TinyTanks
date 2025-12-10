@@ -7,17 +7,25 @@ public class NetworkedMine : NetworkBehaviour
 {
     const int TANK_LAYER = 9;
     const int BULLET_LAYER = 6;
+    [SerializeField] private Collider triggerCol;
 
     [Header("Behaviour")]
     [SerializeField] private int damage = 6;
     [SerializeField] private float armingTime = 4f;
-    [SerializeField] private float despawnTime = 1f;
+    [SerializeField] private float despawnTime = 5f;
     [SyncVar] private double _endTime;
-    [SerializeField, SyncVar] private bool _isArmed = false;
+    private bool _isArmed = false;
+    private bool _hasExploded = false;
+    private Rigidbody rb;
+
+    [Header("Launch settings")]
+    [SerializeField] private float launchForce = 5f;
+    [SerializeField] private ForceMode launchForceMode = ForceMode.Impulse;
 
     [Header("VFX")]
     [SerializeField] private ParticleSystem particleEffect;
-    [SerializeField] private GameObject mineVisual;
+    [SerializeField] private GameObject baseMesh;
+    [SerializeField] private GameObject explodedMesh;
 
     [Header("Light")]
     [SerializeField] private Light armingBlinker;
@@ -37,7 +45,11 @@ public class NetworkedMine : NetworkBehaviour
     private void Start()
     {
         Server_Initialze(armingTime);
-        StartCoroutine(LightBlinker());
+
+        rb = GetComponent<Rigidbody>();
+
+        if (armingBlinker)
+            StartCoroutine(LightBlinker());
     }
 
     [ServerCallback]
@@ -86,35 +98,46 @@ public class NetworkedMine : NetworkBehaviour
     [ClientRpc]
     private void RpcExplode()
     {
-        if (particleEffect != null) particleEffect.Play();
-        if (tankHitAudioSource != null) tankHitAudioSource.Play();
-        if (mineVisual != null) mineVisual.SetActive(false);
+        if (particleEffect) particleEffect.Play();
+        if (tankHitAudioSource) tankHitAudioSource.Play();
+        if (baseMesh) baseMesh.SetActive(false);
+        if (explodedMesh) explodedMesh.SetActive(true);
+        if (rb) rb.AddForce(Vector3.up * launchForce, launchForceMode);
     }
 
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
-        if (!_isArmed) return;
+        if (!_isArmed || _hasExploded)
+            return;
 
-        if (other.gameObject.layer == TANK_LAYER)
+        int otherLayer = other.gameObject.layer;
+        if (otherLayer != TANK_LAYER && otherLayer != BULLET_LAYER)
+            return;
+
+        _hasExploded = true;
+        _isArmed = false;
+
+        triggerCol.enabled = false;
+
+        if (otherLayer == TANK_LAYER)
         {
-            _isArmed = false;
-
-            var tankBrain = other.gameObject.GetComponentInParent<TankBrain>();
+            var tankBrain = other.GetComponentInParent<TankBrain>();
             if (tankBrain != null)
             {
-                tankBrain.Server_TakeDamage(damage); // new server method, see below
+                tankBrain.Server_TakeDamage(damage);
             }
-
-            RpcExplode();
-            Server_DeleteSelfIn(despawnTime);       // despawn on server + clients
         }
-        else if (other.gameObject.layer == BULLET_LAYER)
+
+        if (rb)
         {
-            _isArmed = false;
-
-            RpcExplode();
-            Server_DeleteSelfIn(despawnTime);
+            rb.isKinematic = false;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.AddForce(Vector3.up * launchForce, launchForceMode);
         }
+
+        RpcExplode();
+        Server_DeleteSelfIn(despawnTime);
     }
 }
