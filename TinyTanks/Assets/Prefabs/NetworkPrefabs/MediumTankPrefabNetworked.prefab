@@ -1038,6 +1038,7 @@ MonoBehaviour:
   reloadGroup: {fileID: 2260520121352687922}
   bulletReloadImage: {fileID: 7756968041505650646}
   reloadTimerImage: {fileID: 1407367618982072811}
+  bulletImage: {fileID: 5183331502159319140}
   bulletFillDriver: {fileID: 4984204432293698346}
   batteryImages:
   - {fileID: 21300000, guid: 14d5d4d4e0563df4d91dd2921b5ec7d0, type: 3}
@@ -1052,10 +1053,8 @@ MonoBehaviour:
   mineUI: {fileID: 4292832345926602716}
   mineFillImage: {fileID: 3399631811589695071}
   mineTxt: {fileID: 8001668640196264204}
-  indicatorImage: {fileID: 5183331502159319140}
+  missileImage: {fileID: 3149661968757948300}
   missileFillDriver: {fileID: 2053359720598149896}
-  missileSprite: {fileID: 21300000, guid: e63a30b628145da42bccbbfc279fbc3c, type: 3}
-  bulletSprite: {fileID: 21300000, guid: bc01717ab31c8e747a73adefce676221, type: 3}
   healthImage:
   - {fileID: 7203881064663871673}
   - {fileID: 5964657698217107969}
@@ -1956,6 +1955,18 @@ CanvasGroup:
     type: 3}
   m_PrefabInstance: {fileID: 8850819292145021979}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3149661968757948300 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5864167888027749271, guid: 8823c84c348df324b9b0bce5ece399c9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8850819292145021979}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3293148124697357969 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6298268158007319178, guid: 8823c84c348df324b9b0bce5ece399c9,
