@@ -6,10 +6,10 @@ using UnityEngine;
 /// </summary>
 public class SpeedTriggerData : MonoBehaviour
 {
-    [SerializeField] private SplineDolly splineDolly;
+    //[SerializeField] private SplineDolly splineDolly;
 
     
-    public void TimedStopDolly(float forSeconds)
+    /*public void TimedStopDolly(float forSeconds)
     {
         //#TODO Make a Time Prompt
         splineDolly.PauseForSeconds(forSeconds);
@@ -37,5 +37,5 @@ public class SpeedTriggerData : MonoBehaviour
     {
         //#TODO let the player known they speed up
         splineDolly.currentSpeed = splineDolly.dollySpeed * 2;
-    }
+    }*/
 }
