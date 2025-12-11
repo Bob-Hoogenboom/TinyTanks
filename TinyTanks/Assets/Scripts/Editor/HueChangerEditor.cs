@@ -1,18 +1,22 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(RandomHue))]
+[CustomEditor(typeof(SelectHue))]
 public class HueChangerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        RandomHue script = (RandomHue)target;
+        SelectHue script = (SelectHue)target;
 
         if (GUILayout.Button("Apply Hue"))
         {
             script.ApplyHue();
+        }
+        else if (GUILayout.Button("Apply Random Hue"))
+        {
+            script.RandomHue();
         }
     }
 }
