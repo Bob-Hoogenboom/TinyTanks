@@ -3,32 +3,34 @@ using UnityEngine;
 
 /// <summary>
 /// A script that needs to be attached to the spline computer Gameobject
-/// It holds all info for an OnRailShooter section
+/// It holds all info for an OnRailShooter section like score, enemies and other events
+/// UI is handled in a different section because of delegate events for all singleplayer instances
 /// </summary>
 public class RailShooter : MonoBehaviour
 {
     [SerializeField] private SplineFollower follower;
-
     private float _initialSpeed;
 
 
-    // Start is called before the first frame update
+    private void OnEnable() => SinglePlayer.Events.OnMatchRestart += RestartShooter;
+    private void OnDisable() => SinglePlayer.Events.OnMatchRestart -= RestartShooter;
+
+
     private void Start()
     {
-        follower.onEndReached += RestartWindow;
-        _initialSpeed = follower.followSpeed;
+        follower.onEndReached += EndingShooter;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void EndingShooter(double percent)
     {
-        
+        SinglePlayer.Events.TrackFinished();
     }
 
-    private void RestartWindow(double percent)
+    private void RestartShooter()
     {
-        //restartLogic here*
+        follower.SetPercent(0);
     }
+
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,14 +39,12 @@ public class RailShooter : MonoBehaviour
     {
         //#TODO Make a Time Prompt
         //#TODO Stop follower for X* amount of time
-        
     }
 
     public void InputStopFollower()
     {
         //#TODO Make an Input Prompt
         //#TODO Stop follower until INPUT*
-        
     }
 
     public void SlowFollower()
