@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
-using UnityEngine.Events;
 
 [DefaultExecutionOrder(-100)]
 public class TankBrain : NetworkBehaviour
@@ -16,8 +15,8 @@ public class TankBrain : NetworkBehaviour
         missile = 1
     }
 
-    public UnityEvent OnMissileShoot;
-    public UnityEvent OnMissileDestroy;
+    public Action OnSwapToMissileCam;
+    public Action OnSwapToGunnerCam;
 
     [HideInInspector]
     public int damage { get; private set; }
@@ -50,19 +49,18 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private Transform turretPitchPivot; // X rotation
     [SerializeField] private Transform muzzle; // shell spawn
     public Transform TurretYawPivot => turretYawPivot;
+    public Transform TurretPitchPivot => turretPitchPivot;
+    public Transform Muzzle => muzzle;
     public Vector3 GunnerCameraOffset => gunnerCameraOffset;
 
-    [Header("Firing")]
-    [SerializeField] private GameObject serverShellPrefab;
-    [SyncVar] private double _reloadEndTime;
-    [SyncVar] private float currReloadTime;
+    [Header("Firing/Missile")]
+    public Shooter shooter;
+    private bool _isShootingMissile;
+    [SyncVar(hook = nameof(OnMissileChanged))]
+    public NetworkedMissile missile;
+
     [SyncVar(hook = nameof(OnAmmoTypeChanged))]
     [SerializeField] private ammoTypes currSelectedAmmo = ammoTypes.normal;
-
-    [SyncVar(hook = nameof(OnIsReloadingChanged))]
-    private bool isReloading = false;
-    [SyncVar(hook = nameof(OnHasBulletChanged))]
-    [SerializeField] private bool hasBullet = true;
 
     [Header("Health/Life")]
     [SyncVar(hook = nameof(OnLivesChanged))]
@@ -80,57 +78,17 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private float moveInputThreshold = 0.05f;
 
     [Header("Mines")]
-    [SerializeField] private GameObject mine;
-    [SerializeField] private bool hasMines;
-    [SerializeField] private float mineCooldownTime = 4f;
-    [SyncVar(hook = nameof(OnMineCooldownChanged))]
-    [SerializeField] private bool mineOnCooldown;
-    private int _maxMineAmount = 3;
-    [SyncVar(hook = nameof(OnMinesChanged))]
-    private int _mineAmount = 0;
-    [SyncVar] private double _mineCooldownEndTime;
-
-    [Header("Homing Missile")]
-    [SerializeField] private GameObject missileGO;
-    [SyncVar] private bool _isShootingMissile;
-    [SyncVar(hook = nameof(OnHasMissileChanged))]
-    [SerializeField] private bool _hasMissile = false;
-    [SyncVar(hook = nameof(OnMissileChanged))]
-    public NetworkedMissile missile;
-
-    [Header("RayCast")]
-    [SerializeField] float contactRadius = 0.22f;
-    [SerializeField] float contactCapsuleHalfLength = 0.45f;
-    [SerializeField] private float trackSpacing = 2.6f;
-    [SerializeField] private float trackRayStartHeight = 0.6f;
-    [SerializeField] private float trackRayLength = 1.2f;
-    [SerializeField] private LayerMask groundMask = ~0;
+    [SerializeField] private MineLayer mineLayer;
 
     [Header("UI Canvas")]
     [SerializeField] CanvasGroup driverRespawn;
     [SerializeField] CanvasGroup gunnerRespawn;
     [SerializeField] TMP_Text[] respawnTexts;
 
-    [Header("UI Bullet")]
-    [SerializeField] private CanvasGroup reloadGroup;
-    [SerializeField] private Image bulletReloadImage;
-    [SerializeField] private Image reloadTimerImage;
-    [SerializeField] private Image bulletImage;
-    [SerializeField] private Image bulletFillDriver;
-
     [Header("UI Battery")]
     [SerializeField] private Sprite[] batteryImages;
     [SerializeField] private Image[] currImages;
     private int _lastSpriteIndex;
-
-    [Header("UI Mine")]
-    [SerializeField] private CanvasGroup mineUI;
-    [SerializeField] private Image mineFillImage;
-    [SerializeField] private TMP_Text mineTxt;
-
-    [Header("UI Missile")]
-    [SerializeField] private Image missileImage;
-    [SerializeField] private Image missileFillDriver;
 
     [Header("UI Health")]
     [SerializeField] private Image[] healthImage;
@@ -151,14 +109,12 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private GameObject smokeVFX;
 
     [Header("Audio")]
-    [SerializeField] private AudioSource shootingAudio;
     [SerializeField] private AudioSource driveIntoEnviormentAudio;
     [SerializeField] private AudioSource rotateCapulaAudio;
     [SerializeField] private AudioSource startDrivingAudio;
     [SerializeField] private AudioSource duringDrivingAudio;
     [SerializeField] private AudioSource endinDrivingAudio;
     [SerializeField] private AudioSource idleAudio;
-    [SerializeField] private AudioSource reloadingAudio;
 
     public override void OnStartServer()
     {
@@ -166,10 +122,11 @@ public class TankBrain : NetworkBehaviour
         _netTrans = GetComponent<NetworkTransformReliable>();
         if (!tracks) tracks = GetComponent<TankTrackPhysics>();
         if (!turret) turret = GetComponent<TankTurretPhysics>();
+        if (!mineLayer) mineLayer = GetComponent<MineLayer>();
+
         currHealth = tankData.maxHealth;
         _isDead = false;
         hasBattery = true;
-        currReloadTime = tankData.baseReloadTime;
         currentBtry = tankData.maxBtry;
         damage = tankData.damage;
         idleAudio.Play();
@@ -177,6 +134,8 @@ public class TankBrain : NetworkBehaviour
         List<NetworkStartPosition> startPoints = FindObjectsOfType<NetworkStartPosition>().ToList();
         foreach (var point in startPoints)
             spawnPoints.Add(point.transform);
+
+        shooter.OnMissileShoot += AssignMissile;
     }
 
     [Server]
@@ -194,24 +153,6 @@ public class TankBrain : NetworkBehaviour
             UpdateTimerDisplay(respawnRemaining, respawnTexts);
 
             if (respawnRemaining <= 0 && _isDead) Server_RespawnTank();
-        }
-
-        if (isReloading)
-        {
-            double reloadRemaining = _reloadEndTime - NetworkTime.time;
-            UpdateReloadDisplay(reloadRemaining);
-
-            if (reloadRemaining <= 0)
-                Server_FinishReload();
-        }
-
-        if (mineOnCooldown)
-        {
-            double cooldownRemaining = _mineCooldownEndTime - NetworkTime.time;
-            UpdateMineDisplay(cooldownRemaining);
-
-            if (cooldownRemaining <= 0)
-                Server_FinishMineCooldown();
         }
     }
 
@@ -250,8 +191,15 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
+    public void AssignMissile()
+    {
+        _isShootingMissile = true;
+    }
+
+    [Server]
     public void Server_NotifyMissileDestroyed()
     {
+        _isShootingMissile = false;
         missile = null;
     }
 
@@ -264,65 +212,19 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
-    public void Server_ShootMissile()
-    {
-        _isShootingMissile = true;
-
-        GameObject serverMissileClone = Instantiate(missileGO, muzzle.transform.position, turretPitchPivot.transform.rotation);
-
-        NetworkedMissile nMissile = serverMissileClone.GetComponent<NetworkedMissile>();
-        nMissile.parent = this;
-        NetworkServer.Spawn(serverMissileClone);
-        missile = nMissile;
-        _hasMissile = false;
-    }
-
-    [Server]
-    public void Server_ShootBullet()
-    {
-        var velocity = turretPitchPivot.transform.forward * tankData.shellSpeed;
-        GameObject serverShellClone = Instantiate(serverShellPrefab, muzzle.transform.position, turretPitchPivot.transform.rotation);
-        Rigidbody serverShellRB = serverShellClone.GetComponent<Rigidbody>();
-        serverShellRB.velocity = velocity;
-
-        NetworkedShell nShell = serverShellClone.GetComponent<NetworkedShell>();
-        nShell.parent = this;
-        NetworkServer.Spawn(serverShellClone);
-
-        hasBullet = false;
-        Server_ConsumeBattery(tankData.batteryDrainShot);
-    }
-
-    [Server]
     public void Server_SetOffGun(CrewSeat from)
     {
-        if (from != gunner) return; //revert to driver when done testing
+        if (from != gunner) return;
 
-        if (currSelectedAmmo == ammoTypes.normal)
-        {
-            if (hasBullet)
-                Server_ShootBullet();
-            return;
-        }
-
-        if (currSelectedAmmo == ammoTypes.missile)
-        {
-            if (_hasMissile)
-                Server_ShootMissile();
-            return;
-
-        }
+        if (currSelectedAmmo == ammoTypes.normal) shooter.OnBulletShoot?.Invoke();
+        else shooter.OnMissileShoot?.Invoke();
     }
 
     [Server]
     public void Server_ReloadGun(CrewSeat from)
     {
         if (from != gunner) return;
-        if (hasBullet) return;
-        if (isReloading) return;
-
-        isReloading = true;
-        _reloadEndTime = NetworkTime.time + currReloadTime;
+        shooter.OnReloadBullet?.Invoke();
     }
 
     [Server]
@@ -339,13 +241,6 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Server]
-    public void Server_FinishReload()
-    {
-        isReloading = false;
-        hasBullet = true;
-    }
-
-    [Server]
     private void Server_ApplyBatteryMovementDrain(float dt)
     {
         float aL = Mathf.Abs(_leftTrack);
@@ -356,14 +251,24 @@ public class TankBrain : NetworkBehaviour
 
         float drain = 0;
 
-        if (aR == 0 && aL > 0 || (aR == 0 && aL > 0))
+        float product = aL * aR;
+
+        bool oneStoppedOneForward =
+            (aR == 0f && aL > 0f) ||
+            (aL == 0f && aR > 0f);
+
+        if (oneStoppedOneForward)
+        {
             drain = tankData.batteryDrainTurning;
-        else if (aL == 0 && aR > 0 || (aL == 0 && aR > 0))
-            drain = tankData.batteryDrainTurning;
-        else if (aL > 0 && aR > 0 || aL < 0 && aR < 0)
+        }
+        else if (product > 0f)
+        {
             drain = tankData.batteryDrainMove;
-        else if ((_leftTrack * _rightTrack) < -0.2f)
+        }
+        else if (product < -0.2f)
+        {
             drain += tankData.batteryDrainNeutralSteer;
+        }
 
         Server_ConsumeBattery(drain * dt);
     }
@@ -379,27 +284,23 @@ public class TankBrain : NetworkBehaviour
         if (prev > 0f && currentBtry <= 0f)
         {
             hasBattery = false;
-            Debug.Log("Battery depleted -> disabling systems");
-            currReloadTime = tankData.noBatteryReloadTime;
+            shooter.OnNoBattery?.Invoke();
         }
     }
 
     [Server]
     public void Server_RechargeBattery(float amount)
     {
-        Debug.Log("Applied battery Effect");
         float newBtry = currentBtry + amount;
 
         if (newBtry > tankData.maxBtry)
-        {
             newBtry = tankData.maxBtry;
-        }
 
         currentBtry = newBtry;
 
         if (currentBtry > 0)
         {
-            currReloadTime = tankData.baseReloadTime;
+            shooter.OnRechargeBattery?.Invoke();
             hasBattery = true;
         }
     }
@@ -407,40 +308,20 @@ public class TankBrain : NetworkBehaviour
     [Server]
     public void Server_LoadMissile()
     {
-        _hasMissile = true;
+        shooter.OnPickupMissle?.Invoke();
     }
 
     [Server]
     public void Server_RechargeMines()
     {
-        hasMines = true;
-        mineUI.alpha = 1;
-        _mineAmount = _maxMineAmount;
+        mineLayer.OnPickupMines?.Invoke();
     }
 
     [Server]
     public void Server_PlaceMine(CrewSeat from)
     {
-        if (from != driver) return; //Make sure this is gunner when live
-        if (!hasMines) return;
-        if (mineOnCooldown) return;
-
-        _mineAmount -= 1;
-
-        if (_mineAmount <= 0)
-            hasMines = false;
-
-        GameObject mineGO = Instantiate(mine, transform.position, transform.rotation);
-        NetworkServer.Spawn(mineGO);
-
-        mineOnCooldown = true;
-        _mineCooldownEndTime = NetworkTime.time + mineCooldownTime;
-    }
-
-    [Server]
-    public void Server_FinishMineCooldown()
-    {
-        mineOnCooldown = false;
+        if (from != driver) return;
+        mineLayer.OnLayMines?.Invoke();
     }
 
     [Server]
@@ -472,8 +353,7 @@ public class TankBrain : NetworkBehaviour
 
         currHealth = tankData.maxHealth;
         currentBtry = tankData.maxBtry;
-        if (_mineAmount > 0)
-            _mineAmount = 0;
+        mineLayer.OnDeathReset?.Invoke();
         driver.enabled = true;
         gunner.enabled = true;
         _isDead = false;
@@ -575,34 +455,6 @@ public class TankBrain : NetworkBehaviour
     }
 
     [Client]
-    private void OnHasBulletChanged(bool _, bool hasBullet)
-    {
-        if (!hasBullet)
-        {
-            var _barrelSmoke = Instantiate(smokeVFX, muzzle.transform.position, muzzle.transform.rotation);
-            Destroy(_barrelSmoke, 3);
-            shootingAudio.Play();
-            bulletFillDriver.fillAmount = 0;
-        }
-
-        if (reloadGroup) reloadGroup.alpha = hasBullet ? 0f : 1f;
-
-        if (hasBullet)
-        {
-            if (bulletReloadImage) bulletReloadImage.fillAmount = 0f;
-            if (reloadTimerImage) reloadTimerImage.fillAmount = 0f;
-            bulletFillDriver.fillAmount = 1;
-        }
-    }
-
-    [Client]
-    private void OnIsReloadingChanged(bool _, bool reloading)
-    {
-        if (reloading == true)
-            reloadingAudio.Play();
-    }
-
-    [Client]
     private void OnBatteryChanged(float oldVal, float newVal)
     {
         float clamped = Mathf.Clamp(newVal, 0f, 100f);
@@ -619,43 +471,12 @@ public class TankBrain : NetworkBehaviour
             image.sprite = sprite;
     }
 
-    [Client]
-    private void OnMinesChanged(int oldVal, int newVal)
-    {
-        mineUI.alpha = (newVal == 0) ? 0 : 1;
-
-        mineTxt.text = $"Mines left: {newVal}";
-    }
-
-    [Client]
-    private void OnMineCooldownChanged(bool _, bool onCooldown)
-    {
-        if (onCooldown == true)
-        {
-            // change UI to on cooldown
-        }
-        else if (onCooldown == false)
-        {
-            //change UI to off cooldown
-        }
-    }
-
     private void OnAmmoTypeChanged(ammoTypes oldVal, ammoTypes newVal)
     {
         if (newVal == ammoTypes.missile)
-        {
-            missileImage.enabled = true;
-            missileFillDriver.enabled = true;
-            bulletImage.enabled = false;
-            bulletFillDriver.enabled = false;
-        }
+            shooter.SwapToMissile?.Invoke();
         else
-        {
-            missileImage.enabled = false;
-            missileFillDriver.enabled = false;
-            bulletImage.enabled = true;
-            bulletFillDriver.enabled = true;
-        }
+            shooter.SwapToBullet?.Invoke();
     }
 
     [Client]
@@ -685,30 +506,16 @@ public class TankBrain : NetworkBehaviour
         }
     }
 
-    private void OnHasMissileChanged(bool _, bool hasMissile)
-    {
-        if (hasMissile)
-        {
-            missileFillDriver.fillAmount = 1;
-            return;
-        }
-        if (!hasMissile)
-        {
-            missileFillDriver.fillAmount = 0;
-            return;
-        }
-    }
-
     private void OnMissileChanged(NetworkedMissile oldMissile, NetworkedMissile newMissile)
     {
         if (newMissile != null)
         {
-            OnMissileShoot?.Invoke();
+            OnSwapToMissileCam?.Invoke();
         }
         else
         {
             _isShootingMissile = false;
-            OnMissileDestroy?.Invoke();
+            OnSwapToGunnerCam?.Invoke();
         }
     }
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
@@ -718,19 +525,6 @@ public class TankBrain : NetworkBehaviour
 
         foreach (var text in uiTexts)
             text.text = $"{ts.Seconds:00}";
-    }
-
-    private void UpdateReloadDisplay(double timeRemaining)
-    {
-        float progress = 1f - Mathf.Clamp01((float)(timeRemaining / currReloadTime));
-        bulletReloadImage.fillAmount = progress;
-        reloadTimerImage.fillAmount = progress;
-    }
-
-    private void UpdateMineDisplay(double timeRemaining)
-    {
-        float progress = 1f - Mathf.Clamp01((float)(timeRemaining / currReloadTime));
-        mineFillImage.fillAmount = progress;
     }
 
     private void UpdateTrackColour(bool grounded, Image sprite, float input) //Masterclass by Allan: how to be a maniac
@@ -747,6 +541,14 @@ public class TankBrain : NetworkBehaviour
 
     #region TrackContactGizmos
 #if UNITY_EDITOR
+    [Header("RayCast")]
+    [SerializeField] float contactRadius = 0.22f;
+    [SerializeField] float contactCapsuleHalfLength = 0.45f;
+    [SerializeField] private float trackSpacing = 2.6f;
+    [SerializeField] private float trackRayStartHeight = 0.6f;
+    [SerializeField] private float trackRayLength = 1.2f;
+    [SerializeField] private LayerMask groundMask = ~0;
+
     [Header("Track Contact Gizmos")]
     [SerializeField] bool gizmoDrawTrackCasts = true;
     [SerializeField] bool gizmoOnlyWhenSelected = true;
@@ -804,10 +606,10 @@ public class TankBrain : NetworkBehaviour
             if (gizmoDrawNormals)
                 Gizmos.DrawLine(hit.point, hit.point + hit.normal * 0.6f);
 
-#if UNITY_EDITOR
+
             if (gizmoLabelPoints)
                 UnityEditor.Handles.Label(hit.point + Vector3.up * 0.05f, label);
-#endif
+
         }
         else
         {
@@ -822,10 +624,10 @@ public class TankBrain : NetworkBehaviour
             Gizmos.DrawLine(end - right * s, end + right * s);
             Gizmos.DrawLine(end - up * s, end + up * s);
 
-#if UNITY_EDITOR
+
             if (gizmoLabelPoints)
                 UnityEditor.Handles.Label(end, label + " (miss)");
-#endif
+
         }
     }
 #endif
