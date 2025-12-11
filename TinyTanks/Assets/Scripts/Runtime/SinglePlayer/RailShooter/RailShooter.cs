@@ -19,7 +19,25 @@ public class RailShooter : MonoBehaviour
     private void Start()
     {
         follower.onEndReached += EndingShooter;
+        _initialSpeed = follower.followSpeed;
+
+        follower.followSpeed = 0f;
     }
+
+    private void Update()
+    {
+        //For Debugging*
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            follower.followSpeed = _initialSpeed;
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            follower.followSpeed = 0f;
+        }
+    }
+
+
 
     private void EndingShooter(double percent)
     {
