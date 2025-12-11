@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[ExecuteAlways]
 public class SelectHue : MonoBehaviour
 {
     [Range(0, 1)]
@@ -11,6 +12,8 @@ public class SelectHue : MonoBehaviour
     {
         ApplyHue();
     }
+
+    void OnValidate() => ApplyHue();
 
     public void ApplyHue()
     {
@@ -42,6 +45,30 @@ public class SelectHue : MonoBehaviour
             r.GetPropertyBlock(_mpb);
             _mpb.SetFloat("_Hue", hueValue);
             r.SetPropertyBlock(_mpb);
+        }
+    }
+
+    void OnDestroy()
+    {
+        ClearHueOverrides();
+    }
+
+    void OnDisable()
+    {
+#if UNITY_EDITOR
+        // In Editor, removing a component triggers OnDisable before OnDestroy
+        ClearHueOverrides();
+#endif
+    }
+
+    private void ClearHueOverrides()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+
+        foreach (Renderer r in renderers)
+        {
+            // Passing null removes all overrides
+            r.SetPropertyBlock(null);
         }
     }
 }
