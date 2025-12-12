@@ -24,14 +24,14 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 9)
+        if (other.transform.root != parent)
         {
-            if (other.transform.root != parent)
-            {
-                //Hit other player**
-                IDamagable iDamage = other.GetComponent<IDamagable>();
-                if (iDamage != null) iDamage.Damage(damage);
+            IDamagable iDamage = other.GetComponent<IDamagable>();
+            if (iDamage != null) iDamage.Damage(damage);
 
+
+            if (other.gameObject.layer == 9)
+            {
                 Debug.Log("Player!: " + other.transform.root);
 
                 //TODO Change instantiate and destroy logic to play and stop
@@ -47,32 +47,32 @@ public class Bullet : MonoBehaviour
                 Destroy(hitAudio.gameObject, 4);
 
                 Destroy(gameObject);
-            }         
-        }
-        else
-        {
-            if (other.gameObject.layer == 2) return;
+            }
+            else
+            {
+                if (other.gameObject.layer == 2) return;
 
-            Debug.Log("Geen andere tank gehit");
-            //TODO Change instantiate and destroy logic to play and stop
-            var vxf = Instantiate(impactEffect, this.transform.position, this.transform.rotation);
-            Destroy(vxf, 3);
+                Debug.Log("Geen andere tank gehit");
+                //TODO Change instantiate and destroy logic to play and stop
+                var vxf = Instantiate(impactEffect, this.transform.position, this.transform.rotation);
+                Destroy(vxf, 3);
 
-            //TODO Change instantiate and destroy logic to play and stop
-            var hitAudio = Instantiate(_enviormentHitAudioSource, this.transform.position, this.transform.rotation);
-            Destroy(hitAudio.gameObject, 4);
+                //TODO Change instantiate and destroy logic to play and stop
+                var hitAudio = Instantiate(_enviormentHitAudioSource, this.transform.position, this.transform.rotation);
+                Destroy(hitAudio.gameObject, 4);
 
-            Rigidbody rb = GetComponent<Rigidbody>(); // refine this so the bullet actually goes on the ground
-            Collider col = GetComponent<Collider>();
-            col.isTrigger = false;
-            rb.useGravity = true;
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            _bulletWhistle.Stop();
+                Rigidbody rb = GetComponent<Rigidbody>(); // refine this so the bullet actually goes on the ground
+                Collider col = GetComponent<Collider>();
+                col.isTrigger = false;
+                rb.useGravity = true;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                _bulletWhistle.Stop();
 
-            Debug.Log("Nothing: " + other.name);
-            
-            Destroy(this);
+                Debug.Log("Nothing: " + other.name);
+
+                Destroy(this);
+            }
         }
     }
 }
