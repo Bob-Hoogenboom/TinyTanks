@@ -115,6 +115,7 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private CanvasGroup reloadGroup;
     [SerializeField] private Image bulletReloadImage;
     [SerializeField] private Image reloadTimerImage;
+    [SerializeField] private Image bulletImage;
     [SerializeField] private Image bulletFillDriver;
 
     [Header("UI Battery")]
@@ -128,10 +129,8 @@ public class TankBrain : NetworkBehaviour
     [SerializeField] private TMP_Text mineTxt;
 
     [Header("UI Missile")]
-    [SerializeField] private Image indicatorImage;
+    [SerializeField] private Image missileImage;
     [SerializeField] private Image missileFillDriver;
-    [SerializeField] private Sprite missileSprite;
-    [SerializeField] private Sprite bulletSprite;
 
     [Header("UI Health")]
     [SerializeField] private Image[] healthImage;
@@ -297,7 +296,7 @@ public class TankBrain : NetworkBehaviour
     [Server]
     public void Server_SetOffGun(CrewSeat from)
     {
-        if (from != driver) return; //revert to driver when done testing
+        if (from != gunner) return; //revert to driver when done testing
 
         if (currSelectedAmmo == ammoTypes.normal)
         {
@@ -422,7 +421,7 @@ public class TankBrain : NetworkBehaviour
     [Server]
     public void Server_PlaceMine(CrewSeat from)
     {
-        if (from != gunner) return; //Make sure this is gunner when live
+        if (from != driver) return; //Make sure this is gunner when live
         if (!hasMines) return;
         if (mineOnCooldown) return;
 
@@ -645,14 +644,16 @@ public class TankBrain : NetworkBehaviour
     {
         if (newVal == ammoTypes.missile)
         {
-            indicatorImage.sprite = missileSprite;
+            missileImage.enabled = true;
             missileFillDriver.enabled = true;
+            bulletImage.enabled = false;
             bulletFillDriver.enabled = false;
         }
         else
         {
-            indicatorImage.sprite = bulletSprite;
+            missileImage.enabled = false;
             missileFillDriver.enabled = false;
+            bulletImage.enabled = true;
             bulletFillDriver.enabled = true;
         }
     }
