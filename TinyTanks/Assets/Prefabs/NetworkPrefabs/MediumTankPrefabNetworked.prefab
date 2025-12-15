@@ -907,6 +907,7 @@ GameObject:
   - component: {fileID: 7014368005558136791}
   - component: {fileID: -7946513706763832386}
   - component: {fileID: 7777668788783414760}
+  - component: {fileID: 2017548152771426413}
   - component: {fileID: 4251346048252288421}
   - component: {fileID: 8305034980172248715}
   - component: {fileID: -5794259894426918823}
@@ -989,12 +990,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  OnSwapToMissileCam:
-    m_PersistentCalls:
-      m_Calls: []
-  OnSwapToGunnerCam:
-    m_PersistentCalls:
-      m_Calls: []
   driver: {fileID: 0}
   gunner: {fileID: 0}
   tankData: {fileID: 11400000, guid: fb0f7dc981bf6af45a6927b3f3dd4257, type: 2}
@@ -1009,18 +1004,11 @@ MonoBehaviour:
   shooter: {fileID: 0}
   missile: {fileID: 0}
   currSelectedAmmo: 0
-  lives: 3
-  currHealth: 0
-  respawnTime: 5
+  health: {fileID: 2017548152771426413}
   currentBtry: 50
   hasBattery: 0
   moveInputThreshold: 0.05
   mineLayer: {fileID: 0}
-  driverRespawn: {fileID: 6928386827896993496}
-  gunnerRespawn: {fileID: 1359448853745376679}
-  respawnTexts:
-  - {fileID: 3293148124697357969}
-  - {fileID: 6865935950897333742}
   batteryImages:
   - {fileID: 21300000, guid: 14d5d4d4e0563df4d91dd2921b5ec7d0, type: 3}
   - {fileID: 21300000, guid: 0219acfe38a993d4781e3cd29efa5f96, type: 3}
@@ -1031,12 +1019,6 @@ MonoBehaviour:
   currImages:
   - {fileID: 8866342757030311539}
   - {fileID: 881202975338486235}
-  healthImage:
-  - {fileID: 7203881064663871673}
-  - {fileID: 5964657698217107969}
-  livesText:
-  - {fileID: 6387796752953382360}
-  - {fileID: 7609368645891409760}
   leftTrackImage: {fileID: 8442652213444236451}
   rightTrackImage: {fileID: 7306862909009783511}
   orange: {r: 0.9254902, g: 0.52156866, b: 0.24313726, a: 1}
@@ -1064,6 +1046,36 @@ MonoBehaviour:
   gizmoOnlyWhenSelected: 1
   gizmoDrawNormals: 1
   gizmoLabelPoints: 0
+--- !u!114 &2017548152771426413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8605099804884612094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac2c9dc5a2cfa86459f03b0c098a5076, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  tankData: {fileID: 11400000, guid: fb0f7dc981bf6af45a6927b3f3dd4257, type: 2}
+  lives: 3
+  currHealth: 0
+  respawnTime: 5
+  healthImage:
+  - {fileID: 7203881064663871673}
+  - {fileID: 5964657698217107969}
+  livesText:
+  - {fileID: 6387796752953382360}
+  - {fileID: 7609368645891409760}
+  driverRespawn: {fileID: 6928386827896993496}
+  gunnerRespawn: {fileID: 1359448853745376679}
+  respawnTexts:
+  - {fileID: 30866417366246661}
+  - {fileID: 8256928034697711226}
 --- !u!114 &4251346048252288421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1079,36 +1091,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  OnMissileShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  OnMissileDestroy:
-    m_PersistentCalls:
-      m_Calls: []
-  OnBulletShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  OnReloadBullet:
-    m_PersistentCalls:
-      m_Calls: []
-  OnNoBattery:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRechargeBattery:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeathReset:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPickupMissle:
-    m_PersistentCalls:
-      m_Calls: []
-  SwapToMissile:
-    m_PersistentCalls:
-      m_Calls: []
-  SwapToBullet:
-    m_PersistentCalls:
-      m_Calls: []
   missile: {fileID: 0}
   data: {fileID: 11400000, guid: fb0f7dc981bf6af45a6927b3f3dd4257, type: 2}
   bulletGO: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
@@ -1143,15 +1125,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  OnLayMines:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPickupMines:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeathReset:
-    m_PersistentCalls:
-      m_Calls: []
   mineOnCooldown: 0
   mineGO: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
   hasMines: 0
@@ -1955,6 +1928,18 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8431779184609225854}
   m_SourcePrefab: {fileID: 100100000, guid: 8823c84c348df324b9b0bce5ece399c9, type: 3}
+--- !u!114 &30866417366246661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8843316597627080990, guid: 8823c84c348df324b9b0bce5ece399c9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8850819292145021979}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &881202975338486235 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8570002848541781440, guid: 8823c84c348df324b9b0bce5ece399c9,
@@ -2042,18 +2027,6 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3293148124697357969 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6298268158007319178, guid: 8823c84c348df324b9b0bce5ece399c9,
-    type: 3}
-  m_PrefabInstance: {fileID: 8850819292145021979}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3990186718096727805 stripped
@@ -2196,18 +2169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6865935950897333742 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2710279799123456501, guid: 8823c84c348df324b9b0bce5ece399c9,
-    type: 3}
-  m_PrefabInstance: {fileID: 8850819292145021979}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &6901168756112154940 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2671071273394410791, guid: 8823c84c348df324b9b0bce5ece399c9,
@@ -2318,6 +2279,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8256928034697711226 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 595298737826658913, guid: 8823c84c348df324b9b0bce5ece399c9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8850819292145021979}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8442652213444236451 stripped

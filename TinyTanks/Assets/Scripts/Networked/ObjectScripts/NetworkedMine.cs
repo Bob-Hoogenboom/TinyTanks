@@ -125,7 +125,7 @@ public class NetworkedMine : NetworkBehaviour
             var tankBrain = other.GetComponentInParent<TankBrain>();
             if (tankBrain != null)
             {
-                tankBrain.Server_TakeDamage(damage);
+                tankBrain.health.Server_TakeDamage(damage);
             }
         }
 

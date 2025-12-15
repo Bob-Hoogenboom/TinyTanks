@@ -1087,6 +1087,7 @@ GameObject:
   - component: {fileID: 1648209351347014795}
   - component: {fileID: -343587757533211459}
   - component: {fileID: 5286927959053453512}
+  - component: {fileID: 4519620010102492131}
   - component: {fileID: 553647176807297708}
   - component: {fileID: 8241758214644652562}
   - component: {fileID: 9211153292599580694}
@@ -1169,12 +1170,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  OnBrainMissileShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  OnBrainMissileDestroy:
-    m_PersistentCalls:
-      m_Calls: []
   driver: {fileID: 0}
   gunner: {fileID: 0}
   tankData: {fileID: 11400000, guid: 89efefa4f792acd4cbcbc57590057a59, type: 2}
@@ -1189,26 +1184,11 @@ MonoBehaviour:
   shooter: {fileID: 553647176807297708}
   missile: {fileID: 0}
   currSelectedAmmo: 0
-  lives: 3
-  currHealth: 0
-  respawnTime: 5
+  health: {fileID: 4519620010102492131}
   currentBtry: 50
   hasBattery: 0
   moveInputThreshold: 0.05
   mineLayer: {fileID: 6536292676846462494}
-  contactRadius: 0.18
-  contactCapsuleHalfLength: 0.2
-  trackSpacing: 0.65
-  trackRayStartHeight: 0.3
-  trackRayLength: 0.2
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 23552
-  driverRespawn: {fileID: 7015122323608089706}
-  gunnerRespawn: {fileID: 8419662542903457926}
-  respawnTexts:
-  - {fileID: 1482702092240759643}
-  - {fileID: 76987111198402487}
   batteryImages:
   - {fileID: 21300000, guid: 14d5d4d4e0563df4d91dd2921b5ec7d0, type: 3}
   - {fileID: 21300000, guid: 0219acfe38a993d4781e3cd29efa5f96, type: 3}
@@ -1219,12 +1199,6 @@ MonoBehaviour:
   currImages:
   - {fileID: 2093767266968802130}
   - {fileID: 956595897461398377}
-  healthImage:
-  - {fileID: 431305802051081624}
-  - {fileID: 6033296392722489523}
-  livesText:
-  - {fileID: 4513485006014525689}
-  - {fileID: 7558663049234826706}
   leftTrackImage: {fileID: 8383020782092768785}
   rightTrackImage: {fileID: 7213388448031860837}
   orange: {r: 0.9254902, g: 0.52156866, b: 0.24313726, a: 1}
@@ -1234,18 +1208,54 @@ MonoBehaviour:
   minSpawnDistance: 20
   smokeVFX: {fileID: 3258551338417457710, guid: 2880db6858a8e81479ece32424a72b20,
     type: 3}
-  shootingAudio: {fileID: 9193218893755672709}
   driveIntoEnviormentAudio: {fileID: 5592984663439745867}
   rotateCapulaAudio: {fileID: 1293415043636351165}
   startDrivingAudio: {fileID: 11842180763763817}
   duringDrivingAudio: {fileID: 3119961213283336025}
   endinDrivingAudio: {fileID: 6965599277605960251}
   idleAudio: {fileID: 5824520260315050160}
-  reloadingAudio: {fileID: 7385303803487722460}
+  contactRadius: 0.18
+  contactCapsuleHalfLength: 0.2
+  trackSpacing: 0.65
+  trackRayStartHeight: 0.3
+  trackRayLength: 0.2
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 23552
   gizmoDrawTrackCasts: 1
   gizmoOnlyWhenSelected: 1
   gizmoDrawNormals: 1
   gizmoLabelPoints: 0
+--- !u!114 &4519620010102492131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2905205193779898258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac2c9dc5a2cfa86459f03b0c098a5076, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  tankData: {fileID: 11400000, guid: 89efefa4f792acd4cbcbc57590057a59, type: 2}
+  lives: 3
+  currHealth: 0
+  respawnTime: 5
+  healthImage:
+  - {fileID: 431305802051081624}
+  - {fileID: 6033296392722489523}
+  livesText:
+  - {fileID: 4513485006014525689}
+  - {fileID: 7558663049234826706}
+  driverRespawn: {fileID: 7015122323608089706}
+  gunnerRespawn: {fileID: 8419662542903457926}
+  respawnTexts:
+  - {fileID: 76987111198402487}
+  - {fileID: 1482702092240759643}
 --- !u!114 &553647176807297708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1261,42 +1271,12 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  OnMissileShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  OnMissileDestroy:
-    m_PersistentCalls:
-      m_Calls: []
-  OnBulletShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  OnReloadBullet:
-    m_PersistentCalls:
-      m_Calls: []
-  OnNoBattery:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRechargeBattery:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeathReset:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPickupMissle:
-    m_PersistentCalls:
-      m_Calls: []
-  SwapToMissile:
-    m_PersistentCalls:
-      m_Calls: []
-  SwapToBullet:
-    m_PersistentCalls:
-      m_Calls: []
+  missile: {fileID: 0}
   data: {fileID: 11400000, guid: 89efefa4f792acd4cbcbc57590057a59, type: 2}
   bulletGO: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
     type: 3}
   missileGO: {fileID: 3732487249527810964, guid: 2151206c25b87d446a8afe41821c0a38,
     type: 3}
-  missile: {fileID: 0}
   _hasMissile: 0
   _hasBullet: 1
   reloadGroup: {fileID: 8744837004090127379}
@@ -1393,15 +1373,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  OnLayMines:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPickupMines:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeathReset:
-    m_PersistentCalls:
-      m_Calls: []
   mineOnCooldown: 0
   mineGO: {fileID: 9055745981646465164, guid: 881e5d2e9d4aa3e4b86358ec3f04fb82, type: 3}
   hasMines: 0

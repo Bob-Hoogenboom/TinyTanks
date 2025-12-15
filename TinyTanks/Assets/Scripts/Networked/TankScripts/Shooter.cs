@@ -5,12 +5,6 @@ using System;
 
 public class Shooter : NetworkBehaviour
 {
-    public enum ammoTypes
-    {
-        normal = 0,
-        missile = 1
-    }
-
     public Action OnMissileShoot;
     public Action OnMissileDestroy;
     public Action OnBulletShoot;
@@ -202,6 +196,7 @@ public class Shooter : NetworkBehaviour
         }
     }
 
+    [Client]
     private void ActivateBulletUI()
     {
         missileImage.enabled = false;
@@ -210,6 +205,7 @@ public class Shooter : NetworkBehaviour
         bulletFillDriver.enabled = true;
     }
 
+    [Client]
     private void ActivateMissileUI()
     {
         missileImage.enabled = true;

@@ -8,7 +8,7 @@ public class RepairEffect : PowerUpEffect
 {
     public override void ApplyPowerUp(TankBrain brain)
     {
-        brain.currHealth = brain.tankData.maxHealth;
+        brain.health.currHealth = brain.tankData.maxHealth;
     }
 
     public override void RemovePowerUp(TankBrain brain)

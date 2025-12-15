@@ -15,6 +15,9 @@ public class TankBrain : NetworkBehaviour
         missile = 1
     }
 
+    public static Action OnReturnToLobby;
+    public static Action OnTankDeath;
+    public static Action OnTankRespawn;
     public Action OnSwapToMissileCam;
     public Action OnSwapToGunnerCam;
 
@@ -58,18 +61,11 @@ public class TankBrain : NetworkBehaviour
     private bool _isShootingMissile;
     [SyncVar(hook = nameof(OnMissileChanged))]
     public NetworkedMissile missile;
-
     [SyncVar(hook = nameof(OnAmmoTypeChanged))]
     [SerializeField] private ammoTypes currSelectedAmmo = ammoTypes.normal;
 
     [Header("Health/Life")]
-    [SyncVar(hook = nameof(OnLivesChanged))]
-    [SerializeField] private int lives = 3;
-    [SyncVar(hook = nameof(OnHealthChanged))]
-    [SerializeField] public float currHealth;
-    [SyncVar] private double respawnEndTime;
-    [SerializeField] private float respawnTime = 5f;
-    private bool _isDead;
+    public NetworkedHealth health;
 
     [Header("Battery")]
     [SyncVar(hook = nameof(OnBatteryChanged))]
@@ -80,19 +76,10 @@ public class TankBrain : NetworkBehaviour
     [Header("Mines")]
     [SerializeField] private MineLayer mineLayer;
 
-    [Header("UI Canvas")]
-    [SerializeField] CanvasGroup driverRespawn;
-    [SerializeField] CanvasGroup gunnerRespawn;
-    [SerializeField] TMP_Text[] respawnTexts;
-
     [Header("UI Battery")]
     [SerializeField] private Sprite[] batteryImages;
     [SerializeField] private Image[] currImages;
     private int _lastSpriteIndex;
-
-    [Header("UI Health")]
-    [SerializeField] private Image[] healthImage;
-    [SerializeField] private TMP_Text[] livesText;
 
     [Header("UI Tracks")]
     [SerializeField] private Image leftTrackImage;
@@ -124,8 +111,10 @@ public class TankBrain : NetworkBehaviour
         if (!turret) turret = GetComponent<TankTurretPhysics>();
         if (!mineLayer) mineLayer = GetComponent<MineLayer>();
 
-        currHealth = tankData.maxHealth;
-        _isDead = false;
+        OnTankDeath += Server_StarRespawnTimer;
+        OnReturnToLobby += Server_ReturnToLobby;
+        OnTankRespawn += Server_RespawnTank;
+
         hasBattery = true;
         currentBtry = tankData.maxBtry;
         damage = tankData.damage;
@@ -145,17 +134,6 @@ public class TankBrain : NetworkBehaviour
         else if (s.seatType == SeatType.Gunner) gunner = s;
     }
 
-    private void Update()
-    {
-        if (_isDead)
-        {
-            double respawnRemaining = respawnEndTime - NetworkTime.time;
-            UpdateTimerDisplay(respawnRemaining, respawnTexts);
-
-            if (respawnRemaining <= 0 && _isDead) Server_RespawnTank();
-        }
-    }
-
     private void LateUpdate()
     {
         UpdateTrackColour(tracks.leftTrackGrounded, leftTrackImage, tracks.leftInput);
@@ -166,7 +144,7 @@ public class TankBrain : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!isServer || _rb == null) return;
-        if (_isDead) return;
+        if (health.IsDead) return;
         if (tracks) tracks.SetInputs(_leftTrack, _rightTrack, hasBattery);
 
         if (_isShootingMissile == true)
@@ -180,6 +158,7 @@ public class TankBrain : NetworkBehaviour
     public void Server_SetGunnerInput(CrewSeat from, float yawDelta, float pitchDelta)
     {
         if (from != gunner) return;
+        if (health.IsDead) return;
 
         _yaw = Mathf.Clamp(yawDelta, -1f, 1f);
         _pitch = Mathf.Clamp(pitchDelta, -1f, 1f);
@@ -207,6 +186,7 @@ public class TankBrain : NetworkBehaviour
     public void Server_SelectShot(CrewSeat from)
     {
         if (from != driver) return;
+        if (health.IsDead) return;
 
         currSelectedAmmo = (currSelectedAmmo == ammoTypes.normal) ? currSelectedAmmo = ammoTypes.missile : currSelectedAmmo = ammoTypes.normal;
     }
@@ -215,6 +195,7 @@ public class TankBrain : NetworkBehaviour
     public void Server_SetOffGun(CrewSeat from)
     {
         if (from != gunner) return;
+        if (health.IsDead) return;
 
         if (currSelectedAmmo == ammoTypes.normal) shooter.OnBulletShoot?.Invoke();
         else shooter.OnMissileShoot?.Invoke();
@@ -224,6 +205,8 @@ public class TankBrain : NetworkBehaviour
     public void Server_ReloadGun(CrewSeat from)
     {
         if (from != gunner) return;
+        if (health.IsDead) return;
+
         shooter.OnReloadBullet?.Invoke();
     }
 
@@ -231,6 +214,8 @@ public class TankBrain : NetworkBehaviour
     public void Server_SetDriverInput(CrewSeat from, float _leftTrack, float _rightTrack)
     {
         if (from != driver) return;
+        if (health.IsDead) return;
+
         this._leftTrack = Mathf.Clamp(_leftTrack, -1f, 1f);
         this._rightTrack = Mathf.Clamp(_rightTrack, -1f, 1f);
 
@@ -321,6 +306,8 @@ public class TankBrain : NetworkBehaviour
     public void Server_PlaceMine(CrewSeat from)
     {
         if (from != driver) return;
+        if (health.IsDead) return;
+
         mineLayer.OnLayMines?.Invoke();
     }
 
@@ -351,12 +338,12 @@ public class TankBrain : NetworkBehaviour
 
         _netTrans.RpcTeleport(spawnLocation.position);
 
-        currHealth = tankData.maxHealth;
-        currentBtry = tankData.maxBtry;
+        health.OnHealthReset?.Invoke();
         mineLayer.OnDeathReset?.Invoke();
+
+        currentBtry = tankData.maxBtry;
         driver.enabled = true;
         gunner.enabled = true;
-        _isDead = false;
 
         RpcTankBirth();
     }
@@ -373,55 +360,10 @@ public class TankBrain : NetworkBehaviour
         }
     }
 
-    [Server]
-    public void Server_TakeDamage(int dmg)
-    {
-        if (_isDead) return;
-
-        currHealth -= dmg;
-
-        if (currHealth <= 0)
-        {
-            _isDead = true;
-            lives -= 1;
-
-            if (lives <= 0)
-            {
-                Server_ReturnToLobby();
-            }
-            else
-            {
-                respawnEndTime = NetworkTime.time + respawnTime;
-                RpcTankDeath();
-            }
-        }
-    }
-
     [ClientRpc]
     private void RpcTankBirth()
     {
-        StopRespawnTimer();
-    }
-
-    [ClientRpc]
-    private void RpcTankDeath()
-    {
-        StarRespawnTimer();
-    }
-
-    [Client]
-    private void OnLivesChanged(int oldVal, int newVal)
-    {
-        foreach (var text in livesText)
-            text.text = $"{newVal}";
-    }
-
-    [Client]
-    private void OnHealthChanged(float oldVal, float newVal)
-    {
-        foreach (var image in healthImage)
-            image.fillAmount = newVal / tankData.maxHealth;
-
+        health.OnStopRespawnTimer?.Invoke();
     }
 
     [Client]
@@ -471,39 +413,17 @@ public class TankBrain : NetworkBehaviour
             image.sprite = sprite;
     }
 
-    private void OnAmmoTypeChanged(ammoTypes oldVal, ammoTypes newVal)
+    [Server]
+    private void Server_StarRespawnTimer()
     {
-        if (newVal == ammoTypes.missile)
-            shooter.SwapToMissile?.Invoke();
-        else
-            shooter.SwapToBullet?.Invoke();
-    }
+        if (!health.IsDead) return;
 
-    [Client]
-    private void StarRespawnTimer()
-    {
-        _isDead = true;
         _leftTrack = 0;
         _rightTrack = 0;
         driver.enabled = false;
         gunner.enabled = false;
 
-        if (driverRespawn != null && gunnerRespawn != null)
-        {
-            driverRespawn.alpha = 1;
-            gunnerRespawn.alpha = 1;
-        }
-        respawnEndTime = NetworkTime.time + +respawnTime;
-    }
-
-    [Client]
-    private void StopRespawnTimer()
-    {
-        if (driverRespawn != null && gunnerRespawn != null)
-        {
-            driverRespawn.alpha = 0;
-            gunnerRespawn.alpha = 0;
-        }
+        health.OnStartRespawnTimer?.Invoke();
     }
 
     private void OnMissileChanged(NetworkedMissile oldMissile, NetworkedMissile newMissile)
@@ -518,13 +438,13 @@ public class TankBrain : NetworkBehaviour
             OnSwapToGunnerCam?.Invoke();
         }
     }
-    private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
-    {
-        if (timeRemaining <= 0) timeRemaining = 0;
-        var ts = TimeSpan.FromSeconds(timeRemaining);
 
-        foreach (var text in uiTexts)
-            text.text = $"{ts.Seconds:00}";
+    private void OnAmmoTypeChanged(ammoTypes oldVal, ammoTypes newVal)
+    {
+        if (newVal == ammoTypes.missile)
+            shooter.SwapToMissile?.Invoke();
+        else
+            shooter.SwapToBullet?.Invoke();
     }
 
     private void UpdateTrackColour(bool grounded, Image sprite, float input) //Masterclass by Allan: how to be a maniac
