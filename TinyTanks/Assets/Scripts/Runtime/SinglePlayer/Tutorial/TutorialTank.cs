@@ -15,7 +15,6 @@ public class TutorialTank : MonoBehaviour, IDamagable
     [Header("References")]
     [SerializeField] private TankTrackPhysics tankTrack;
     [SerializeField] private TankTurretPhysics tankTurret;
-    [SerializeField] private SplineDolly tankDolly;
 
     [Space]
     [SerializeField] private CinemachineVirtualCamera driverCam;
@@ -69,7 +68,7 @@ public class TutorialTank : MonoBehaviour, IDamagable
             {
                 currentRole = TankRole.TANK_OBSERVER;
             }
-            else if (currentRole == TankRole.TANK_OBSERVER && !tankDolly.isOnSpline)
+            else if (currentRole == TankRole.TANK_OBSERVER)
             {
                 currentRole = TankRole.TANK_DRIVER;
             }
