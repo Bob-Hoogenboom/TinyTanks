@@ -1087,8 +1087,11 @@ GameObject:
   - component: {fileID: 1648209351347014795}
   - component: {fileID: -343587757533211459}
   - component: {fileID: 5286927959053453512}
+  - component: {fileID: 4519620010102492131}
+  - component: {fileID: 553647176807297708}
   - component: {fileID: 8241758214644652562}
   - component: {fileID: 9211153292599580694}
+  - component: {fileID: 6536292676846462494}
   - component: {fileID: 293358931188755715}
   - component: {fileID: 796225033882754524}
   - component: {fileID: 9080319658624944878}
@@ -1167,12 +1170,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  OnMissileShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  OnMissileDestroy:
-    m_PersistentCalls:
-      m_Calls: []
   driver: {fileID: 0}
   gunner: {fileID: 0}
   tankData: {fileID: 11400000, guid: 89efefa4f792acd4cbcbc57590057a59, type: 2}
@@ -1184,41 +1181,14 @@ MonoBehaviour:
   turretYawPivot: {fileID: 8485076201043624360}
   turretPitchPivot: {fileID: 7678173531244863629}
   muzzle: {fileID: 5035525454890280112}
-  serverShellPrefab: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
-    type: 3}
+  shooter: {fileID: 553647176807297708}
+  missile: {fileID: 0}
   currSelectedAmmo: 0
-  hasBullet: 1
-  lives: 3
-  currHealth: 0
-  respawnTime: 5
+  health: {fileID: 4519620010102492131}
   currentBtry: 50
   hasBattery: 0
   moveInputThreshold: 0.05
-  mine: {fileID: 3732487249527810964, guid: fb696069ad1c60d4297a0a71129129d0, type: 3}
-  hasMines: 0
-  mineCooldownTime: 4
-  mineOnCooldown: 0
-  missileGO: {fileID: 3732487249527810964, guid: 2151206c25b87d446a8afe41821c0a38,
-    type: 3}
-  _hasMissile: 0
-  missile: {fileID: 0}
-  contactRadius: 0.18
-  contactCapsuleHalfLength: 0.2
-  trackSpacing: 0.65
-  trackRayStartHeight: 0.3
-  trackRayLength: 0.2
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 23552
-  driverRespawn: {fileID: 7015122323608089706}
-  gunnerRespawn: {fileID: 8419662542903457926}
-  respawnTexts:
-  - {fileID: 1482702092240759643}
-  - {fileID: 76987111198402487}
-  reloadGroup: {fileID: 8744837004090127379}
-  bulletReloadImage: {fileID: 982722239254385399}
-  reloadTimerImage: {fileID: 8467581599527105738}
-  bulletFillDriver: {fileID: 4924501540729919896}
+  mineLayer: {fileID: 6536292676846462494}
   batteryImages:
   - {fileID: 21300000, guid: 14d5d4d4e0563df4d91dd2921b5ec7d0, type: 3}
   - {fileID: 21300000, guid: 0219acfe38a993d4781e3cd29efa5f96, type: 3}
@@ -1229,19 +1199,6 @@ MonoBehaviour:
   currImages:
   - {fileID: 2093767266968802130}
   - {fileID: 956595897461398377}
-  mineUI: {fileID: 6743623365050837757}
-  mineFillImage: {fileID: 5271734807771595646}
-  mineTxt: {fileID: 652668750858429485}
-  indicatorImage: {fileID: 5085354530822247126}
-  missileFillDriver: {fileID: 2090466548723489210}
-  missileSprite: {fileID: 21300000, guid: e63a30b628145da42bccbbfc279fbc3c, type: 3}
-  bulletSprite: {fileID: 21300000, guid: bc01717ab31c8e747a73adefce676221, type: 3}
-  healthImage:
-  - {fileID: 431305802051081624}
-  - {fileID: 6033296392722489523}
-  livesText:
-  - {fileID: 4513485006014525689}
-  - {fileID: 7558663049234826706}
   leftTrackImage: {fileID: 8383020782092768785}
   rightTrackImage: {fileID: 7213388448031860837}
   orange: {r: 0.9254902, g: 0.52156866, b: 0.24313726, a: 1}
@@ -1251,18 +1208,88 @@ MonoBehaviour:
   minSpawnDistance: 20
   smokeVFX: {fileID: 3258551338417457710, guid: 2880db6858a8e81479ece32424a72b20,
     type: 3}
-  shootingAudio: {fileID: 9193218893755672709}
   driveIntoEnviormentAudio: {fileID: 5592984663439745867}
   rotateCapulaAudio: {fileID: 1293415043636351165}
   startDrivingAudio: {fileID: 11842180763763817}
   duringDrivingAudio: {fileID: 3119961213283336025}
   endinDrivingAudio: {fileID: 6965599277605960251}
   idleAudio: {fileID: 5824520260315050160}
-  reloadingAudio: {fileID: 7385303803487722460}
+  contactRadius: 0.18
+  contactCapsuleHalfLength: 0.2
+  trackSpacing: 0.65
+  trackRayStartHeight: 0.3
+  trackRayLength: 0.2
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 23552
   gizmoDrawTrackCasts: 1
   gizmoOnlyWhenSelected: 1
   gizmoDrawNormals: 1
   gizmoLabelPoints: 0
+--- !u!114 &4519620010102492131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2905205193779898258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac2c9dc5a2cfa86459f03b0c098a5076, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  tankData: {fileID: 11400000, guid: 89efefa4f792acd4cbcbc57590057a59, type: 2}
+  lives: 3
+  currHealth: 0
+  respawnTime: 5
+  healthImage:
+  - {fileID: 431305802051081624}
+  - {fileID: 6033296392722489523}
+  livesText:
+  - {fileID: 4513485006014525689}
+  - {fileID: 7558663049234826706}
+  driverRespawn: {fileID: 7015122323608089706}
+  gunnerRespawn: {fileID: 8419662542903457926}
+  respawnTexts:
+  - {fileID: 76987111198402487}
+  - {fileID: 1482702092240759643}
+--- !u!114 &553647176807297708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2905205193779898258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c7e24e97607bd48b14c6669fa4a519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  missile: {fileID: 0}
+  data: {fileID: 11400000, guid: 89efefa4f792acd4cbcbc57590057a59, type: 2}
+  bulletGO: {fileID: 3732487249527810964, guid: 4bc52dda4e996fb46b9093a970187f1d,
+    type: 3}
+  missileGO: {fileID: 3732487249527810964, guid: 2151206c25b87d446a8afe41821c0a38,
+    type: 3}
+  _hasMissile: 0
+  _hasBullet: 1
+  reloadGroup: {fileID: 8744837004090127379}
+  bulletReloadImage: {fileID: 982722239254385399}
+  reloadTimerImage: {fileID: 8467581599527105738}
+  bulletImage: {fileID: 5085354530822247126}
+  bulletFillDriver: {fileID: 4924501540729919896}
+  missileImage: {fileID: 3083262970865057086}
+  missileFillDriver: {fileID: 2090466548723489210}
+  reloadingAudio: {fileID: 7385303803487722460}
+  shootingAudio: {fileID: 9193218893755672709}
+  smokeVFX: {fileID: 3258551338417457710, guid: 2880db6858a8e81479ece32424a72b20,
+    type: 3}
 --- !u!114 &8241758214644652562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1331,6 +1358,28 @@ MonoBehaviour:
   sleepTorque: 0.25
   yawWakeInput: 0.02
   yawAngleSnapDeg: 0.005
+--- !u!114 &6536292676846462494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2905205193779898258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7de2f3a6fa58fd4ab15578786d88d78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  mineOnCooldown: 0
+  mineGO: {fileID: 9055745981646465164, guid: 881e5d2e9d4aa3e4b86358ec3f04fb82, type: 3}
+  hasMines: 0
+  mineCooldownTime: 4
+  mineUI: {fileID: 7114351888286421663}
+  mineFillImage: {fileID: 8504377200770415388}
+  mineTxt: {fileID: 3901197155200277583}
 --- !u!114 &293358931188755715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3365,6 +3414,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3083262970865057086 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3088022221222436451, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 5392621048374109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3901197155200277583 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3904900890670481170, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 5392621048374109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4924501540729919896 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4919180388236868293, guid: 42a37a046e3ec104db7d766801b4dd13,
@@ -3413,6 +3486,12 @@ CanvasGroup:
     type: 3}
   m_PrefabInstance: {fileID: 5392621048374109}
   m_PrefabAsset: {fileID: 0}
+--- !u!225 &7114351888286421663 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 7109048380613865922, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 5392621048374109}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7213388448031860837 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7208066300154170168, guid: 42a37a046e3ec104db7d766801b4dd13,
@@ -3440,6 +3519,18 @@ MonoBehaviour:
 --- !u!114 &8383020782092768785 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8378191137057568076, guid: 42a37a046e3ec104db7d766801b4dd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 5392621048374109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8504377200770415388 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8509189270893156417, guid: 42a37a046e3ec104db7d766801b4dd13,
     type: 3}
   m_PrefabInstance: {fileID: 5392621048374109}
   m_PrefabAsset: {fileID: 0}
@@ -3804,18 +3895,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &652668750858429485 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 93322974036678951, guid: eee26696c6da89043b3aa63ff9667d52,
-    type: 3}
-  m_PrefabInstance: {fileID: 595937523931086090}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &982722239254385399 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 425140113310134269, guid: eee26696c6da89043b3aa63ff9667d52,
@@ -3864,27 +3943,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5271734807771595646 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4714640873583099508, guid: eee26696c6da89043b3aa63ff9667d52,
-    type: 3}
-  m_PrefabInstance: {fileID: 595937523931086090}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &6626794040321194787 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6030926919568573993, guid: eee26696c6da89043b3aa63ff9667d52,
-    type: 3}
-  m_PrefabInstance: {fileID: 595937523931086090}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &6743623365050837757 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 6184317215678781431, guid: eee26696c6da89043b3aa63ff9667d52,
     type: 3}
   m_PrefabInstance: {fileID: 595937523931086090}
   m_PrefabAsset: {fileID: 0}

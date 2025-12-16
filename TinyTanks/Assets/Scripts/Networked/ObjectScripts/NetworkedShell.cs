@@ -1,19 +1,19 @@
-﻿using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class NetworkedMissile : NetworkBehaviour
+using Mirror;
+
+public class NetworkedShell : NetworkBehaviour
 {
+
     const int TANK_LAYER = 9;
     const int POWERUP_LAYER = 13;
 
     [Header("Behaviour")]
     [SyncVar] public TankBrain parent;
-    [SerializeField] private float missileLifeTime = 10f;
-    [SerializeField] private int missileSpeed = 7;
-
-    [Header("Camera")]
-    public Transform camAnchor;
+    [SerializeField] private float shellLifeTime = 5f;
+    [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private int damage = 1;
 
     [Header("VFX")]
     [SerializeField] private GameObject bulletTrail;
@@ -25,34 +25,28 @@ public class NetworkedMissile : NetworkBehaviour
     [SerializeField] private AudioSource tankHitAudioSource;
     [SerializeField] private AudioSource enviormentHitAudioSource;
 
-    private Rigidbody _rb;
+    private Rigidbody rb;
 
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
+        var startRotation = Random.Range(0, 360);
+        Server_RotateSelf(startRotation);
+
         bulletWhistle = GetComponentInChildren<AudioSource>();
     }
 
     private void FixedUpdate()
     {
-        _rb.velocity = transform.forward * missileSpeed;
-
-        missileLifeTime -= Time.deltaTime;
-        if (missileLifeTime <= 0)
-        {
-            SpawnDeathVFX();
+        shellLifeTime -= Time.deltaTime;
+        if (shellLifeTime <= 0)
             Server_DeleteSelfNow();
-        }         
-    }
 
-    public void MoveMissile(float yaw, float pitch)
-    {
-        var rotation = new Vector3(pitch, yaw, 0);
-        _rb.transform.eulerAngles += rotation;
+        Server_RotateSelf(rotationSpeed);
     }
 
     [Server]
@@ -63,19 +57,18 @@ public class NetworkedMissile : NetworkBehaviour
     }
 
     [Server]
-    private void Server_DeleteSelfNow()
+    void Server_DeleteSelfNow()
     {
-        parent.Server_NotifyMissileDestroyed();
         NetworkServer.Destroy(gameObject);
     }
 
-    private void SpawnDeathVFX()
+    private void Server_RotateSelf(float newRotation)
     {
-        var vxf = Instantiate(enviormentHitVFX, this.transform.position, this.transform.rotation);
-        vxf.transform.localScale *= 10;
-        Destroy(vxf, 3);
+        var angles = transform.rotation.eulerAngles;
+        angles.z += newRotation;
+        Quaternion newRot = Quaternion.Euler(angles);
+        rb.MoveRotation(newRot);       
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -91,22 +84,30 @@ public class NetworkedMissile : NetworkBehaviour
                 Destroy(hitAudio.gameObject, 4);
 
                 var tankBrain = other.gameObject.GetComponentInParent<TankBrain>();
-                tankBrain.Server_TakeDamage(parent.damage);
+                tankBrain.health.Server_TakeDamage(parent.damage);
                 Server_DeleteSelfNow();
             }
         }
-        else if (other.gameObject.layer != POWERUP_LAYER)
+        else if(other.gameObject.layer != POWERUP_LAYER)
         {
             var vxf = Instantiate(enviormentHitVFX, this.transform.position, this.transform.rotation);
             Destroy(vxf, 3);
 
             var hitAudio = Instantiate(enviormentHitAudioSource, this.transform.position, this.transform.rotation);
             Destroy(hitAudio.gameObject, 4);
+
+            Collider col = GetComponent<Collider>();
+            col.isTrigger = false;
+            rb.useGravity = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            Server_DeleteSelfIn(5);
             Destroy(bulletTrail);
             bulletWhistle.Stop();
-
-            Server_DeleteSelfNow();
+            this.enabled = false;
         }
-
+                   
     }
+
+
 }
