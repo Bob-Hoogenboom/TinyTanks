@@ -1,43 +1,48 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using UnityEngine.WSA;
 
+/// <summary>
+/// Statemachine* and let the enemy be for freeroam and stationary stuff
+/// </summary>
 public class TutorialEnemy : MonoBehaviour, IDamagable
 {
-    [Header("Enemy")]
-    [SerializeField] private float hitpoints = 3f;
-    public float HitPoints => hitpoints;
-
-    public bool canShoot = true;
-
-    private TutorialTank _playerTarget;
-
-
-    [Header("Attack")]
-    [SerializeField] private LayerMask hittable;
+    [Header("References")]
     [SerializeField] private GameObject cupola;
     [SerializeField] private GameObject barrel;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform muzzle;
+
+    private TutorialTank _playerTarget;
+
+    [Header("Variables")]
+    [SerializeField] private float hitPoints = 3f;
+    public float HitPoints => hitPoints;
+
+    [SerializeField] private bool isStationary = false;
+    private bool _isActive;
+    [Space]
+    public UnityEvent onEnemyDefeat;
+
+    [Header("Attack")]
+    public bool canShoot = true;
+    [SerializeField] private LayerMask hittable;
     [SerializeField] private float bulletSpeed = 10f;
-    [SerializeField] private float range;
+    [SerializeField] private float attackRange;
+    [SerializeField] private float vision;
     [SerializeField]private float _coolDown = 0f;
     [Space]
     public UnityEvent onShoot;
-
-    private bool _isActive;
-    private float _cupolaRotateSpeed = 10f;
-    private float _barrelRotateSpeed = 10f;
-
-    [Header("Path")]
-    [SerializeField] private float waitTimeOnWayPoint = 1f;
-    [SerializeField] private EnemyPath path;
-
-    private NavMeshAgent _agent;
     private float time = 0f;
 
-    [Space]
-    public UnityEvent onEnemyDefeat;
+    [Header("Movement")]
+    [SerializeField] private float waitTimeOnWayPoint = 1f;
+
+    private NavMeshAgent _agent;
+
+    private float _cupolaRotateSpeed = 10f;
+    private float _barrelRotateSpeed = 10f;
 
 
     private void Awake()
@@ -48,38 +53,35 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        if (path.pathType != PathType.IDLE)
-        {
-            _agent.destination = path.GetCurrentWayPoint();
-        }
+        
     }
 
     private void Update()
     {
+        _isActive = GetDistanceToPlayer() <= attackRange ? true : false;
+
         if (_isActive)
         {
             AimAtPlayer();
-            if(_agent.remainingDistance <= 0.1f && path.pathType != PathType.IDLE)
-            {
-                time += Time.deltaTime;
-                if(time >= waitTimeOnWayPoint)
-                {
-                    time = 0f;
-                    _agent.destination = path.GetNextWayPoint();
-                }
-            }
+            _isActive = GetDistanceToPlayer() <= vision ? true : false;
         }
 
-        CheckPlayerRange();
+
+        
+
+
     }
 
-    private bool CheckPlayerRange()
+
+
+
+    private bool CheckIfPlayerRange()
     {
         bool playerInRange;
         float dist = Vector3.Distance(transform.position, _playerTarget.transform.position);
         Vector3 dir = _playerTarget.transform.position - transform.position;
 
-        playerInRange = (dist < range) ? true : false;
+        playerInRange = (dist < attackRange) ? true : false;
 
         //Player was never found before but is in range
         if (!_isActive && playerInRange)
@@ -100,9 +102,15 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
             }
         }
 
-        if(dist < range * 2.5) playerInRange = false;
+        if(dist < attackRange * 2.5) playerInRange = false;
 
         return playerInRange;
+    }
+
+    private float GetDistanceToPlayer()
+    {
+        float dist = Vector3.Distance(transform.position, _playerTarget.transform.position);
+        return dist;
     }
 
     private void AimAtPlayer()
@@ -181,13 +189,14 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
 
     public void Damage(float damage)
     {
-        Debug.Log("AUWW!");
-        hitpoints -= damage;
-        if(hitpoints <= 0)
+        hitPoints -= damage;
+
+        if(hitPoints <= 0) 
         {
             Death();
         }
-        //do some damage effect here
+
+
     }
 
     private void Death()
@@ -198,10 +207,10 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, range);
+        Gizmos.DrawWireSphere(transform.position, attackRange);
         
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, (range * 2.5f));
+        Gizmos.DrawWireSphere(transform.position, (attackRange * 2.5f));
     }
 }
  
