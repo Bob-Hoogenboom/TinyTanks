@@ -702,7 +702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &105123866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -834,6 +834,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3f75328781dbab4b8eadcc8f1f1a18f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anime: {fileID: 0}
+  transitionTime: 1
 --- !u!1001 &117595893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2376,7 +2378,7 @@ MonoBehaviour:
   roomPlayerPrefab: {fileID: -7145266086400463187, guid: 9c0d13d17d95c7045b11073610a7b2a3,
     type: 3}
   RoomScene: Assets/Scenes/NetworkedLevels/NetworkedPlayerRoom.unity
-  GameplayScene: Assets/Scenes/Testing/ProductionLevelTest.unity
+  GameplayScene: Assets/Scenes/Testing/ProductionLevelCullingTest.unity
   _allPlayersReady: 0
   clientIndex: 0
   gameTime: 0

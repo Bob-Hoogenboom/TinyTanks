@@ -32,10 +32,11 @@ public class TankBrain : NetworkBehaviour
 
     public TankData tankData;
 
-    [Header("Physics based movement")]
-    [SerializeField] private TankTrackPhysics tracks;
-    private float _leftTrack;
-    private float _rightTrack;
+    [Header("Physics based movement and trackAnim")]
+    [SerializeField] private TankTrackPhysics tracks;   
+    [SyncVar(hook = nameof(OnLeftTrackChanged))] private float _leftTrack;
+    [SyncVar(hook = nameof(OnRightTrackChanged))] private float _rightTrack;
+
     [SerializeField] private TankTurretPhysics turret;
     private float _yaw;
     private float _pitch;
@@ -152,6 +153,15 @@ public class TankBrain : NetworkBehaviour
         else if (turret) turret.SetInputs(_yaw, _pitch);
 
         Server_ApplyBatteryMovementDrain(Time.fixedDeltaTime);
+    }
+
+    private void OnLeftTrackChanged(float oldVal, float newVal) => PushTrackInputsToTracks();
+    private void OnRightTrackChanged(float oldVal, float newVal) => PushTrackInputsToTracks();
+
+    private void PushTrackInputsToTracks()
+    {
+        if (!tracks) tracks = GetComponent<TankTrackPhysics>();
+        if (tracks) tracks.SetInputs(_leftTrack, _rightTrack, currentBtry > 0f);
     }
 
     [Server]

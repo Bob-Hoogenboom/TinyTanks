@@ -25,6 +25,8 @@ public class CrewSeat : NetworkBehaviour
         if (!t) return;
         tankObject = t.gameObject; // SyncVar replication to clients
         t.Server_RegisterSeat(this); // keeps TankBrain’s driver/gunner pointers updated
+
+        Debug.Log($"[Server] {seatType} seat {netIdentity.netId} assigned to tank {t.netIdentity.netId}");
     }
     private void OnTankChanged(GameObject _, GameObject __)
     {

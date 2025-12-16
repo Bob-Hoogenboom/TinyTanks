@@ -45,6 +45,7 @@ public class DriverSeatController : NetworkBehaviour
     private void CmdDriverInput(float leftTrack, float rightTrack)
     {
         if (!seat || !seat.tank) return;
+        Debug.Log($"[Server] Input from seat {seat.netIdentity.netId} -> tank {seat.tank.netIdentity.netId}");
         seat.tank.Server_SetDriverInput(seat, leftTrack, rightTrack);
     }
 
