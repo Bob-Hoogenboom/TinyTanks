@@ -22,12 +22,20 @@ public class GunnerSeatController : NetworkBehaviour
         if (seatCam) seatCam.gameObject.SetActive(true);
         if (canvas) canvas.gameObject.SetActive(true);
 
-        seat.tank.OnMissileShoot.AddListener(InitializeMissileCam);
-        seat.tank.OnMissileDestroy.AddListener(DeInitializeMissileCam);
+        seat.tank.OnSwapToMissileCam += InitializeMissileCam;
+        seat.tank.OnSwapToGunnerCam += DeInitializeMissileCam;
 
         Debug.Log($"Adding missile listeners on {seat.tank.name} " +
           $"isServer={seat.tank.isServer} isClient={seat.tank.isClient} " +
           $"isLocalPlayer={seat.tank.isLocalPlayer}");
+    }
+    public override void OnStopLocalPlayer()
+    {
+        if (seat && seat.tank)
+        {
+            seat.tank.OnSwapToMissileCam -= InitializeMissileCam;
+            seat.tank.OnSwapToGunnerCam -= DeInitializeMissileCam;
+        }
     }
 
     private void Update()
