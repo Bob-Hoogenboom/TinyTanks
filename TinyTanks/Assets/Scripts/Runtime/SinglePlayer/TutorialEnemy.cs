@@ -14,7 +14,7 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform muzzle;
 
-    private TutorialTank _playerTarget;
+    private SinglePlayerTank _playerTarget;
 
     [Header("Variables")]
     [SerializeField] private float hitPoints = 3f;
@@ -48,7 +48,7 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _playerTarget = FindAnyObjectByType<TutorialTank>();
+        _playerTarget = FindAnyObjectByType<SinglePlayerTank>();
     }
 
     private void Start()

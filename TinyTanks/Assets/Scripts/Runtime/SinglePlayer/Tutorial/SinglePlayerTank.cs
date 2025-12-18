@@ -10,7 +10,7 @@ public enum TankRole
     TANK_SPECTATOR
 }
 
-public class TutorialTank : MonoBehaviour, IDamagable
+public class SinglePlayerTank : MonoBehaviour, IDamagable
 {
     [Header("References")]
     [SerializeField] private TankTrackPhysics tankTrack;
