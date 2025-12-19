@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class TankChase : TankBaseState
 {
-    private float _refreshWaypoint = 1f;
+    private float _refreshWaypoint = 2f;
     private float _currentTimer;
-    //private Vector3 _raycastOrigin = new Vector3(0f, 1f, 0f);
+    private Vector3 _raycastOffset = new Vector3(0f, .5f, 0f);
     private Vector3 _waypoint;
 
     public override void EnterState(TankStateManager tank)
@@ -15,8 +15,9 @@ public class TankChase : TankBaseState
 
     public override void UpdateState(TankStateManager tank)
     {
+        Debug.Log("In Chase State");
         //if the enemy is in range of the player switch to shoot state
-        if(GetDistanceTo(tank, _waypoint) <= tank.ShootingRange)
+        if (GetDistanceTo(tank, tank.Player.transform.position) <= tank.ShootingRange * 0.75f)
         {
             tank.SwitchState(tank.Shoot);
         }
@@ -27,17 +28,20 @@ public class TankChase : TankBaseState
         if(_currentTimer <= 0)
         {
             RaycastHit hit;
-            if (Physics.Raycast(tank.transform.position, tank.Player.transform.position, out hit))
+            Vector3 dir = tank.Player.transform.position + _raycastOffset - tank.transform.position + _raycastOffset;
+            if (Physics.Raycast(tank.transform.position, dir, out hit))
             {
-                if (hit.transform.gameObject == tank.Player)
+               Debug.DrawRay(tank.transform.position, dir, Color.yellow, 10f);
+                if (hit.transform.gameObject == tank.Player.gameObject)
                 {
-                    Debug.Log("Player hit!");
+                    Debug.Log("Player detected!");
                     //the enemy will move towards this destination
-                    tank.Agent.SetDestination(tank.Player.transform.position);
+                    _waypoint = tank.Player.transform.position;
+                    tank.Agent.SetDestination(_waypoint);
                 }
                 else
                 {
-                    Debug.Log(hit.transform.gameObject + "No Player Hit");
+                    Debug.Log(hit.transform.gameObject + "No Player detected");
                 }
             }
             _currentTimer = _refreshWaypoint;
@@ -62,6 +66,7 @@ public class TankChase : TankBaseState
     private float GetDistanceTo(TankStateManager tank, Vector3 target)
     {
         float dist = Vector3.Distance(tank.transform.position, target);
+        //Debug.Log(tank.transform.position + " => " + target + " = " + dist);
         return dist;
     }
 

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
-using UnityEngine.WSA;
 
 /// <summary>
 /// Statemachine* and let the enemy be for freeroam and stationary stuff
