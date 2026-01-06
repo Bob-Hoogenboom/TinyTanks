@@ -37,8 +37,6 @@ public class NetworkedHealth : NetworkBehaviour
         OnHealthReset += Server_ResetTankHealth;
         OnStartRespawnTimer += StartRespawnTimer;
         OnStopRespawnTimer += StopRespawnTimer;
-
-        OnHealthReset?.Invoke();
     }
 
     private void Update()
@@ -80,6 +78,7 @@ public class NetworkedHealth : NetworkBehaviour
             {
                 respawnEndTime = NetworkTime.time + respawnTime;
                 TankBrain.OnTankDeath?.Invoke();
+                OnStartRespawnTimer?.Invoke();
             }
         }
     }
@@ -101,6 +100,7 @@ public class NetworkedHealth : NetworkBehaviour
     [Client]
     private void StartRespawnTimer()
     {
+        Debug.Log("Restart UI start");
         if (driverRespawn != null && gunnerRespawn != null)
         {
             driverRespawn.alpha = 1;

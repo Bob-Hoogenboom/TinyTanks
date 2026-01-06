@@ -74,14 +74,14 @@ SkinnedMeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   serializedVersion: 2
-  m_Quality: 0
+  m_Quality: 1
   m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 8116293111752195724, guid: 2aec956efc9259d409cb25f537639e5b, type: 3}
   m_Bones: []
   m_BlendShapeWeights:
   - 0
-  m_RootBone: {fileID: 0}
+  m_RootBone: {fileID: 1526584041057443538}
   m_AABB:
     m_Center: {x: -0.38703126, y: 0.2521101, z: 0.127747}
     m_Extent: {x: 0.10956119, y: 0.2911013, z: 0.461412}
@@ -1092,7 +1092,6 @@ GameObject:
   - component: {fileID: 8241758214644652562}
   - component: {fileID: 9211153292599580694}
   - component: {fileID: 6536292676846462494}
-  - component: {fileID: 293358931188755715}
   - component: {fileID: 796225033882754524}
   - component: {fileID: 9080319658624944878}
   - component: {fileID: 3141117644775854628}
@@ -1306,7 +1305,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 23552
-  identity: {fileID: 0}
+  _id: {fileID: 0}
   isSupposedToHaveServer: 1
   anim: {fileID: 1189097710389964332}
   contactRadius: 0.18
@@ -1380,20 +1379,6 @@ MonoBehaviour:
   mineUI: {fileID: 7114351888286421663}
   mineFillImage: {fileID: 8504377200770415388}
   mineTxt: {fileID: 3901197155200277583}
---- !u!114 &293358931188755715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2905205193779898258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a15cf15c53c4df44ba5bbd5ece669908, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anim: {fileID: 1189097710389964332}
-  animSpeed: 1
 --- !u!114 &796225033882754524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1709,10 +1694,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
+  syncDirection: 1
   syncMode: 0
   syncInterval: 0
-  clientAuthority: 0
+  clientAuthority: 1
   animator: {fileID: 1189097710389964332}
 --- !u!1 &4030355756270742880
 GameObject:
@@ -2874,14 +2859,14 @@ SkinnedMeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   serializedVersion: 2
-  m_Quality: 0
+  m_Quality: 1
   m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: -6776258722203020807, guid: 2aec956efc9259d409cb25f537639e5b, type: 3}
   m_Bones: []
   m_BlendShapeWeights:
   - 0
-  m_RootBone: {fileID: 0}
+  m_RootBone: {fileID: 1173055730923146233}
   m_AABB:
     m_Center: {x: 0.26969373, y: 0.25211012, z: -0.5289779}
     m_Extent: {x: 0.109561324, y: 0.2911014, z: 0.4614121}

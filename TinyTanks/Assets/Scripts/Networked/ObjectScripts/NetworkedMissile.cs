@@ -10,7 +10,7 @@ public class NetworkedMissile : NetworkBehaviour
     [Header("Behaviour")]
     [SyncVar] public TankBrain parent;
     [SerializeField] private float missileLifeTime = 10f;
-    [SerializeField] private int missileSpeed = 7;
+    [SerializeField] private int missileSpeed = 10;
 
     [Header("Camera")]
     public Transform camAnchor;
@@ -83,6 +83,7 @@ public class NetworkedMissile : NetworkBehaviour
         {
             if (other.gameObject.GetComponentInParent<TankBrain>() != parent)
             {
+                Debug.Log("I hit enemy tank");
                 var vxf = Instantiate(tankHitVFX, this.transform.position, this.transform.rotation);
                 Destroy(vxf, 3);
                 Destroy(gameObject);

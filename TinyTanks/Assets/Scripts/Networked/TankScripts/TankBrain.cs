@@ -111,6 +111,7 @@ public class TankBrain : NetworkBehaviour
         if (!tracks) tracks = GetComponent<TankTrackPhysics>();
         if (!turret) turret = GetComponent<TankTurretPhysics>();
         if (!mineLayer) mineLayer = GetComponent<MineLayer>();
+        if (!shooter) shooter = GetComponent<Shooter>();
 
         OnTankDeath += Server_StarRespawnTimer;
         OnReturnToLobby += Server_ReturnToLobby;
@@ -346,6 +347,7 @@ public class TankBrain : NetworkBehaviour
         var idx = UnityEngine.Random.Range(0, possibleSpawnLocations.Count);
         spawnLocation = possibleSpawnLocations[idx];
 
+        transform.rotation = Quaternion.Euler(0, 0, 0);
         _netTrans.RpcTeleport(spawnLocation.position);
 
         health.OnHealthReset?.Invoke();
@@ -432,8 +434,6 @@ public class TankBrain : NetworkBehaviour
         _rightTrack = 0;
         driver.enabled = false;
         gunner.enabled = false;
-
-        health.OnStartRespawnTimer?.Invoke();
     }
 
     private void OnMissileChanged(NetworkedMissile oldMissile, NetworkedMissile newMissile)

@@ -1154,7 +1154,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 23552
-  identity: {fileID: 0}
+  _id: {fileID: 0}
   isSupposedToHaveServer: 1
   anim: {fileID: 4172860821965508566}
   contactRadius: 0.25
@@ -1459,16 +1459,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
-    - target: {fileID: 289930272187836702, guid: ad4463405ba347041990f570bd9c4442,
-        type: 3}
-      propertyPath: m_Quality
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 289930272187836702, guid: ad4463405ba347041990f570bd9c4442,
-        type: 3}
-      propertyPath: m_RootBone
-      value: 
-      objectReference: {fileID: 7842051150634779232}
     - target: {fileID: 335009936715851645, guid: ad4463405ba347041990f570bd9c4442,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1524,16 +1514,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
-    - target: {fileID: 1566356344417437299, guid: ad4463405ba347041990f570bd9c4442,
-        type: 3}
-      propertyPath: m_Quality
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1566356344417437299, guid: ad4463405ba347041990f570bd9c4442,
-        type: 3}
-      propertyPath: m_RootBone
-      value: 
-      objectReference: {fileID: 6476926989854816360}
     - target: {fileID: 1615213304812188114, guid: ad4463405ba347041990f570bd9c4442,
         type: 3}
       propertyPath: m_Layer
@@ -2059,12 +2039,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 42958732176555552}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &6476926989854816360 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6447523518095410760, guid: ad4463405ba347041990f570bd9c4442,
-    type: 3}
-  m_PrefabInstance: {fileID: 42958732176555552}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6913944111142080836 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6875832475124592484, guid: ad4463405ba347041990f570bd9c4442,
@@ -2110,12 +2084,6 @@ MonoBehaviour:
 --- !u!225 &7641572188861375143 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 7679991782636280967, guid: ad4463405ba347041990f570bd9c4442,
-    type: 3}
-  m_PrefabInstance: {fileID: 42958732176555552}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7842051150634779232 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7803631245520665664, guid: ad4463405ba347041990f570bd9c4442,
     type: 3}
   m_PrefabInstance: {fileID: 42958732176555552}
   m_PrefabAsset: {fileID: 0}
@@ -2195,10 +2163,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
+  syncDirection: 1
   syncMode: 0
   syncInterval: 0
-  clientAuthority: 0
+  clientAuthority: 1
   animator: {fileID: 4172860821965508566}
 --- !u!1001 &5313128099472091053
 PrefabInstance:
