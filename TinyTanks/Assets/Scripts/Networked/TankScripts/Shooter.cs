@@ -48,10 +48,10 @@ public class Shooter : NetworkBehaviour
     [Header("VFX")]
     [SerializeField] private GameObject smokeVFX;
 
-    [ServerCallback]
-    private void Start()
+    public override void OnStartServer()
     {
         _currReloadTime = data.baseReloadTime;
+
         OnMissileShoot += Server_ShootMissile;
         OnBulletShoot += Server_ShootBullet;
         OnReloadBullet += Server_ReloadGun;
@@ -59,8 +59,30 @@ public class Shooter : NetworkBehaviour
         OnRechargeBattery += Server_RechargeBattery;
         OnDeathReset += Server_OnDeathReset;
         OnPickupMissle += Server_LoadMissile;
+    }
+    public override void OnStartClient()
+    {
         SwapToMissile += ActivateMissileUI;
         SwapToBullet += ActivateBulletUI;
+
+        ActivateBulletUI();
+    }
+
+    public override void OnStopClient()
+    {
+        SwapToMissile -= ActivateMissileUI;
+        SwapToBullet -= ActivateBulletUI;
+    }
+
+    public override void OnStopServer()
+    {
+        OnMissileShoot -= Server_ShootMissile;
+        OnBulletShoot -= Server_ShootBullet;
+        OnReloadBullet -= Server_ReloadGun;
+        OnNoBattery -= Server_NoBattery;
+        OnRechargeBattery -= Server_RechargeBattery;
+        OnDeathReset -= Server_OnDeathReset;
+        OnPickupMissle -= Server_LoadMissile;
     }
 
     private void Update()

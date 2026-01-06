@@ -106,6 +106,8 @@ public class TankBrain : NetworkBehaviour
 
     public override void OnStartServer()
     {
+        base.OnStartServer();
+
         _rb = GetComponent<Rigidbody>();
         _netTrans = GetComponent<NetworkTransformReliable>();
         if (!tracks) tracks = GetComponent<TankTrackPhysics>();
@@ -113,7 +115,7 @@ public class TankBrain : NetworkBehaviour
         if (!mineLayer) mineLayer = GetComponent<MineLayer>();
         if (!shooter) shooter = GetComponent<Shooter>();
 
-        OnTankDeath += Server_StarRespawnTimer;
+        OnTankDeath += Server_DeathRemoveInput;
         OnReturnToLobby += Server_ReturnToLobby;
         OnTankRespawn += Server_RespawnTank;
 
@@ -127,6 +129,18 @@ public class TankBrain : NetworkBehaviour
             spawnPoints.Add(point.transform);
 
         shooter.OnMissileShoot += AssignMissile;
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        _rb = GetComponent<Rigidbody>();
+        _netTrans = GetComponent<NetworkTransformReliable>();
+        if (!tracks) tracks = GetComponent<TankTrackPhysics>();
+        if (!turret) turret = GetComponent<TankTurretPhysics>();
+        if (!mineLayer) mineLayer = GetComponent<MineLayer>();
+        if (!shooter) shooter = GetComponent<Shooter>();
     }
 
     [Server]
@@ -325,6 +339,8 @@ public class TankBrain : NetworkBehaviour
     [Server]
     private void Server_RespawnTank()
     {
+        if (!health.IsDead) return;
+
         var players = FindObjectsOfType<TankBrain>().ToList();
         players.Remove(this);
 
@@ -356,8 +372,6 @@ public class TankBrain : NetworkBehaviour
         currentBtry = tankData.maxBtry;
         driver.enabled = true;
         gunner.enabled = true;
-
-        RpcTankBirth();
     }
 
     [Server]
@@ -372,10 +386,15 @@ public class TankBrain : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
-    private void RpcTankBirth()
+    [Server]
+    private void Server_DeathRemoveInput()
     {
-        health.OnStopRespawnTimer?.Invoke();
+        if (!health.IsDead) return;
+
+        _leftTrack = 0;
+        _rightTrack = 0;
+        driver.enabled = false;
+        gunner.enabled = false;
     }
 
     [Client]
@@ -425,17 +444,6 @@ public class TankBrain : NetworkBehaviour
             image.sprite = sprite;
     }
 
-    [Server]
-    private void Server_StarRespawnTimer()
-    {
-        if (!health.IsDead) return;
-
-        _leftTrack = 0;
-        _rightTrack = 0;
-        driver.enabled = false;
-        gunner.enabled = false;
-    }
-
     private void OnMissileChanged(NetworkedMissile oldMissile, NetworkedMissile newMissile)
     {
         if (newMissile != null)
@@ -449,6 +457,7 @@ public class TankBrain : NetworkBehaviour
         }
     }
 
+    [Client]
     private void OnAmmoTypeChanged(ammoTypes oldVal, ammoTypes newVal)
     {
         if (newVal == ammoTypes.missile)

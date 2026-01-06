@@ -9,10 +9,6 @@ using System;
 public class NetworkedHealth : NetworkBehaviour
 {
     public Action OnHealthReset;
-    public Action OnStartRespawnTimer;
-    public Action OnStopRespawnTimer;
-
-
     public TankData tankData;
 
     [Header("Behaviour")]
@@ -22,7 +18,8 @@ public class NetworkedHealth : NetworkBehaviour
     [SerializeField] public float currHealth;
     [SyncVar] private double respawnEndTime;
     [SerializeField] private float respawnTime = 4f;
-    [SyncVar] private bool _isDead;
+    [SyncVar(hook = nameof(OnDeadChanged))]
+    private bool _isDead;
     public bool IsDead => _isDead;
 
     [Header("UI")]
@@ -35,19 +32,17 @@ public class NetworkedHealth : NetworkBehaviour
     private void Start()
     {
         OnHealthReset += Server_ResetTankHealth;
-        OnStartRespawnTimer += StartRespawnTimer;
-        OnStopRespawnTimer += StopRespawnTimer;
+        currHealth = tankData.maxHealth;
     }
 
     private void Update()
     {
         if (_isDead)
         {
-            Debug.Log("isDead is true in NetworkedHealth Update");
             double respawnRemaining = respawnEndTime - NetworkTime.time;
             UpdateTimerDisplay(respawnRemaining, respawnTexts);
 
-            if (respawnRemaining <= 0 && _isDead) TankBrain.OnTankRespawn?.Invoke();
+            if (respawnRemaining <= 0 && _isDead && isServer) TankBrain.OnTankRespawn?.Invoke();
         }
     }
 
@@ -78,7 +73,6 @@ public class NetworkedHealth : NetworkBehaviour
             {
                 respawnEndTime = NetworkTime.time + respawnTime;
                 TankBrain.OnTankDeath?.Invoke();
-                OnStartRespawnTimer?.Invoke();
             }
         }
     }
@@ -90,33 +84,16 @@ public class NetworkedHealth : NetworkBehaviour
             text.text = $"{newVal}";
     }
 
-    [Client]
     private void OnHealthChanged(float oldVal, float newVal)
     {
         foreach (var image in healthImage)
             image.fillAmount = newVal / tankData.maxHealth;
     }
 
-    [Client]
-    private void StartRespawnTimer()
+    private void OnDeadChanged(bool oldVal, bool newVal)
     {
-        Debug.Log("Restart UI start");
-        if (driverRespawn != null && gunnerRespawn != null)
-        {
-            driverRespawn.alpha = 1;
-            gunnerRespawn.alpha = 1;
-        }
-        respawnEndTime = NetworkTime.time + +respawnTime;
-    }
-
-    [Client]
-    private void StopRespawnTimer()
-    {
-        if (driverRespawn != null && gunnerRespawn != null)
-        {
-            driverRespawn.alpha = 0;
-            gunnerRespawn.alpha = 0;
-        }
+        if (driverRespawn != null) driverRespawn.alpha = newVal ? 1 : 0;
+        if (gunnerRespawn != null) gunnerRespawn.alpha = newVal ? 1 : 0;
     }
 
     private void UpdateTimerDisplay(double timeRemaining, TMP_Text[] uiTexts)
