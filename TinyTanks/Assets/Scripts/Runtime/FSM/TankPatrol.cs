@@ -3,15 +3,18 @@ using UnityEngine.AI;
 
 public class TankPatrol : TankBaseState
 {
-    private Vector3 _raycastOffset = new Vector3(0f, .5f, 0f);
+    private Vector3 _raycastOffset = new Vector3(0f, .3f, 0f);
     private Vector3 _currentWaypoint;
     private float _patrolRange;
 
     public override void EnterState(TankStateManager tank)
     {
+        if (tank.Agent.isOnNavMesh)
+        {
+            tank.Agent.SetDestination(_currentWaypoint);
+        }
         _patrolRange = tank.DetectionRange / 0.75f;
         SetNewWaypoint(tank);
-        tank.Agent.SetDestination(_currentWaypoint);
     }
 
     public override void UpdateState(TankStateManager tank)
@@ -29,7 +32,7 @@ public class TankPatrol : TankBaseState
             Vector3 dir = tank.Player.transform.position + _raycastOffset - tank.transform.position + _raycastOffset;
             if (Physics.Raycast(tank.transform.position, dir, out hit))
             {
-                Debug.DrawRay(tank.transform.position, dir, Color.yellow, 10f);
+                Debug.DrawRay(tank.transform.position + _raycastOffset, dir, Color.yellow, 10f);
                 if(hit.transform.gameObject == tank.Player.gameObject)
                 {
                     Debug.Log("Player detected!");

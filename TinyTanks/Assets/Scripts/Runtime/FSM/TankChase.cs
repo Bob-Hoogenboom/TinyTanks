@@ -4,12 +4,15 @@ public class TankChase : TankBaseState
 {
     private float _refreshWaypoint = 2f;
     private float _currentTimer;
-    private Vector3 _raycastOffset = new Vector3(0f, .5f, 0f);
+    private Vector3 _raycastOffset = new Vector3(0f, .3f, 0f);
     private Vector3 _waypoint;
 
     public override void EnterState(TankStateManager tank)
     {
-        tank.Agent.SetDestination(tank.Player.transform.position);
+        if (tank.Agent.isOnNavMesh)
+        {
+            tank.Agent.SetDestination(tank.Player.transform.position);
+        }
         _currentTimer = _refreshWaypoint;
     }
 
@@ -31,17 +34,16 @@ public class TankChase : TankBaseState
             Vector3 dir = tank.Player.transform.position + _raycastOffset - tank.transform.position + _raycastOffset;
             if (Physics.Raycast(tank.transform.position, dir, out hit))
             {
-               Debug.DrawRay(tank.transform.position, dir, Color.yellow, 10f);
                 if (hit.transform.gameObject == tank.Player.gameObject)
                 {
-                    Debug.Log("Player detected!");
+                    Debug.DrawRay(tank.transform.position + _raycastOffset, dir, Color.red, 1f);
                     //the enemy will move towards this destination
                     _waypoint = tank.Player.transform.position;
                     tank.Agent.SetDestination(_waypoint);
                 }
                 else
                 {
-                    Debug.Log(hit.transform.gameObject + "No Player detected");
+                    Debug.DrawRay(tank.transform.position, dir, Color.yellow, 5f);
                 }
             }
             _currentTimer = _refreshWaypoint;

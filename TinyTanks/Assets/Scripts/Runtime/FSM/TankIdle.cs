@@ -3,11 +3,15 @@ using UnityEngine;
 public class TankIdle : TankBaseState
 {
     private Vector2 _timerRange = new Vector2(3f, 6f);
+    private Vector3 _raycastOffset = new Vector3(0f, .3f, 0f);
     private float _currentTimer;
 
     public override void EnterState(TankStateManager tank)
     {
-        tank.Agent.SetDestination(tank.transform.position);
+        if (tank.Agent.isOnNavMesh)
+        {
+            tank.Agent.SetDestination(tank.transform.position);
+        }
         _currentTimer = Random.Range(_timerRange.x, _timerRange.y);
     }
 
@@ -28,21 +32,27 @@ public class TankIdle : TankBaseState
             if (GetDistanceTo(tank, tank.Player.transform.position) <= tank.DetectionRange)
             {
                 RaycastHit hit;
-                if (Physics.Raycast(tank.transform.position, tank.Player.transform.position, out hit))
+                Vector3 dir = tank.Player.transform.position + _raycastOffset - tank.transform.position + _raycastOffset;
+                if (Physics.Raycast(tank.transform.position, dir, out hit))
                 {
-                    if (hit.transform.gameObject == tank.Player)
+                    Debug.DrawRay(tank.transform.position + _raycastOffset, dir, Color.yellow, 1f);
+
+                    if (hit.transform.gameObject == tank.Player.gameObject)
                     {
-                        Debug.Log("Player detected!");
-                        //the enemy will move towards this destination
+                        //Debug.Log("Player detected!");
                         tank.SwitchState(tank.Chase);
                     }
                     else
                     {
-                        Debug.Log(hit.transform.gameObject + "No Player detected");
+
                     }
                 }
             }
-        
+        }
+
+        if (GetDistanceTo(tank, tank.Player.transform.position) <= tank.DetectionRange)
+        {
+            tank.SwitchState(tank.Shoot);
         }
     }
 

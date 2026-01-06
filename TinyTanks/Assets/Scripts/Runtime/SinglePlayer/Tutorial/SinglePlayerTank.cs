@@ -39,7 +39,8 @@ public class SinglePlayerTank : MonoBehaviour, IDamagable
     public UnityEvent onShoot;
 
     [Header("Settings")]
-    public bool observerModeActive = false;
+    public bool canSpectate = false;
+    public bool onlyObserver = false;
     [SerializeField] private float hitpoints = 3f;
     public float HitPoints => hitpoints;
      
@@ -68,7 +69,7 @@ public class SinglePlayerTank : MonoBehaviour, IDamagable
             {
                 currentRole = TankRole.TANK_OBSERVER;
             }
-            else if (currentRole == TankRole.TANK_OBSERVER)
+            else if (currentRole == TankRole.TANK_OBSERVER && !onlyObserver)
             {
                 currentRole = TankRole.TANK_DRIVER;
             }
@@ -77,12 +78,19 @@ public class SinglePlayerTank : MonoBehaviour, IDamagable
         }
 
         // --- Toggle Overview Mode (Spectator camera) ---
-        if (Input.GetKeyDown(KeyCode.M) && observerModeActive)
+        if (Input.GetKeyDown(KeyCode.M) && canSpectate)
         {
             if (currentRole == TankRole.TANK_SPECTATOR)
             {
                 // Return to previous role (default to Driver)
-                currentRole = TankRole.TANK_DRIVER;
+                if (onlyObserver)
+                {
+                    currentRole = TankRole.TANK_OBSERVER;
+                }
+                else
+                {
+                    currentRole = TankRole.TANK_DRIVER;
+                }
             }
             else
             {

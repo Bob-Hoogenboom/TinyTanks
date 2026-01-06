@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TankStateManager : MonoBehaviour
+public class TankStateManager : MonoBehaviour, IDamagable
 {
     private TankBaseState _currentState;
 
@@ -9,7 +9,7 @@ public class TankStateManager : MonoBehaviour
     private TankPatrol _patrol = new TankPatrol();
     private TankChase _chase = new TankChase();
     private TankShoot _shoot = new TankShoot();
-    //private TankDeath _death = new TankDeath();
+    private TankDefeat _defeat = new TankDefeat();
 
     private SinglePlayerTank _player;
     private NavMeshAgent _agent;
@@ -24,6 +24,8 @@ public class TankStateManager : MonoBehaviour
     [SerializeField] private float detectionRange = 7f;
     [SerializeField] private float shootingRange = 3f;
 
+    [SerializeField] private float hitpoints = 1f;
+
     [Header("Debug")]
     [SerializeField] private bool showGizmos;
     [SerializeField] private Color detectionColor = new Color (1f, 0.9f, 0.1f, 0.3f);
@@ -35,6 +37,7 @@ public class TankStateManager : MonoBehaviour
     public TankPatrol Patrol { get { return _patrol; } }
     public TankChase Chase { get { return _chase; } }
     public TankShoot Shoot { get { return _shoot; } }
+    public TankDefeat Defeat { get { return _defeat; } }
 
     public SinglePlayerTank Player { get { return _player; } }
     public NavMeshAgent Agent { get { return _agent; } }
@@ -48,6 +51,8 @@ public class TankStateManager : MonoBehaviour
     public bool CanShoot { get { return canShoot; } }
     public float DetectionRange {  get { return detectionRange; } }
     public float ShootingRange {  get { return shootingRange; } }
+
+    public float HitPoints { get { return hitpoints; } }
 
 
     private void Start()
@@ -86,4 +91,14 @@ public class TankStateManager : MonoBehaviour
 
     }
 
+    public void Damage(float damage)
+    {
+        Debug.Log("AU KANKER");
+        hitpoints -= damage;
+
+        if (hitpoints <= 0 && _currentState != _defeat)
+        {
+            SwitchState(_defeat);
+        }
+    }
 }
