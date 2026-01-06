@@ -1,108 +1,69 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
-public class TutorialEnemy : MonoBehaviour, IDamagable
+/// <summary>
+/// Statemachine* and let the enemy be for freeroam and stationary stuff
+/// </summary>
+public class StationaryEnemy : MonoBehaviour, IDamagable
 {
-    [Header("Enemy")]
-    [SerializeField] private float hitpoints = 3f;
-    public float HitPoints => hitpoints;
+    [Header("References")]
+    private SinglePlayerTank _playerTarget;
 
+    [Header("Detection")]
+    [SerializeField] private Transform detectionOrigin;
+    [SerializeField] private float attackRange = 8f;
+
+    [Header("Aiming & Shooting")]
     public bool canShoot = true;
-
-    private TutorialTank _playerTarget;
-
-
-    [Header("Attack")]
     [SerializeField] private LayerMask hittable;
+    [SerializeField] private float bulletSpeed = 10f;
+    [SerializeField] private float _coolDown = 0f;
+    private float time = 0f;
+    [Space]
+    [SerializeField] private GameObject bulletPrefab;
+    [Space]
     [SerializeField] private GameObject cupola;
     [SerializeField] private GameObject barrel;
-    [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform muzzle;
-    [SerializeField] private float bulletSpeed = 10f;
-    [SerializeField] private float range;
-    [SerializeField]private float _coolDown = 0f;
-    [Space]
-    public UnityEvent onShoot;
-
-    private bool _isActive;
     private float _cupolaRotateSpeed = 10f;
     private float _barrelRotateSpeed = 10f;
 
-    [Header("Path")]
-    [SerializeField] private float waitTimeOnWayPoint = 1f;
-    [SerializeField] private EnemyPath path;
+    [Header("Stats")]
+    [SerializeField] private float hitPoints = 1f;
+    public float HitPoints { get { return hitPoints; } }
 
-    private NavMeshAgent _agent;
-    private float time = 0f;
-
-    [Space]
+    [Header("Effects")]
+    public UnityEvent onShoot;
     public UnityEvent onEnemyDefeat;
+
+    [Header("Debug")]
+    [SerializeField] private bool showGizmos = false;
+    [SerializeField] private Color attackColor = new Color(1f, 0f, 0f, 0.2f);
 
 
     private void Awake()
     {
-        _agent = GetComponent<NavMeshAgent>();
-        _playerTarget = FindAnyObjectByType<TutorialTank>();
+        _playerTarget = FindAnyObjectByType<SinglePlayerTank>();
     }
 
-    private void Start()
-    {
-        if (path.pathType != PathType.IDLE)
-        {
-            _agent.destination = path.GetCurrentWayPoint();
-        }
-    }
 
     private void Update()
     {
-        if (_isActive)
+        float distance = GetDistanceToPlayer();
+
+        if(distance < attackRange)
         {
             AimAtPlayer();
-            if(_agent.remainingDistance <= 0.1f && path.pathType != PathType.IDLE)
-            {
-                time += Time.deltaTime;
-                if(time >= waitTimeOnWayPoint)
-                {
-                    time = 0f;
-                    _agent.destination = path.GetNextWayPoint();
-                }
-            }
         }
 
-        CheckPlayerRange();
     }
 
-    private bool CheckPlayerRange()
+    private float GetDistanceToPlayer()
     {
-        bool playerInRange;
-        float dist = Vector3.Distance(transform.position, _playerTarget.transform.position);
-        Vector3 dir = _playerTarget.transform.position - transform.position;
-
-        playerInRange = (dist < range) ? true : false;
-
-        //Player was never found before but is in range
-        if (!_isActive && playerInRange)
-        {
-            Debug.Log(_isActive + " : " + playerInRange);
-            //chack for a direct hit on the player
-            RaycastHit hit;
-
-            Debug.DrawRay(transform.position + Vector3.up, dir, Color.yellow, 10f);
-            if (Physics.Raycast(transform.position + Vector3.up, dir, out hit, Mathf.Infinity))
-            {
-                Debug.Log(hit);
-                if(hit.transform.gameObject == _playerTarget.transform.gameObject)
-                {
-                    //activate tank
-                    _isActive = true;
-                }
-            }
-        }
-
-        if(dist < range * 2.5) playerInRange = false;
-
-        return playerInRange;
+        float dist = Vector3.Distance(detectionOrigin.position, _playerTarget.transform.position);
+        return dist;
     }
 
     private void AimAtPlayer()
@@ -143,8 +104,8 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
         if (!canShoot) return;
 
         //Timer
-        _coolDown += Time.deltaTime;
-        if (_coolDown >= 3f)
+        time += Time.deltaTime;
+        if (time >= _coolDown)
         {
             Vector3 dir = target - muzzle.transform.position;
             //Clean Shot
@@ -155,8 +116,7 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
             {
                 if (hit.transform.gameObject == _playerTarget.transform.gameObject)
                 {
-                    _coolDown = 0f;
-
+                    time = 0f;
                    Shoot();
                     
                 }
@@ -181,27 +141,26 @@ public class TutorialEnemy : MonoBehaviour, IDamagable
 
     public void Damage(float damage)
     {
-        Debug.Log("AUWW!");
-        hitpoints -= damage;
-        if(hitpoints <= 0)
+        hitPoints -= damage;
+
+        if(hitPoints <= 0) 
         {
             Death();
         }
-        //do some damage effect here
     }
 
     private void Death()
     {
         onEnemyDefeat.Invoke();
+        this.enabled = false;
     }
 
-    public void OnDrawGizmosSelected()
+    public void OnDrawGizmos()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, range);
-        
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, (range * 2.5f));
+        if (!showGizmos) return;
+
+        Gizmos.color = attackColor;
+        Gizmos.DrawSphere(detectionOrigin.position, attackRange);
     }
 }
  

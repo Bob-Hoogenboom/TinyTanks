@@ -9,12 +9,12 @@ public class TutorialUI : MonoBehaviour
 
     private void OnEnable()
     {
-        TutorialTank.OnUpdateRole += UpdateUI;
+        SinglePlayerTank.OnUpdateRole += UpdateUI;
     }
 
     private void OnDisable()
     {
-        TutorialTank.OnUpdateRole -= UpdateUI;
+        SinglePlayerTank.OnUpdateRole -= UpdateUI;
     }
 
 
