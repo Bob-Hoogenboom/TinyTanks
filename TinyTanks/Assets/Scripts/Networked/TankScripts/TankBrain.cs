@@ -32,10 +32,11 @@ public class TankBrain : NetworkBehaviour
 
     public TankData tankData;
 
-    [Header("Physics based movement")]
-    [SerializeField] private TankTrackPhysics tracks;
-    private float _leftTrack;
-    private float _rightTrack;
+    [Header("Physics based movement and trackAnim")]
+    [SerializeField] private TankTrackPhysics tracks;   
+    [SyncVar(hook = nameof(OnLeftTrackChanged))] private float _leftTrack;
+    [SyncVar(hook = nameof(OnRightTrackChanged))] private float _rightTrack;
+
     [SerializeField] private TankTurretPhysics turret;
     private float _yaw;
     private float _pitch;
@@ -105,13 +106,16 @@ public class TankBrain : NetworkBehaviour
 
     public override void OnStartServer()
     {
+        base.OnStartServer();
+
         _rb = GetComponent<Rigidbody>();
         _netTrans = GetComponent<NetworkTransformReliable>();
         if (!tracks) tracks = GetComponent<TankTrackPhysics>();
         if (!turret) turret = GetComponent<TankTurretPhysics>();
         if (!mineLayer) mineLayer = GetComponent<MineLayer>();
+        if (!shooter) shooter = GetComponent<Shooter>();
 
-        OnTankDeath += Server_StarRespawnTimer;
+        OnTankDeath += Server_DeathRemoveInput;
         OnReturnToLobby += Server_ReturnToLobby;
         OnTankRespawn += Server_RespawnTank;
 
@@ -125,6 +129,18 @@ public class TankBrain : NetworkBehaviour
             spawnPoints.Add(point.transform);
 
         shooter.OnMissileShoot += AssignMissile;
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        _rb = GetComponent<Rigidbody>();
+        _netTrans = GetComponent<NetworkTransformReliable>();
+        if (!tracks) tracks = GetComponent<TankTrackPhysics>();
+        if (!turret) turret = GetComponent<TankTurretPhysics>();
+        if (!mineLayer) mineLayer = GetComponent<MineLayer>();
+        if (!shooter) shooter = GetComponent<Shooter>();
     }
 
     [Server]
@@ -152,6 +168,15 @@ public class TankBrain : NetworkBehaviour
         else if (turret) turret.SetInputs(_yaw, _pitch);
 
         Server_ApplyBatteryMovementDrain(Time.fixedDeltaTime);
+    }
+
+    private void OnLeftTrackChanged(float oldVal, float newVal) => PushTrackInputsToTracks();
+    private void OnRightTrackChanged(float oldVal, float newVal) => PushTrackInputsToTracks();
+
+    private void PushTrackInputsToTracks()
+    {
+        if (!tracks) tracks = GetComponent<TankTrackPhysics>();
+        if (tracks) tracks.SetInputs(_leftTrack, _rightTrack, currentBtry > 0f);
     }
 
     [Server]
@@ -314,6 +339,8 @@ public class TankBrain : NetworkBehaviour
     [Server]
     private void Server_RespawnTank()
     {
+        if (!health.IsDead) return;
+
         var players = FindObjectsOfType<TankBrain>().ToList();
         players.Remove(this);
 
@@ -336,6 +363,7 @@ public class TankBrain : NetworkBehaviour
         var idx = UnityEngine.Random.Range(0, possibleSpawnLocations.Count);
         spawnLocation = possibleSpawnLocations[idx];
 
+        transform.rotation = Quaternion.Euler(0, 0, 0);
         _netTrans.RpcTeleport(spawnLocation.position);
 
         health.OnHealthReset?.Invoke();
@@ -344,8 +372,6 @@ public class TankBrain : NetworkBehaviour
         currentBtry = tankData.maxBtry;
         driver.enabled = true;
         gunner.enabled = true;
-
-        RpcTankBirth();
     }
 
     [Server]
@@ -360,10 +386,15 @@ public class TankBrain : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
-    private void RpcTankBirth()
+    [Server]
+    private void Server_DeathRemoveInput()
     {
-        health.OnStopRespawnTimer?.Invoke();
+        if (!health.IsDead) return;
+
+        _leftTrack = 0;
+        _rightTrack = 0;
+        driver.enabled = false;
+        gunner.enabled = false;
     }
 
     [Client]
@@ -413,19 +444,6 @@ public class TankBrain : NetworkBehaviour
             image.sprite = sprite;
     }
 
-    [Server]
-    private void Server_StarRespawnTimer()
-    {
-        if (!health.IsDead) return;
-
-        _leftTrack = 0;
-        _rightTrack = 0;
-        driver.enabled = false;
-        gunner.enabled = false;
-
-        health.OnStartRespawnTimer?.Invoke();
-    }
-
     private void OnMissileChanged(NetworkedMissile oldMissile, NetworkedMissile newMissile)
     {
         if (newMissile != null)
@@ -439,6 +457,7 @@ public class TankBrain : NetworkBehaviour
         }
     }
 
+    [Client]
     private void OnAmmoTypeChanged(ammoTypes oldVal, ammoTypes newVal)
     {
         if (newVal == ammoTypes.missile)

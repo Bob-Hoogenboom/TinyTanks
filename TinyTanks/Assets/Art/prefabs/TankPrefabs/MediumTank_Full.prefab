@@ -685,14 +685,14 @@ SkinnedMeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   serializedVersion: 2
-  m_Quality: 0
+  m_Quality: 1
   m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 8116293111752195724, guid: 3ac85be6374f58d46ba301a365c710a0, type: 3}
   m_Bones: []
   m_BlendShapeWeights:
   - 100
-  m_RootBone: {fileID: 0}
+  m_RootBone: {fileID: 4719660905394764635}
   m_AABB:
     m_Center: {x: -0.44735563, y: 0.2289859, z: 0.099455595}
     m_Extent: {x: 0.13802887, y: 0.25771996, z: 0.5883001}
@@ -1429,8 +1429,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 2078041479623857745, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_sharedMaterial
@@ -1471,8 +1470,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 4122517054715147097, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_sharedMaterial
@@ -1483,8 +1481,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 4613534928030359938, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_sharedMaterial
@@ -1505,8 +1502,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 4896454300173776570, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_sharedMaterial
@@ -1719,8 +1715,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 44df75db63e7ee84f8b11285bd1250e0,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 9077610971876759929, guid: eee26696c6da89043b3aa63ff9667d52,
         type: 3}
       propertyPath: m_sharedMaterial

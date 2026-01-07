@@ -17,6 +17,7 @@ public class MyRoomManager : NetworkRoomManager
 
     public override void Awake()
     {
+        base.Awake();
         playerSpawnMethod = PlayerSpawnMethod.Random;
     }
 
@@ -53,16 +54,16 @@ public class MyRoomManager : NetworkRoomManager
 
     private void ResolveGameTimeInput()
     {
-        if (gameTimeInput != null) return;
+        if (gameTimeInput == null)
+            gameTimeInput = FindObjectOfType<TMP_InputField>(true);
 
-        //get match timer input
-        matchTimer = FindObjectOfType<SetMatchTimer>(true);
+        // get match timer input
+        if (matchTimer == null)
+            matchTimer = FindObjectOfType<SetMatchTimer>(true);
 
-        //update match time to the match timer input default
+        // update match time to the match timer input default
         if (matchTimer != null)
-        {
             gameTime = matchTimer.selectedTime;
-        }
     }
 
     //Needs a string parameter but i dont have to use it so...
