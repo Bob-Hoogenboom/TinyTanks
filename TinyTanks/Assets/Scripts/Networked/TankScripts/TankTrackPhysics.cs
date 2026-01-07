@@ -13,7 +13,7 @@ public class TankTrackPhysics : MonoBehaviour
 
     [SerializeField] private Rigidbody rb;
     [SerializeField] private LayerMask groundMask = ~0;
-    [SerializeField] private NetworkIdentity identity;
+    [SerializeField] private NetworkIdentity _id;
 
     [SerializeField] private bool isSupposedToHaveServer = true;
 
@@ -70,7 +70,7 @@ public class TankTrackPhysics : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
-        identity = GetComponent<NetworkIdentity>();
+        _id = GetComponentInParent<NetworkIdentity>();
 
         // Stability guards
         rb.maxDepenetrationVelocity = 2f;
@@ -97,10 +97,10 @@ public class TankTrackPhysics : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isSupposedToHaveServer)
-        {
-            if (!NetworkServer.active) return;
-        }
+        //if (isSupposedToHaveServer)
+        //{
+        //    if (!NetworkServer.active) return;
+        //}
 
         smoothedForward = Vector3.Slerp(smoothedForward, transform.forward, forwardSmoothing).normalized;
         smoothedRight = Vector3.Slerp(smoothedRight, transform.right, forwardSmoothing).normalized;
@@ -166,6 +166,12 @@ public class TankTrackPhysics : MonoBehaviour
 
         ApplyTrackAnimation();
     }
+
+    //private void LateUpdate()
+    //{
+    //    if (!NetworkClient.active) return;
+    //    ApplyTrackAnimation();
+    //}
 
     private void ApplyTrackForces(Vector3 contactPoint, Vector3 contactNormal, float input, float otherInput, float normalForce, bool isLeft, bool hasBattery)
     {
@@ -334,10 +340,12 @@ public class TankTrackPhysics : MonoBehaviour
 
     private void ApplyTrackAnimation()
     {
-        float inputDead = 0.15f;         // small input deadzone
-        float velDead = 0.05f;         // ignore tiny forward velocity
-        float zeroBand = 0.25f;         // widen neutral band so it doesn't chatter around 0
-        float smoothPerSec = 12f;        // animator param slew rate (higher = snappier)
+        if (anim == null) return;
+
+        float inputDead = 0.05f;         // small input deadzone
+        float velDead = 0.03f;         // ignore tiny forward velocity
+        float zeroBand = 0.30f;         // widen neutral band so it doesn't chatter around 0
+        float smoothPerSec = 18f;        // animator param slew rate (higher = snappier)
         float step = smoothPerSec * Time.fixedDeltaTime;
 
         // Tank forward/back sign from actual motion (fallback when inputs are idle)
@@ -383,8 +391,6 @@ public class TankTrackPhysics : MonoBehaviour
 
         float newL = Mathf.MoveTowards(currL, leftTarget, step);
         float newR = Mathf.MoveTowards(currR, rightTarget, step);
-
-        if (anim == null) return;
 
         anim.SetFloat(_leftTrackAnim, newL);
         anim.SetFloat(_rightTrackAnim, newR);

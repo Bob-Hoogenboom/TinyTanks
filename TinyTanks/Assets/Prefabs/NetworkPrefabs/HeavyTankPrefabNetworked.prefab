@@ -1154,7 +1154,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 23552
-  identity: {fileID: 0}
+  _id: {fileID: 0}
   isSupposedToHaveServer: 1
   anim: {fileID: 4172860821965508566}
   contactRadius: 0.25
@@ -2163,10 +2163,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
+  syncDirection: 1
   syncMode: 0
   syncInterval: 0
-  clientAuthority: 0
+  clientAuthority: 1
   animator: {fileID: 4172860821965508566}
 --- !u!1001 &5313128099472091053
 PrefabInstance:
