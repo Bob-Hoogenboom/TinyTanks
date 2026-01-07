@@ -23,13 +23,10 @@ namespace Interaction
             {
                 // offset
                 _mouseOffset = (Input.mousePosition - _mouseReference);
-
                 // apply rotation
                 _rotation.y = -(_mouseOffset.x + _mouseOffset.y) * _sensitivity;
-
                 // rotate
                 transform.Rotate(_rotation);
-
                 // store mouse
                 _mouseReference = Input.mousePosition;
             }
