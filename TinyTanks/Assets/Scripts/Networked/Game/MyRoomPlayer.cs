@@ -11,6 +11,7 @@ public class MyRoomPlayer : NetworkRoomPlayer
     [Header("UI (Room Scene")]
     [SerializeField] private Button readyButton;
     [SerializeField] private TMP_Text readyStatus;
+    [SerializeField] private GameObject objTimerUI;
 
     [SyncVar(hook = nameof(OnRoleChanged))]
     public int roleIndex = -1;
@@ -20,6 +21,7 @@ public class MyRoomPlayer : NetworkRoomPlayer
     {
         readyButton = GameObject.FindWithTag("ReadyButton").GetComponent<Button>();
         readyStatus = GameObject.FindWithTag("ReadyText").GetComponent< TMP_Text>();
+        objTimerUI = FindAnyObjectByType<SetMatchTimer>().gameObject;
     }
 
     public override void OnClientEnterRoom()
@@ -29,7 +31,18 @@ public class MyRoomPlayer : NetworkRoomPlayer
             readyButton.onClick.AddListener(OnReadyClicked);
         }
 
+        CheckIfHost();
         UpdateUI();
+    }
+
+    private void CheckIfHost()
+    {
+        if (!this.isServer)
+        {
+            //Clients cannot change the durration of the match
+            objTimerUI.SetActive(false);
+            return;
+        }
     }
 
     public override void OnClientExitRoom()

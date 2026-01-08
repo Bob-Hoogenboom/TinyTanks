@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Mirror;
 
 public class SetMatchTimer : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class SetMatchTimer : MonoBehaviour
 
     private bool _isCustom = false;
     public float selectedTime { get; private set; } // in seconds
+
+    NetworkBehaviour _netObject;
 
     private void Start()
     {
