@@ -6,7 +6,6 @@ using TMPro;
 public class MyRoomPlayer : NetworkRoomPlayer
 {
     public static MyRoomPlayer Local;
-    public override void OnStartLocalPlayer() => Local = this;
 
     [Header("UI (Room Scene")]
     [SerializeField] private Button readyButton;
@@ -16,20 +15,19 @@ public class MyRoomPlayer : NetworkRoomPlayer
     [SyncVar(hook = nameof(OnRoleChanged))]
     public int roleIndex = -1;
 
-
-    private void Awake()
+    public override void OnStartLocalPlayer()
     {
-        readyButton = GameObject.FindWithTag("ReadyButton").GetComponent<Button>();
-        readyStatus = GameObject.FindWithTag("ReadyText").GetComponent< TMP_Text>();
-        objTimerUI = FindAnyObjectByType<SetMatchTimer>().gameObject;
+        base.OnStartLocalPlayer();
+        Local = this;
     }
 
     public override void OnClientEnterRoom()
     {
-        if(readyButton != null)
-        {
-            readyButton.onClick.AddListener(OnReadyClicked);
-        }
+        // IMPORTANT: don't bind UI from remote players
+        if (!isLocalPlayer) return;
+
+        ResolveUI();
+        BindUI();
 
         CheckIfHost();
         UpdateUI();
@@ -47,12 +45,8 @@ public class MyRoomPlayer : NetworkRoomPlayer
 
     public override void OnClientExitRoom()
     {
-        Debug.Log("exited ready room");
-
-        if (roleIndex == 0)
-        {
-            var tankBody = GameObject.FindGameObjectsWithTag("TankBody1");
-        }
+        if (!isLocalPlayer) return;
+        UnbindUI();
     }
 
     public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
@@ -109,11 +103,44 @@ public class MyRoomPlayer : NetworkRoomPlayer
         
     }
 
+    public override void OnStopClient()
+    {
+        if (Local == this)
+            Local = null;
+
+        base.OnStopClient();
+        UnbindUI();
+    }
+
     // If this player disconnects, server clears the role if we owned it
     public override void OnStopServer()
     {
         if (RoleManager.Instance != null)
             RoleManager.Instance.Server_ReleaseAllFor(netIdentity);
+    }
+
+    private void BindUI()
+    {
+        if (readyButton == null) return;
+        readyButton.onClick.AddListener(OnReadyClicked);
+    }
+
+    private void UnbindUI()
+    {
+        if (readyButton == null) return;
+        readyButton.onClick.RemoveListener(OnReadyClicked);
+    }
+
+    private void ResolveUI()
+    {
+        if (readyButton == null)
+            readyButton = GameObject.FindWithTag("ReadyButton")?.GetComponent<Button>();
+
+        if (readyStatus == null)
+            readyStatus = GameObject.FindWithTag("ReadyText")?.GetComponent<TMP_Text>();
+
+        if (objTimerUI == null)
+            objTimerUI = FindAnyObjectByType<SetMatchTimer>()?.gameObject;
     }
 
     [Server]

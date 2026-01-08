@@ -9,6 +9,8 @@ public class TankSelector : NetworkBehaviour
     public static event Action<TankSelector> InstanceChanged;
     public enum TankType : byte { Heavy = 0, Medium = 1, Light = 2 }
 
+    private RoleVisuals _visuals;
+
     [Header("Prefabs")]
     [SerializeField] private GameObject heavyTankPrefab;
     [SerializeField] private GameObject mediumTankPrefab;
@@ -16,6 +18,9 @@ public class TankSelector : NetworkBehaviour
 
     [SyncVar(hook = nameof(OnTeam1TypeChanged))] private TankType _team1Type = TankType.Light;
     [SyncVar(hook = nameof(OnTeam2TypeChanged))] private TankType _team2Type = TankType.Light;
+
+    public TankType Team1Type => _team1Type;
+    public TankType Team2Type => _team2Type;
 
     public event Action OnTankUpdated;
 
@@ -38,15 +43,52 @@ public class TankSelector : NetworkBehaviour
 
     public override void OnStartServer()
     {
+        base.OnStartServer();
         _team1Type = TankType.Light;
         _team2Type = TankType.Light;
+        _visuals = FindObjectOfType<RoleVisuals>();
     }
 
     public override void OnStartClient()
     {
-        OnTankUpdated?.Invoke();
+        base.OnStartClient();
+        _visuals = FindObjectOfType<RoleVisuals>();
+        Client_ApplyAllTankTypeVisuals();
     }
 
+    public override void OnStopClient()
+    {
+        Destroy(this);
+        base.OnStopClient();
+        CleanupSingleton();
+    }
+
+    public override void OnStopServer()
+    {
+        base.OnStopServer();
+        CleanupSingleton();
+    }
+
+    private void CleanupSingleton()
+    {
+        _visuals = null;
+
+        if (Instance == this)
+        {
+            Instance = null;
+            InstanceChanged?.Invoke(null);
+        }
+
+        // If you keep TankSelector as a scene object, destroying here prevents “old instance blocks new instance”
+        Destroy(gameObject);
+    }
+
+    private bool TryResolveVisuals()
+    {
+        if (_visuals != null) return true;
+        _visuals = FindObjectOfType<RoleVisuals>();
+        return _visuals != null;
+    }
 
     #region UI (client)
     [Client] public void UI_SelectHeavy() => UI_SelectType(TankType.Heavy);
@@ -57,13 +99,19 @@ public class TankSelector : NetworkBehaviour
     public void UI_SelectType(TankType type)
     {
         var me = MyRoomPlayer.Local;
+
+        if (me == null && NetworkClient.localPlayer != null)
+            me = NetworkClient.localPlayer.GetComponent<MyRoomPlayer>();
+
         if (me == null)
             return;
-        if(me.roleIndex < 0)
+
+        if (me.roleIndex < 0)
         {
             Debug.Log("[TankSelector] Pick a role first, then select tank.");
             return;
         }
+
         CmdSelectTypeForRole(type, me.roleIndex);
     }
 
@@ -75,10 +123,20 @@ public class TankSelector : NetworkBehaviour
         int team = TeamFromRoleIndex(me.roleIndex);
         return (team == 1 ? _team1Type : _team2Type) == type;
     }
+
+    [Client]
+    public void Client_ApplyAllTankTypeVisuals()
+    {
+        if (!TryResolveVisuals()) return;
+
+        // Apply absolute state (important for late join / scene load)
+        _visuals.ApplyTeamType(0, _team1Type);
+        _visuals.ApplyTeamType(1, _team2Type);
+    }
     #endregion
 
     #region Server commands
-    
+
     [Command(requiresAuthority = false)]
     private void CmdSelectTypeForRole(TankType type, int roleIndex, NetworkConnectionToClient sender = null)
     {
@@ -158,8 +216,21 @@ public class TankSelector : NetworkBehaviour
     #endregion
 
     #region SyncVar hooks & helpers
-    private void OnTeam1TypeChanged(TankType oldVal, TankType newVal) => OnTankUpdated?.Invoke();
-    private void OnTeam2TypeChanged(TankType oldVal, TankType newVal) => OnTankUpdated?.Invoke();
+    private void OnTeam1TypeChanged(TankType oldVal, TankType newVal)
+    {
+        if (TryResolveVisuals())
+            _visuals.ApplyTeamType(0, newVal);
+
+        OnTankUpdated?.Invoke();
+    }
+
+    private void OnTeam2TypeChanged(TankType oldVal, TankType newVal)
+    {
+        if (TryResolveVisuals())
+            _visuals.ApplyTeamType(1, newVal);
+
+        OnTankUpdated?.Invoke();
+    }
 
     private static int TeamFromRoleIndex(int roleIndex)
     {
