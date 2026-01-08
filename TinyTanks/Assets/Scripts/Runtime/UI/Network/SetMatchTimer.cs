@@ -21,27 +21,6 @@ public class SetMatchTimer : MonoBehaviour
 
     private void Start()
     {
-        _netObject = FindObjectOfType<NetworkBehaviour>();
-
-
-        if (_netObject != null)
-        {
-            // The object is on the host if it's the server instance AND the local player instance
-            bool isHostPlayerObject = _netObject.isServer && _netObject.isLocalPlayer;
-
-            if (isHostPlayerObject)
-            {
-                Debug.Log("The target object is on the host instance.");
-                gameObject.SetActive (false);
-                return;
-            }
-            else
-            {
-                Debug.Log("The target object is not on the host instance (might be a client's object or a dedicated server object).");
-            }
-        }
-
-
         buttonLeft.onClick.AddListener(PreviousTime);
         buttonRight.onClick.AddListener(NextTime);
         timeInput.onValueChanged.AddListener(OnCustomTimeChanged);

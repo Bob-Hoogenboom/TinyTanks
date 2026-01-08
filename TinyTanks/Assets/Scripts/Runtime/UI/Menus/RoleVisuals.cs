@@ -80,7 +80,7 @@ public class RoleVisuals : MonoBehaviour
                     {
                         // ghost: make it transparent / faded
                         r.GetPropertyBlock(_mpb);
-                        _mpb.SetFloat("_Value", 0.3f);
+                        _mpb.SetFloat("_Value", 0f);
                         r.SetPropertyBlock(_mpb);
                     }
 
