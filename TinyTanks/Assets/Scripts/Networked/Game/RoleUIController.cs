@@ -75,7 +75,7 @@ public class RoleUIController : MonoBehaviour
             if (btnText != null) btnText.text = mine ? "Release" : "Claim";
 
             if (roleLabels != null && i < roleLabels.Length && roleLabels[i] != null)
-                roleLabels[i].text = $"Role {i + 1}: \n{(free ? "(free)" : owner)}";
+                roleLabels[i].text = $"{(free ? "(free)" : owner)}";
         }
     }
 }
