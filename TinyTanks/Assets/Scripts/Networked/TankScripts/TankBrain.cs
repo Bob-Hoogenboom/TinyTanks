@@ -378,8 +378,9 @@ public class TankBrain : NetworkBehaviour
         mineLayer.OnDeathReset?.Invoke();
 
         currentBtry = tankData.maxBtry;
-        driver.enabled = true;
+        driver.enabled = true;    
         gunner.enabled = true;
+        Debug.Log(gunner.enabled);
     }
 
     [Server]
@@ -403,6 +404,7 @@ public class TankBrain : NetworkBehaviour
         _rightTrack = 0;
         driver.enabled = false;
         gunner.enabled = false;
+        Debug.Log(gunner.enabled);
     }
 
     [Server]
