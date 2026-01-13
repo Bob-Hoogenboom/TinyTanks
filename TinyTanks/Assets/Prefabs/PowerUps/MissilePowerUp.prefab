@@ -158,7 +158,7 @@ MonoBehaviour:
   effect: {fileID: 11400000, guid: ebf1f1c05beebc74192b0858cdc1beca, type: 2}
   coolDownTimer: 20
   col: {fileID: 1009062528977614006}
-  visual: {fileID: 0}
+  visual: {fileID: 4441190483494858176}
   onGrabPowerUp:
     m_PersistentCalls:
       m_Calls: []
@@ -191,6 +191,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Missile_Prop
+      objectReference: {fileID: 0}
+    - target: {fileID: 6252138892924551743, guid: 65de1e3a9d1238242a3c172b8179d5b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6741853037928405125, guid: 65de1e3a9d1238242a3c172b8179d5b7,
         type: 3}

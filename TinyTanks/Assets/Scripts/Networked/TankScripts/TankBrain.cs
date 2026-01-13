@@ -129,6 +129,7 @@ public class TankBrain : NetworkBehaviour
             spawnPoints.Add(point.transform);
 
         shooter.OnMissileShoot += AssignMissile;
+        shooter.OnPickupMissle += Server_AutoSwapMissileOnPickup;
     }
 
     public override void OnStartClient()
@@ -157,6 +158,13 @@ public class TankBrain : NetworkBehaviour
     }
 
     [ServerCallback]
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Server_ReturnToLobby();
+    }
+
+    [ServerCallback]
     private void FixedUpdate()
     {
         if (!isServer || _rb == null) return;
@@ -167,7 +175,7 @@ public class TankBrain : NetworkBehaviour
             missile.MoveMissile(_yaw, _pitch);
         else if (turret) turret.SetInputs(_yaw, _pitch);
 
-        Server_ApplyBatteryMovementDrain(Time.fixedDeltaTime);
+        Server_ApplyBatteryMovementDrain(Time.fixedDeltaTime);      
     }
 
     private void OnLeftTrackChanged(float oldVal, float newVal) => PushTrackInputsToTracks();
@@ -395,6 +403,12 @@ public class TankBrain : NetworkBehaviour
         _rightTrack = 0;
         driver.enabled = false;
         gunner.enabled = false;
+    }
+
+    [Server]
+    private void Server_AutoSwapMissileOnPickup()
+    {
+        currSelectedAmmo = ammoTypes.missile;
     }
 
     [Client]
