@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfb3e6d41af830e48a45307ce8139b2f, type: 3}
   m_Name: HeavyTankData
   m_EditorClassIdentifier: 
-  damage: 4
+  damage: 3
   maxHealth: 12
   baseReloadTime: 8
   noBatteryReloadTime: 16
   shellSpeed: 15
-  batteryDrainMove: 0.5
-  batteryDrainTurning: 0.3
-  batteryDrainNeutralSteer: 0.2
-  batteryDrainShot: 12
-  moveInputThreshold: 0.05
+  maxBtry: 100
+  batteryDrainMove: 0.8
+  batteryDrainTurning: 0.5
+  batteryDrainNeutralSteer: 0.3
+  batteryDrainShot: 10

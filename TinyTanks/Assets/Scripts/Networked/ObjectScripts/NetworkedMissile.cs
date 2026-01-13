@@ -11,6 +11,7 @@ public class NetworkedMissile : NetworkBehaviour
     [SyncVar] public TankBrain parent;
     [SerializeField] private float missileLifeTime = 10f;
     [SerializeField] private int missileSpeed = 10;
+    [SerializeField] private int damage = 2;
 
     [Header("Camera")]
     public Transform camAnchor;
@@ -92,7 +93,7 @@ public class NetworkedMissile : NetworkBehaviour
                 Destroy(hitAudio.gameObject, 4);
 
                 var tankBrain = other.gameObject.GetComponentInParent<TankBrain>();
-                tankBrain.health.Server_TakeDamage(parent.damage);
+                tankBrain.health.Server_TakeDamage(damage);
                 Server_DeleteSelfNow();
             }
         }

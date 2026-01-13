@@ -24,7 +24,7 @@ public class NetworkedHealth : NetworkBehaviour
 
     [Header("UI")]
     [SerializeField] private Image[] healthImage;
-    [SerializeField] private TMP_Text[] livesText;
+    [SerializeField] private GameObject[] liveGos;
     [SerializeField] private CanvasGroup driverRespawn;
     [SerializeField] private CanvasGroup gunnerRespawn;
     [SerializeField] private TMP_Text[] respawnTexts;
@@ -80,8 +80,8 @@ public class NetworkedHealth : NetworkBehaviour
     [Client]
     private void OnLivesChanged(int oldVal, int newVal)
     {
-        foreach (var text in livesText)
-            text.text = $"{newVal}";
+        liveGos[newVal].SetActive(false);
+        liveGos[newVal+3].SetActive(false);
     }
 
     private void OnHealthChanged(float oldVal, float newVal)
