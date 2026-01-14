@@ -2584,8 +2584,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 216.16406, y: 268.49316}
-  m_SizeDelta: {x: 384.4243, y: 506.251}
+  m_AnchoredPosition: {x: 949, y: 412}
+  m_SizeDelta: {x: 1047.8, y: 209.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &257954945
 MonoBehaviour:
@@ -3774,8 +3774,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.78714, y: -26.1409}
-  m_SizeDelta: {x: 368.69, y: 431.6816}
+  m_AnchoredPosition: {x: -0.78714, y: -12}
+  m_SizeDelta: {x: 1018.8, y: 110.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &340116129
 MonoBehaviour:
@@ -4721,6 +4721,79 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 451574169}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &460577375
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.869441
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 24.604927
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269901667987094918, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239196460062397631, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_Name
+      value: Battery hit diorama
+      objectReference: {fileID: 0}
+    - target: {fileID: 7309621576730834814, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.02
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1b38e1bbb983a1347a0bcf8df7a9b26b, type: 3}
 --- !u!1 &464446580 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2765da3792a84d84a98723a2d8de7107,
@@ -7270,7 +7343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.78734, y: 221.8}
+  m_AnchoredPosition: {x: -330, y: 77}
   m_SizeDelta: {x: 368.69, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &715979644
@@ -20750,6 +20823,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PLYR
       objectReference: {fileID: 0}
+    - target: {fileID: 3328022547023463954, guid: eb012fb7aa7ab9c4193bfa1e9b104a60,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6786516030431862247, guid: eb012fb7aa7ab9c4193bfa1e9b104a60,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -24614,3 +24692,4 @@ SceneRoots:
   - {fileID: 992766993}
   - {fileID: 914541533}
   - {fileID: 1998593201}
+  - {fileID: 460577375}
