@@ -37,12 +37,18 @@ public class SinglePlayerTank : MonoBehaviour, IDamagable
 
     [Header("Effects and Actions")]
     public UnityEvent onShoot;
+    public UnityEvent onDeath;
 
     [Header("Settings")]
     public bool canSpectate = false;
     public bool onlyObserver = false;
-    [SerializeField] private float hitpoints = 3f;
+
+
+    [SerializeField] private float maxHealth = 5f;
+    private float hitpoints;
     public float HitPoints => hitpoints;
+    private float _stock = 3f;
+    [SerializeField] private HealthUI healthUI;
      
     private float _leftInput = 0f;
     private float _rightInput = 0f;
@@ -50,6 +56,7 @@ public class SinglePlayerTank : MonoBehaviour, IDamagable
 
     private void Start()
     {
+        hitpoints = maxHealth;
         if (hitIndicatorPrefab != null)
         {
             // Create one instance to reuse (so we’re not constantly instantiating)
@@ -220,6 +227,30 @@ public class SinglePlayerTank : MonoBehaviour, IDamagable
     {
         Debug.Log("AUWW!");
         hitpoints -= damage;
-        //do some damage effect here
+
+
+        if(healthUI != null)
+        {
+            float healthAmount = hitpoints / maxHealth;
+            healthUI.MinusHealth(healthAmount);
+
+            if(hitpoints <= 0)
+            {
+                healthUI.MinushealthIcons();
+            }
+        }
+
+        if (hitpoints <= 0)
+        {
+            _stock -= 1;
+            if(_stock <= 0)
+            {
+                onDeath.Invoke();
+            }
+            else
+            {
+                hitpoints = maxHealth;
+            }
+        }
     }
 }
