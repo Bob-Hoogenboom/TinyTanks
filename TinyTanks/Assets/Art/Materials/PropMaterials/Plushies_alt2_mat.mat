@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BedBoy_mat
+  m_Name: Plushies_alt2_mat
   m_Shader: {fileID: -6465566751694194690, guid: 60813b0df5689294296680077be8b099,
     type: 3}
   m_Parent: {fileID: 0}
@@ -42,7 +42,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 978d6ecfd819d754ebd27c4e6c37b575, type: 3}
+        m_Texture: {fileID: 2800000, guid: b037916d09df6514db77175439b6ffd1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -58,7 +58,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EMR:
-        m_Texture: {fileID: 2800000, guid: 905feff7e83dfd04d9a76d03d8e42845, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2b004b2f13d5e474190e3fffc1d1028d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -66,7 +66,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: d7975aa0eb076b84ea158f8b975b5a1a, type: 3}
+        m_Texture: {fileID: 2800000, guid: ceb0c11dfa640df4ab1e29b582294a15, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -81,20 +81,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SMRE:
-        m_Texture: {fileID: 2800000, guid: 9a099e7315a93384dab5330145b54f75, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_21e0031e70a845f88f03580116fff89a_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 9a099e7315a93384dab5330145b54f75, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Specularmap:
-        m_Texture: {fileID: 2800000, guid: 9a099e7315a93384dab5330145b54f75, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -130,7 +118,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Hue: 1
-    - _Metallic: 1
+    - _Metallic: 0
     - _Metallic_intensity: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -138,7 +126,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Saturation: 1.24
+    - _Saturation: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -147,9 +135,8 @@ Material:
     - _Surface: 0
     - _UVSec: 0
     - _UseAlpha: 0
-    - _UseAoMap: 0
     - _UseColorMap: 1
-    - _UseEmissiveMap: 0
+    - _UseEmissiveMap: 1
     - _UseMetallicMap: 1
     - _UseNormalMap: 1
     - _UseRoughnessMap: 1
@@ -161,6 +148,4 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _UvOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _UvTiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
