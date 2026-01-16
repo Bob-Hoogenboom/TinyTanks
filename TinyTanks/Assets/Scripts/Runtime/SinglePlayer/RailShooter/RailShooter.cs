@@ -12,6 +12,8 @@ public class RailShooter : MonoBehaviour
     private float _initialSpeed;
 
 
+    [SerializeField] private GameObject StartPrompt;
+
     private void OnEnable() => SinglePlayer.Events.OnMatchRestart += RestartShooter;
     private void OnDisable() => SinglePlayer.Events.OnMatchRestart -= RestartShooter;
 
@@ -21,19 +23,26 @@ public class RailShooter : MonoBehaviour
         follower.onEndReached += EndingShooter;
         _initialSpeed = follower.followSpeed;
 
+        StartPrompt.SetActive(true);
         follower.followSpeed = 0f;
+        Time.timeScale = 0f;
     }
 
     private void Update()
     {
         //For Debugging*
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
+            StartPrompt.SetActive(false);
             follower.followSpeed = _initialSpeed;
+            Time.timeScale = 1f;
         }
         else if(Input.GetKeyDown(KeyCode.Alpha2))
         {
+            StartPrompt.SetActive(true);
             follower.followSpeed = 0f;
+            Time.timeScale = 0f;
+
         }
     }
 

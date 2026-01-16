@@ -47,7 +47,7 @@ public class SinglePlayerTank : MonoBehaviour, IDamagable
     [SerializeField] private float maxHealth = 5f;
     private float hitpoints;
     public float HitPoints => hitpoints;
-    private float _stock = 3f;
+    [SerializeField] private float stock = 3f;
     [SerializeField] private HealthUI healthUI;
      
     private float _leftInput = 0f;
@@ -242,8 +242,8 @@ public class SinglePlayerTank : MonoBehaviour, IDamagable
 
         if (hitpoints <= 0)
         {
-            _stock -= 1;
-            if(_stock <= 0)
+            stock -= 1;
+            if(stock <= 0)
             {
                 onDeath.Invoke();
             }
